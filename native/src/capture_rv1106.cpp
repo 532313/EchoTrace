@@ -30,6 +30,7 @@ public:
   ~RockchipCapture() { stop(); }
   void start(const std::string &session) override {
     stop();
+    preview_stamp_ = 0;
     directory_ = config_.root / "sessions" / session;
     fs::create_directories(directory_ / "video");
     if (fs::space(directory_).available < config_.reserve_bytes)
@@ -279,6 +280,7 @@ public:
     });
   }
   bool playback_active() const override { return playing_.load(); }
+  uint64_t preview_time_us() const override { return preview_stamp_.load(); }
   void stop_playback() override {
     playing_ = false;
     if (playback_.joinable())
@@ -480,6 +482,32 @@ private:
       if (y)
         for (int row = 0; row < 180; ++row)
           std::memcpy(image.data() + row * 320, y + row * stride, 320);
+      if (y && !config_.preview_path.empty()) {
+        try {
+          const int height = std::max(180, int(frame.stVFrame.u32VirHeight));
+          const auto *uv = y + stride * height;
+          std::vector<uint8_t> pixels(160 * 90 * 2);
+          auto clamp = [](int c) { return std::max(0, std::min(255, c)); };
+          for (int row = 0; row < 90; ++row)
+            for (int col = 0; col < 160; ++col) {
+              int luma = std::max(0, int(y[row * 2 * stride + col * 2]) - 16);
+              int u = int(uv[row * stride + col * 2]) - 128;
+              int v = int(uv[row * stride + col * 2 + 1]) - 128;
+              int r = clamp((298 * luma + 409 * v + 128) >> 8);
+              int g = clamp((298 * luma - 100 * u - 208 * v + 128) >> 8);
+              int b = clamp((298 * luma + 516 * u + 128) >> 8);
+              uint16_t color = uint16_t((r >> 3) << 11 | (g >> 2) << 5 | (b >> 3));
+              size_t at = size_t(row * 160 + col) * 2;
+              pixels[at] = uint8_t(color);
+              pixels[at + 1] = uint8_t(color >> 8);
+            }
+          write_preview(config_.preview_path, pixels);
+          preview_stamp_ = stamp;
+        } catch (const std::exception &error) {
+          // A display preview must never interrupt the authoritative recorder.
+          std::cerr << error.what() << "\n";
+        }
+      }
       RK_MPI_VI_ReleaseChnFrame(0, 1, &frame);
       if (!y)
         continue;
@@ -528,6 +556,7 @@ private:
   snd_pcm_t *pcm_ = nullptr;
   std::atomic<bool> running_{false}, paused_{false}, playing_{false},
       video_discontinuity_{true};
+  std::atomic<uint64_t> preview_stamp_{0};
   std::thread video_thread_, audio_thread_, scene_thread_, playback_;
   mutable std::mutex error_mutex_, clock_mutex_;
   std::string error_;

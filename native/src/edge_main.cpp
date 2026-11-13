@@ -84,6 +84,9 @@ public:
     }
     CaptureConfig capture_config;
     capture_config.root = root_;
+    preview_path_ = simulated_ ? root_ / "preview.rgb565"
+                              : fs::path("/run/echotrace-preview.rgb565");
+    capture_config.preview_path = preview_path_;
     capture_config.alsa = config_.get("alsa", "hw:0,0").asString();
     capture_config.capture_channels =
         config_.get("capture_channels", 2).asUInt();
@@ -285,6 +288,8 @@ public:
     value["selected_project_id"] = ui_preferences_["project_id"];
     value["last_marker_us"] = Json::UInt64(last_marker_us_);
     value["playback_active"] = capture_->playback_active();
+    value["preview_path"] = preview_path_.string();
+    value["preview_time_us"] = Json::UInt64(capture_->preview_time_us());
     value["error"] = capture_error_.empty() ? last_error_ : capture_error_;
     return value;
   }
@@ -648,6 +653,7 @@ private:
           release_media_lease();
           std::lock_guard<std::mutex> lock(state_mutex_);
           state_ = "stopped";
+          session_["ended_us"] = Json::UInt64(monotonic_us());
           capture_error_.clear();
           throw;
         }
@@ -906,6 +912,7 @@ private:
   Json::Value config_;
   Journal journal_;
   std::unique_ptr<Capture> capture_;
+  fs::path preview_path_;
   mutable std::mutex state_mutex_, media_mutex_, connection_mutex_, persist_mutex_,
       download_mutex_;
   std::string state_ = "stopped";

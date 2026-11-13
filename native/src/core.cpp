@@ -51,6 +51,18 @@ uint64_t monotonic_us() {
     throw std::runtime_error("monotonic clock unavailable");
   return uint64_t(stamp.tv_sec) * 1000000 + stamp.tv_nsec / 1000;
 }
+void write_preview(const fs::path &path, const std::vector<uint8_t> &pixels) {
+  if (pixels.size() != 160 * 90 * 2)
+    throw std::runtime_error("invalid RGB565 preview dimensions");
+  auto part = path;
+  part += ".part";
+  std::ofstream output(part, std::ios::binary | std::ios::trunc);
+  output.write(reinterpret_cast<const char *>(pixels.data()), pixels.size());
+  output.close();
+  if (!output)
+    throw std::runtime_error("preview unavailable");
+  fs::rename(part, path);
+}
 std::string boot_id() {
   std::ifstream source("/proc/sys/kernel/random/boot_id");
   std::string result;

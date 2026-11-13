@@ -37,6 +37,7 @@ public:
   ~SimulatedCapture() { stop(); }
   void start(const std::string &session) override {
     stop();
+    preview_stamp_ = 0;
     directory_ = config_.root / "sessions" / session;
     fs::create_directories(directory_);
     {
@@ -63,6 +64,16 @@ public:
             flushed_ = false;
           }
           const auto now = monotonic_us();
+          if (!config_.preview_path.empty() && now - preview_stamp_.load() > 500000) {
+            std::vector<uint8_t> pixels(160 * 90 * 2);
+            for (size_t at = 0; at < pixels.size(); at += 2) {
+              uint16_t color = uint16_t((((at / 2) % 160) / 20) << 12);
+              pixels[at] = uint8_t(color);
+              pixels[at + 1] = uint8_t(color >> 8);
+            }
+            write_preview(config_.preview_path, pixels);
+            preview_stamp_ = now;
+          }
           if (now - begin >= 10000000) {
             flush(begin, now);
             begin = monotonic_us();
@@ -80,6 +91,7 @@ public:
     });
   }
   void pause(bool value) override { paused_ = value; }
+  uint64_t preview_time_us() const override { return preview_stamp_.load(); }
   void stop() override {
     running_ = false;
     if (thread_.joinable())
@@ -129,6 +141,7 @@ private:
            payload);
   }
   CaptureConfig config_;
+  std::atomic<uint64_t> preview_stamp_{0};
   MediaCallback media_;
   EventCallback event_;
   std::thread thread_;

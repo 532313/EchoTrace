@@ -12,6 +12,7 @@ using EventCallback = std::function<void(const std::string &, uint64_t,
                                          const std::string &, Json::Value)>;
 struct CaptureConfig {
   std::filesystem::path root;
+  std::filesystem::path preview_path;
   unsigned capture_channels = 2, microphone_channel = 0;
   unsigned capture_latency_us = 500000;
   std::string alsa = "default";
@@ -30,6 +31,7 @@ public:
   }
   virtual void stop_playback() {}
   virtual bool playback_active() const { return false; }
+  virtual uint64_t preview_time_us() const { return 0; }
 };
 std::unique_ptr<Capture> make_capture(const CaptureConfig &, MediaCallback,
                                       EventCallback, bool simulated);
