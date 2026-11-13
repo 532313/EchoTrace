@@ -22,6 +22,7 @@ from . import __version__
 from .config import Settings
 from .ai import ModelUnavailable
 from .memory import MemoryService
+from .terminal import TerminalApp
 from .playback import make_playback_plan
 from .protocol import (
     VERSION,
@@ -691,6 +692,8 @@ def create_app(settings=None):
             path, media_type="application/zip", filename="EchoTrace-evidence.zip"
         )
 
+    terminal = TerminalApp(settings, store, memory, devices, session_create)
+
     @app.websocket("/ws/device")
     async def device_socket(websocket: WebSocket):
         if not valid_token(websocket.headers.get("authorization")):
@@ -867,7 +870,7 @@ def create_app(settings=None):
                             ProjectCreate(name=args.get("name", "")),
                         )
                     else:
-                        raise ValueError("小屏操作暂不支持：" + action)
+                        result = await terminal.handle(device_id, peer, action, args)
                     reply.update(ok=True, data=result)
                 except (ValueError, Conflict, NotFound, ValidationError) as error:
                     reply["error"] = str(error)[:500]
