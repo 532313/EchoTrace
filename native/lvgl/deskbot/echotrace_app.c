@@ -58,6 +58,7 @@ static char video_socket[108], video_stream[33], display_report[1024];
 static uint8_t video_packet[ET_SCREEN_WIRE_BYTES], video_pixels[ET_SCREEN_PIXELS];
 static lv_image_dsc_t video_descriptor;
 static uint32_t video_sequence;
+static uint64_t player_controls_us;
 static uint64_t video_received, video_rendered, video_discarded, video_epoch, video_window, video_window_frames;
 static void close_player(lv_event_t *event);
 static void open_player(void);
@@ -641,6 +642,7 @@ static void open_player(void) {
     font_tree(player_view);
     lv_obj_set_style_text_font(player_rate, &lv_font_montserrat_14, 0);
     video_stream[0] = 0; video_dirty = 0;
+    player_controls_us = 0;
 }
 static void video_flushed(lv_event_t *event) {
     (void)event;
@@ -1024,12 +1026,17 @@ static void refresh(lv_timer_t *unused) {
                  (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60),
                  str(player, "message"));
         set_text(player_text, playback);
-        if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED)) {
+        if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED) &&
+            (now_us() - player_controls_us >= 500000 || strcmp(str(player, "state"), "playing"))) {
             lv_slider_set_range(player_slider, 0, duration ? (int)duration : 1);
             lv_slider_set_value(player_slider, (int)position, LV_ANIM_OFF);
+            player_controls_us = now_us();
         }
         set_text(lv_obj_get_child(player_pause, 0), !strcmp(str(player, "state"), "paused") ? "继续" : "暂停");
     }
+    /* The opaque player covers the workbench. Updating hidden widgets causes
+     * full-height dirty ranges in fbtft, wasting the SPI refresh budget. */
+    if (player_view) return;
     const char *state = str(status, "state");
     char line[200];
     snprintf(line, sizeof(line), "%s%s · %s", boolean(status, "synthetic") ? "模拟 · " : "",
