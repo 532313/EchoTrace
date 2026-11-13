@@ -659,10 +659,10 @@ static void refresh(lv_timer_t *unused) {
     char hint[320];
     pthread_mutex_lock(&mutex);
     json_object *next = shared_status ? json_object_get(shared_status) : NULL;
+    if (status) json_object_put(status);
     copy(hint, sizeof(hint), notice);
     if (failed_send) { pending_id[0] = 0; failed_send = 0; }
     pthread_mutex_unlock(&mutex);
-    if (status) json_object_put(status);
     status = next;
     if (*pending_id && now_us() - pending_since > (!strcmp(pending_action, "voice") ? 90000000ULL : 20000000ULL)) {
         pending_id[0] = 0; message("后台未及时回复，请检查连接后重试");
