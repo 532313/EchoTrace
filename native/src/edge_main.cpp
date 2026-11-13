@@ -30,6 +30,15 @@ bool component(const std::string &text) {
          text.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRST"
                                 "UVWXYZ0123456789-_") == std::string::npos;
 }
+std::string short_text(std::string text) {
+  if (text.size() > 450) {
+    size_t end = 450;
+    while (end && (static_cast<unsigned char>(text[end]) & 0xc0) == 0x80) --end;
+    text.resize(end);
+    text += "…";
+  }
+  return text;
+}
 Json::Value load_json(const fs::path &path) {
   std::ifstream stream(path);
   if (!stream)
@@ -44,6 +53,12 @@ class Edge {
     std::string kind, session;
     uint64_t begin, end;
     bool discontinuity;
+  };
+  struct VoiceClip {
+    Json::Value request;
+    fs::path path;
+    std::string error;
+    bool cancelled = false;
   };
 public:
   Edge(fs::path root, std::string hub, std::string token, bool simulated,
@@ -213,15 +228,25 @@ public:
           const auto &thumbnail = value["data"]["thumbnail"];
           if (thumbnail.isObject() && thumbnail["width"].asInt() == 160 &&
               thumbnail["height"].asInt() == 90 && thumbnail["format"] == "rgb565le") {
-            const auto pixels = decode_base64(thumbnail["data"].asString(), 28800);
             const auto path = simulated_ ? root_ / "screen.rgb565"
                                         : fs::path("/run/echotrace-screen.rgb565");
-            write_preview(path, pixels);
+            try {
+              const auto pixels = decode_base64(thumbnail["data"].asString(), 28800);
+              write_preview(path, pixels);
+              value["data"]["thumbnail_path"] = path.string();
+            } catch (const std::exception &) {
+              value["data"]["media_message"] = "缩略图暂不可用，文字记录仍可查看";
+            }
             value["data"].removeMember("thumbnail");
-            value["data"]["thumbnail_path"] = path.string();
           }
           std::lock_guard<std::mutex> lock(state_mutex_);
           app_reply_ = value;
+          if (value.get("ok", false).asBool() &&
+              (value["action"] == "query" ||
+               (value["action"] == "voice" && value["data"]["mode"] == "query"))) {
+            last_query_ = value["data"];
+            last_query_["received_us"] = Json::UInt64(monotonic_us());
+          }
         } else if (value["type"] == "media.chunk.ack") {
           upload_acks_.push(value);
         } else if (value["type"] == "query.result") {
@@ -229,6 +254,22 @@ public:
           Json::Value brief;
           brief["answer"] = result["answer"];
           brief["status"] = result["status"];
+          brief["transcript"] = result["transcript"];
+          brief["hits"] = Json::arrayValue;
+          for (const auto &hit : result["hits"]) {
+            Json::Value candidate;
+            const auto &anchor = hit["anchor"];
+            candidate["id"] = anchor["id"];
+            auto label = anchor["note"].asString();
+            if (label.empty()) label = anchor["asr_text"].asString();
+            if (label.empty()) label = anchor["caption"].asString();
+            candidate["label"] = label.empty() ? "操作标记" : short_text(label);
+            auto stamp = anchor["source_time_us"].asUInt64();
+            auto begin = anchor["started_us"].asUInt64();
+            candidate["seconds"] = Json::UInt64(stamp >= begin ? (stamp - begin) / 1000000 : 0);
+            brief["hits"].append(candidate);
+            if (brief["hits"].size() == 5) break;
+          }
           brief["received_us"] = Json::UInt64(monotonic_us());
           if (result["hits"].size()) {
             const auto &hit = result["hits"][0];
@@ -271,6 +312,8 @@ public:
     });
   }
   ~Edge() {
+    listening_ = false;
+    if (voice_thread_.joinable()) voice_thread_.join();
     capture_->stop();
     release_media_lease();
     connected_ = false;
@@ -300,6 +343,9 @@ public:
     value["playback_active"] = capture_->playback_active();
     value["preview_path"] = preview_path_.string();
     value["preview_time_us"] = Json::UInt64(capture_->preview_time_us());
+    value["listening"] = listening_.load();
+    value["voice_running"] = voice_running_.load();
+    value["voice_started_us"] = Json::UInt64(voice_started_us_.load());
     value["error"] = capture_error_.empty() ? last_error_ : capture_error_;
     return value;
   }
@@ -312,6 +358,19 @@ public:
     const auto op = request.get("op", "status").asString();
     if (op == "status")
       return snapshot();
+    if (op == "voice.start" || op == "voice.stop" || op == "voice.cancel" ||
+        op == "playback.stop") {
+      if (op == "voice.start" && !connected_)
+        throw std::runtime_error("后台离线，暂时不能语音输入");
+      Json::Value command;
+      command["id"] = "local-" + std::to_string(monotonic_us());
+      command["op"] = op;
+      command["arguments"] = request;
+      if (!commands_.push(command))
+        throw std::runtime_error("操作队列忙");
+      result["queued"] = true;
+      return result;
+    }
     if (op == "project.select") {
       const auto id = request["project_id"].asString();
       {
@@ -416,6 +475,32 @@ public:
       if (auto command = commands_.pop())
         execute(*command);
       commit_closed_media();
+      if (auto clip = voice_clips_.pop()) {
+        voice_waiting_ = false;
+        if (!clip->cancelled) {
+          try {
+            if (!clip->error.empty()) throw std::runtime_error(clip->error);
+            const auto size = fs::file_size(clip->path);
+            if (size < 1000 || size > 400000)
+              throw std::runtime_error("语音过短，请再说一次");
+            std::vector<uint8_t> bytes(size);
+            std::ifstream file(clip->path, std::ios::binary);
+            file.read(reinterpret_cast<char *>(bytes.data()), bytes.size());
+            if (!file) throw std::runtime_error("语音文件读取失败");
+            Json::Value message;
+            message["type"] = "app.request";
+            message["id"] = clip->request["id"];
+            message["action"] = "voice";
+            message["arguments"] = clip->request["arguments"];
+            message["arguments"]["audio"] = encode_base64(bytes);
+            if (!outgoing_.push(message)) throw std::runtime_error("发送队列忙，请重试");
+          } catch (const std::exception &error) {
+            voice_reply(clip->request["id"], error.what());
+          }
+        }
+        fs::remove(clip->path);
+        auto part = clip->path; part.replace_extension(".part"); fs::remove(part);
+      }
       if (connected_) {
         if (replay_pending_.exchange(false)) {
           replay_cursor_ = 0;
@@ -473,10 +558,12 @@ public:
         persist_state();
       }
       if (media_lease_fd_ >= 0 && state() == "stopped" &&
-          !capture_->playback_active())
+          !capture_->playback_active() && !voice_running_)
         release_media_lease();
       std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
+    listening_ = false;
+    if (voice_thread_.joinable()) voice_thread_.join();
     capture_->stop();
     release_media_lease();
     drain_closed_media();
@@ -498,6 +585,12 @@ public:
   }
 
 private:
+  void voice_reply(const Json::Value &id, const std::string &error) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    app_reply_ = Json::objectValue;
+    app_reply_["id"] = id; app_reply_["action"] = "voice";
+    app_reply_["ok"] = false; app_reply_["error"] = error;
+  }
   std::string session_id() const {
     std::lock_guard<std::mutex> lock(state_mutex_);
     return session_["id"].asString();
@@ -639,6 +732,7 @@ private:
       }
       const auto &args = command["arguments"];
       if (op == "session.start") {
+        if (voice_running_) throw std::runtime_error("请先结束语音输入");
         auto session = args["session"];
         if (!component(session["id"].asString()) ||
             session["boot_id"].asString() != journal_.boot)
@@ -668,6 +762,38 @@ private:
           throw;
         }
         persist_state();
+      } else if (op == "voice.start") {
+        if (state() != "stopped" || capture_->playback_active() ||
+            voice_running_ || voice_waiting_)
+          throw std::runtime_error("请先结束录制、回放或上一次语音输入");
+        const auto request_id = args["id"].asString();
+        if (!component(request_id)) throw std::runtime_error("invalid voice request");
+        acquire_media_lease();
+        if (voice_thread_.joinable()) voice_thread_.join();
+        fs::create_directories(root_ / "voice");
+        const auto path = root_ / "voice" / (request_id + ".part");
+        voice_started_us_ = monotonic_us();
+        listening_ = voice_running_ = voice_waiting_ = true;
+        voice_cancelled_ = false;
+        try {
+          voice_thread_ = std::thread([this, args, path] {
+          VoiceClip clip;
+          clip.request = args; clip.path = path; clip.path.replace_extension(".wav");
+          try { capture_->listen(path, listening_); }
+          catch (const std::exception &error) { clip.error = error.what(); }
+          clip.cancelled = voice_cancelled_.load();
+          listening_ = false;
+          voice_clips_.push(std::move(clip));
+          voice_running_ = false;
+          });
+        } catch (...) {
+          listening_ = voice_running_ = voice_waiting_ = false;
+          release_media_lease();
+          throw;
+        }
+      } else if (op == "voice.stop" || op == "voice.cancel") {
+        if (op == "voice.cancel") voice_cancelled_ = true;
+        listening_ = false;
       } else if (op == "session.pause" || op == "session.resume" ||
                  op == "session.stop") {
         if (args["session_id"].asString() != session_id())
@@ -732,6 +858,7 @@ private:
         if (!download_)
           throw std::runtime_error("feedback cache unavailable");
       } else if (op == "playback.cache.end") {
+        if (voice_running_) throw std::runtime_error("请先结束语音输入");
         std::lock_guard<std::mutex> lock(download_mutex_);
         if (args["id"].asString() != download_id_ || !download_.is_open() ||
             download_bytes_ != download_size_)
@@ -746,6 +873,7 @@ private:
         acquire_media_lease();
         capture_->play(final, 0);
       } else if (op == "playback.start") {
+        if (voice_running_) throw std::runtime_error("请先结束语音输入");
         auto path = media_path(args["media_id"].asString());
         acquire_media_lease();
         capture_->play(path, args.get("offset_seconds", 0.0).asDouble());
@@ -776,6 +904,7 @@ private:
       } else
         throw std::runtime_error("unknown command");
     } catch (const std::exception &e) {
+      if (op == "voice.start") voice_reply(command["arguments"]["id"], e.what());
       reply["ok"] = false;
       reply["error"] = e.what();
       if (visible_error) {
@@ -935,6 +1064,11 @@ private:
   Client client_;
   websocketpp::connection_hdl handle_, upload_handle_;
   std::thread network_;
+  std::thread voice_thread_;
+  BoundedQueue<VoiceClip> voice_clips_{2};
+  std::atomic<bool> listening_{false}, voice_running_{false}, voice_waiting_{false},
+      voice_cancelled_{false};
+  std::atomic<uint64_t> voice_started_us_{0};
   std::atomic<bool> connected_{false}, connecting_{false}, replay_pending_{false},
       chunk_ack_{false};
   BoundedQueue<Json::Value> commands_{64}, outgoing_{128};

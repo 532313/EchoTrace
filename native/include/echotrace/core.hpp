@@ -18,6 +18,7 @@ void atomic_json(const std::filesystem::path &path, const Json::Value &value);
 void sync_closed_file(const std::filesystem::path &path);
 std::string sha256_file(const std::filesystem::path &path);
 std::vector<uint8_t> decode_base64(const std::string &text, size_t maximum);
+std::string encode_base64(const std::vector<uint8_t> &bytes);
 void write_preview(const std::filesystem::path &path, const std::vector<uint8_t> &pixels);
 
 struct Packet {

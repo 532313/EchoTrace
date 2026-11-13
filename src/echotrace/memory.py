@@ -610,6 +610,7 @@ class MemoryService:
                         self.query,
                         QueryIn(text=question, project_id=anchor["project_id"]),
                     )
+                    result["transcript"] = question
                     await self.on_voice_result(anchor["device_id"], result)
                 return
             child_id = self.store.derive_speech(

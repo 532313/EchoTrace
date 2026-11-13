@@ -78,6 +78,22 @@ std::string json(const Json::Value &value) {
   builder["indentation"] = "";
   return Json::writeString(builder, value);
 }
+std::string encode_base64(const std::vector<uint8_t> &bytes) {
+  static const char alphabet[] =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  std::string out;
+  out.reserve((bytes.size() + 2) / 3 * 4);
+  for (size_t i = 0; i < bytes.size(); i += 3) {
+    uint32_t v = uint32_t(bytes[i]) << 16;
+    if (i + 1 < bytes.size()) v |= uint32_t(bytes[i + 1]) << 8;
+    if (i + 2 < bytes.size()) v |= bytes[i + 2];
+    out += alphabet[v >> 18];
+    out += alphabet[v >> 12 & 63];
+    out += i + 1 < bytes.size() ? alphabet[v >> 6 & 63] : '=';
+    out += i + 2 < bytes.size() ? alphabet[v & 63] : '=';
+  }
+  return out;
+}
 Json::Value parse_json(const std::string &text) {
   Json::CharReaderBuilder builder;
   builder["collectComments"] = false;
