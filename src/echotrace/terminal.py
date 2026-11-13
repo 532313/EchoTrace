@@ -7,6 +7,7 @@ import subprocess
 import wave
 from .protocol import SessionCreate, QueryIn
 from .store import Conflict, NotFound, identifier
+from .terminal_playback import ScreenPlayer
 
 
 class TerminalApp:
@@ -15,6 +16,7 @@ class TerminalApp:
     def __init__(self, settings, store, memory, devices, start_session):
         self.settings, self.store, self.memory = settings, store, memory
         self.devices, self.start_session = devices, start_session
+        self.player = ScreenPlayer(settings, store, devices)
 
     @staticmethod
     def page(args):
@@ -68,6 +70,16 @@ class TerminalApp:
         return {**await self.query(text, args.get("project_id")), "mode": "query"}
 
     async def handle(self, device_id, peer, action, args):
+        if action == "player.start":
+            return await self.player.start(device_id, str(args.get("anchor_id", "")), args.get("offset_ms", 0))
+        if action == "player.pause":
+            return await self.player.pause(device_id)
+        if action == "player.resume":
+            return await self.player.resume(device_id)
+        if action == "player.seek":
+            return await self.player.resume(device_id, int(args.get("offset_ms", 0)))
+        if action == "player.stop":
+            return await self.player.stop(device_id)
         if action == "query":
             return await self.query(str(args.get("text", "")), args.get("project_id"))
         if action == "voice":

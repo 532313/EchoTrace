@@ -219,6 +219,7 @@ def create_app(settings=None):
         await memory.start()
         yield
         await memory.stop()
+        await terminal.player.close()
         for peer in list(devices.connected.values()):
             with contextlib.suppress(Exception):
                 await peer["socket"].close(code=1001)
@@ -914,6 +915,8 @@ def create_app(settings=None):
                 elif kind == "intent":
                     # Keep receiving the ACK while a terminal intent awaits command completion.
                     background(intent(data))
+                elif kind == "screen.stop":
+                    background(terminal.player.stop(device_id))
                 elif kind == "app.request":
                     # Keep receiving command ACKs while the requested action awaits
                     # the recorder. Only one app task per device is admitted.

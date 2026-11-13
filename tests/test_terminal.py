@@ -68,3 +68,64 @@ class TerminalHistoryTests(unittest.TestCase):
                 asyncio.run(check())
             finally:
                 store.close()
+
+
+class ScreenPlaybackTests(unittest.TestCase):
+    def test_play_pause_and_seek_across_video_segments(self):
+        import shutil
+        if not shutil.which("ffmpeg"):
+            self.skipTest("ffmpeg is not installed")
+        from echotrace.cli import seed_demo
+        from echotrace.terminal_playback import ScreenPlayer
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            demo = seed_demo(root)
+            settings = Settings(root, min_free_bytes=0, model_config=root / "absent.json")
+            store = Store(root)
+
+            async def check():
+                queue, commands = asyncio.Queue(), []
+
+                class Socket:
+                    async def send_json(self, message):
+                        await queue.put(message)
+
+                class Devices:
+                    connected = {"echo": {"capture_state": "stopped", "socket": Socket(),
+                                          "send_lock": asyncio.Lock()}}
+
+                    async def command(self, device_id, operation, arguments=None):
+                        commands.append((operation, arguments))
+                        return {"ok": True}
+
+                player = ScreenPlayer(settings, store, Devices())
+
+                async def frame(player_id):
+                    while True:
+                        message = await asyncio.wait_for(queue.get(), 4)
+                        if message.get("id") != player_id:
+                            continue
+                        if message["type"] == "screen.frame":
+                            self.assertEqual(len(base64.b64decode(message["data"])), 28800)
+                            return message
+                        if message.get("state") == "paused":
+                            self.fail(message.get("message"))
+
+                try:
+                    first = await player.start("echo", demo["anchors"][0])
+                    await frame(first["id"])
+                    paused = await player.pause("echo")
+                    self.assertEqual(paused["state"], "paused")
+                    second = await player.resume("echo", 4500)
+                    picture = await frame(second["id"])
+                    self.assertGreaterEqual(picture["position_ms"], 4500)
+                    self.assertTrue(any(op == "playback.start" for op, _ in commands))
+                    await player.stop("echo")
+                    self.assertEqual(player.states["echo"]["state"], "stopped")
+                finally:
+                    await player.close()
+
+            try:
+                asyncio.run(check())
+            finally:
+                store.close()
