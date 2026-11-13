@@ -53,12 +53,13 @@ static uint64_t pending_since;
 static char entry_target[160];
 static lv_obj_t *player_view, *player_image, *player_rate;
 static lv_timer_t *video_timer;
-static int video_fd = -1, video_dirty;
+static int video_fd = -1, video_dirty, video_pending;
 static char video_socket[108], video_stream[33], display_report[1024];
 static uint8_t video_packet[ET_SCREEN_WIRE_BYTES], video_pixels[ET_SCREEN_PIXELS];
 static lv_image_dsc_t video_descriptor;
 static uint32_t video_sequence;
 static uint64_t player_controls_us;
+static uint64_t video_deadline;
 static uint64_t video_received, video_rendered, video_discarded, video_epoch, video_window, video_window_frames;
 static void close_player(lv_event_t *event);
 static void open_player(void);
@@ -595,7 +596,9 @@ static void close_player(lv_event_t *event) {
     lv_obj_delete(player_view);
     player_view = player_image = player_rate = NULL;
     player_slider = player_text = player_pause = NULL;
-    video_dirty = 0;
+    video_dirty = video_pending = 0;
+    lv_timer_resume(lv_display_get_refr_timer(lv_display_get_default()));
+    if (video_timer) lv_timer_set_period(video_timer, 8);
     if (!strncmp(pending_action, "player.", 7)) pending_id[0] = 0;
 }
 static void open_player(void) {
@@ -643,6 +646,9 @@ static void open_player(void) {
     lv_obj_set_style_text_font(player_rate, &lv_font_montserrat_14, 0);
     video_stream[0] = 0; video_dirty = 0;
     player_controls_us = 0;
+    video_pending = 0; video_deadline = 0;
+    lv_timer_pause(lv_display_get_refr_timer(lv_display_get_default()));
+    lv_timer_set_period(video_timer, 1);
 }
 static void video_flushed(lv_event_t *event) {
     (void)event;
@@ -667,17 +673,27 @@ static void draw_video(lv_timer_t *unused) {
             copy(video_stream, sizeof(video_stream), stream);
             video_received = video_rendered = video_discarded = video_window_frames = 0;
             video_epoch = video_window = now_us(); video_sequence = frame.sequence;
+            /* Half a frame of jitter margin, then commit at a fixed 30Hz.
+             * Two unrelated video/repaint timers otherwise create 16/48ms
+             * bursts that fbtft coalesces even when average render FPS is 30. */
+            video_deadline = now_us() + 16667;
         } else if (video_received && frame.sequence <= video_sequence) continue;
         video_sequence = frame.sequence; ++video_received;
-        if (updated || video_dirty) ++video_discarded;
+        if (updated || video_pending) ++video_discarded;
         memcpy(video_pixels, frame.pixels, sizeof(video_pixels)); updated = 1;
     }
-    if (updated) {
-        video_dirty = 1;
-        lv_image_cache_drop(&video_descriptor);
-        lv_obj_invalidate(player_image);
-    }
+    if (updated) video_pending = 1;
     uint64_t now = now_us();
+    if (player_view && now >= video_deadline) {
+        if (video_pending) {
+            video_pending = 0; video_dirty = 1;
+            lv_image_cache_drop(&video_descriptor); lv_obj_invalidate(player_image);
+        }
+        lv_refr_now(lv_display_get_default());
+        if (!video_deadline || now - video_deadline > 100000)
+            video_deadline = now + 33333;
+        else video_deadline += 33333;
+    }
     if (*video_stream && now - video_window >= 1000000) {
         unsigned fps_milli = (unsigned)(video_window_frames * 1000000000ULL / (now - video_window));
         char report[1024];
