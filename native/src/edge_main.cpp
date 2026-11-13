@@ -222,6 +222,22 @@ public:
               connecting_ = false;
             }
           }
+        } else if (value["type"] == "screen.state" || value["type"] == "screen.frame") {
+          if (value["type"] == "screen.frame") {
+            if (value["width"].asInt() != 160 || value["height"].asInt() != 90 ||
+                value["format"] != "rgb565le")
+              throw std::runtime_error("invalid screen video frame");
+            const auto pixels = decode_base64(value["data"].asString(), 28800);
+            const auto path = simulated_ ? root_ / "playback.rgb565"
+                                        : fs::path("/run/echotrace-playback.rgb565");
+            write_preview(path, pixels);
+            value.removeMember("data");
+            value["frame_path"] = path.string();
+            value["frame_us"] = Json::UInt64(monotonic_us());
+          }
+          std::lock_guard<std::mutex> lock(state_mutex_);
+          if (value["type"] == "screen.state" || player_["id"] == value["id"])
+            player_ = value;
         } else if (value["type"] == "app.reply") {
           if (message->get_payload().size() > 60000)
             throw std::runtime_error("app reply exceeds small-screen limit");
@@ -346,6 +362,7 @@ public:
     value["listening"] = listening_.load();
     value["voice_running"] = voice_running_.load();
     value["voice_started_us"] = Json::UInt64(voice_started_us_.load());
+    value["player"] = player_;
     value["error"] = capture_error_.empty() ? last_error_ : capture_error_;
     return value;
   }
@@ -358,6 +375,14 @@ public:
     const auto op = request.get("op", "status").asString();
     if (op == "status")
       return snapshot();
+    if (op == "screen.stop") {
+      screen_stop_requested_ = true;
+      Json::Value message;
+      message["type"] = "screen.stop";
+      outgoing_.push(message);
+      result["queued"] = true;
+      return result;
+    }
     if (op == "voice.start" || op == "voice.stop" || op == "voice.cancel" ||
         op == "playback.stop") {
       if (op == "voice.start" && !connected_)
@@ -474,6 +499,10 @@ public:
       }
       if (auto command = commands_.pop())
         execute(*command);
+      if (screen_stop_requested_.exchange(false)) {
+        capture_->stop_playback();
+        if (state() == "stopped" && !voice_running_) release_media_lease();
+      }
       commit_closed_media();
       if (auto clip = voice_clips_.pop()) {
         voice_waiting_ = false;
@@ -733,6 +762,7 @@ private:
       const auto &args = command["arguments"];
       if (op == "session.start") {
         if (voice_running_) throw std::runtime_error("请先结束语音输入");
+        if (capture_->playback_active()) throw std::runtime_error("请先停止回放");
         auto session = args["session"];
         if (!component(session["id"].asString()) ||
             session["boot_id"].asString() != journal_.boot)
@@ -1056,7 +1086,7 @@ private:
       download_mutex_;
   std::string state_ = "stopped";
   Json::Value session_, projects_, last_query_, retired_, seen_commands_,
-      app_reply_, ui_preferences_;
+      app_reply_, ui_preferences_, player_;
   uint64_t last_marker_us_ = 0;
   std::string last_error_;
   std::string capture_error_;
@@ -1068,6 +1098,7 @@ private:
   BoundedQueue<VoiceClip> voice_clips_{2};
   std::atomic<bool> listening_{false}, voice_running_{false}, voice_waiting_{false},
       voice_cancelled_{false};
+  std::atomic<bool> screen_stop_requested_{false};
   std::atomic<uint64_t> voice_started_us_{0};
   std::atomic<bool> connected_{false}, connecting_{false}, replay_pending_{false},
       chunk_ack_{false};

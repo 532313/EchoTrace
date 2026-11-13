@@ -129,7 +129,7 @@ static void *worker_main(void *unused) {
         int active = running;
         if (queued) { copy(next, sizeof(next), command); queued = 0; }
         pthread_mutex_unlock(&mutex);
-        if (!active) break;
+        if (!active && !*next) break;
         if (*next) {
             char error[320] = "";
             json_object *request = json_tokener_parse(next);
@@ -148,6 +148,7 @@ static void *worker_main(void *unused) {
                 pthread_mutex_unlock(&mutex);
             }
         }
+        if (!active) break;
         char error[320] = "";
         json_object *request = json_object_new_object();
         json_object_object_add(request, "op", json_object_new_string("status"));
@@ -165,7 +166,7 @@ static void *worker_main(void *unused) {
 static int enqueue(json_object *request) {
     const char *text = json_object_to_json_string_ext(request, JSON_C_TO_STRING_PLAIN);
     pthread_mutex_lock(&mutex);
-    int ok = !queued && strlen(text) < sizeof(command);
+    int ok = (!queued || !strcmp(str(request, "op"), "screen.stop")) && strlen(text) < sizeof(command);
     if (ok) { copy(command, sizeof(command), text); queued = 1; notice[0] = 0; }
     else copy(notice, sizeof(notice), "上一条操作仍在等待");
     pthread_mutex_unlock(&mutex);
@@ -351,6 +352,8 @@ static json_object *anchor_model;
 static char history_session[100], opened_anchor[100];
 static int history_offset, history_more, detail_pending;
 static uint64_t detail_retry;
+static lv_obj_t *player_slider, *player_text, *player_pause;
+static uint64_t player_frame;
 static uint8_t detail_pixels[THUMB_BYTES];
 static lv_image_dsc_t detail_descriptor;
 
@@ -395,10 +398,16 @@ static void history_control(lv_event_t *event) {
 }
 static void close_detail(lv_event_t *event) {
     (void)event;
+    if (detail && *opened_anchor &&
+        !strcmp(str(field(status, "player"), "anchor_id"), opened_anchor)) operation("screen.stop");
     if (detail) { lv_obj_delete(detail); detail = detail_body = detail_image = NULL; }
+    player_slider = player_text = player_pause = NULL; player_frame = 0;
     if (anchor_model) { json_object_put(anchor_model); anchor_model = NULL; }
     opened_anchor[0] = 0; detail_pending = 0;
-    if (*pending_id && !strcmp(pending_action, "anchor.open")) pending_id[0] = 0;
+    if (*pending_id && (!strcmp(pending_action, "anchor.open") || !strncmp(pending_action, "player.", 7))) {
+        if (!strncmp(pending_action, "player.", 7)) operation("screen.stop");
+        pending_id[0] = 0;
+    }
 }
 static void reader(const char *title) {
     close_detail(NULL);
@@ -423,8 +432,8 @@ static void detail_refresh(lv_event_t *event) {
     json_object *args = object(); putstr(args, "anchor_id", opened_anchor);
     call("anchor.open", args); json_object_put(args);
 }
-static void update_detail_image(json_object *data) {
-    FILE *file = fopen(str(data, "thumbnail_path"), "rb");
+static void display_detail_frame(const char *path) {
+    FILE *file = fopen(path, "rb");
     size_t got = file ? fread(detail_pixels, 1, sizeof(detail_pixels), file) : 0;
     if (file) fclose(file);
     if (got == sizeof(detail_pixels)) {
@@ -432,6 +441,31 @@ static void update_detail_image(json_object *data) {
         lv_image_set_src(detail_image, &detail_descriptor);
         lv_obj_remove_flag(detail_image, LV_OBJ_FLAG_HIDDEN);
     }
+}
+static void update_detail_image(json_object *data) {
+    display_detail_frame(str(data, "thumbnail_path"));
+}
+static void player_control(lv_event_t *event) {
+    intptr_t op = (intptr_t)lv_event_get_user_data(event);
+    if (op == 2) { operation("screen.stop"); return; }
+    if (strcmp(str(status, "state"), "stopped") || boolean(status, "voice_running")) {
+        message("请先结束录制或语音输入"); return;
+    }
+    json_object *args = object(); putstr(args, "anchor_id", opened_anchor);
+    const char *state = str(field(status, "player"), "state");
+    const char *action = op == 0 ? "player.start" :
+        !strcmp(state, "playing") || !strcmp(state, "loading") ? "player.pause" : "player.resume";
+    call(action, args); json_object_put(args);
+}
+static void player_seek(lv_event_t *event) {
+    (void)event;
+    json_object *current = field(status, "player");
+    if (strcmp(str(current, "anchor_id"), opened_anchor) || !number(current, "duration_ms")) return;
+    int value = lv_slider_get_value(player_slider), maximum = (int)number(current, "duration_ms");
+    if (value >= maximum) value = maximum - 1;
+    json_object *args = object();
+    json_object_object_add(args, "offset_ms", json_object_new_int(value));
+    call("player.seek", args); json_object_put(args);
 }
 static void render_anchor(json_object *data) {
     if (detail && anchor_model && !strcmp(opened_anchor, str(data, "id")) &&
@@ -460,6 +494,15 @@ static void render_anchor(json_object *data) {
     detail_descriptor.data_size = sizeof(detail_pixels);
     detail_descriptor.data = detail_pixels;
     update_detail_image(data);
+    player_text = label(detail_body, "原始片段 · 点击播放", 285);
+    player_slider = lv_slider_create(detail_body);
+    lv_obj_set_size(player_slider, 275, 14);
+    lv_slider_set_range(player_slider, 0, 1);
+    lv_obj_add_event_cb(player_slider, player_seek, LV_EVENT_RELEASED, NULL);
+    lv_obj_t *play_controls = row(detail_body, 32);
+    button(play_controls, "播放", 78, player_control, 0);
+    player_pause = button(play_controls, "暂停/继续", 112, player_control, 1);
+    button(play_controls, "停止", 78, player_control, 2);
     detail_media_label = label(detail_body, str(data, "media_message"), 285);
     if (*str(data, "note")) {
         label(detail_body, "你的笔记", 285); label(detail_body, str(data, "note"), 285);
@@ -596,6 +639,8 @@ static void consume_reply(json_object *reply) {
     } else if (!strcmp(pending_action, "query") || !strcmp(pending_action, "voice")) {
         if (dialog && edit_mode == 1) close_dialog(NULL);
         render_query(data); lv_tabview_set_active(tabs, 3, LV_ANIM_OFF); message("");
+    } else if (!strncmp(pending_action, "player.", 7)) {
+        message("");
     } else if (!strcmp(pending_action, "speak")) {
         message("正在朗读回答");
     } else if (!strcmp(pending_action, "history.sessions") || !strcmp(pending_action, "history.anchors")) {
@@ -626,6 +671,25 @@ static void refresh(lv_timer_t *unused) {
     if (detail && detail_pending && !*pending_id && now_us() - detail_retry > 3000000) {
         detail_retry = now_us();
         detail_refresh(NULL);
+    }
+    json_object *player = field(status, "player");
+    if (detail && player_text && !strcmp(str(player, "anchor_id"), opened_anchor)) {
+        uint64_t position = number(player, "position_ms"), duration = number(player, "duration_ms");
+        char playback[220];
+        snprintf(playback, sizeof(playback), "%02llu:%02llu / %02llu:%02llu  %s",
+                 (unsigned long long)(position / 60000), (unsigned long long)(position / 1000 % 60),
+                 (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60),
+                 str(player, "message"));
+        lv_label_set_text(player_text, playback);
+        if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED)) {
+            lv_slider_set_range(player_slider, 0, duration ? (int)duration : 1);
+            lv_slider_set_value(player_slider, (int)position, LV_ANIM_OFF);
+        }
+        lv_label_set_text(lv_obj_get_child(player_pause, 0), !strcmp(str(player, "state"), "paused") ? "继续播放" : "暂停播放");
+        uint64_t frame = number(player, "frame_us");
+        if (frame && frame != player_frame) {
+            display_detail_frame(str(player, "frame_path")); player_frame = frame;
+        }
     }
     const char *state = str(status, "state");
     char line[200];
@@ -704,7 +768,7 @@ static void refresh(lv_timer_t *unused) {
     if (voice_button) lv_label_set_text(lv_obj_get_child(voice_button, 0), listening ? "结束说话" : "语音提问");
     if (dialog_voice) lv_label_set_text(lv_obj_get_child(dialog_voice, 0), listening ? "结束" : "语音");
     if (listening) lv_label_set_text(status_label, "正在听 · 点击结束说话");
-    enabled(start_button, !active && !boolean(status, "voice_running"));
+    enabled(start_button, !active && !boolean(status, "voice_running") && !boolean(status, "playback_active"));
     const char *error = str(status, "error");
     lv_label_set_text(notice_label, *error ? error : hint);
     json_object *query = field(status, "query");
@@ -819,15 +883,20 @@ void ui_EchoTracePage_init(void) {
 }
 void ui_EchoTracePage_deinit(void) {
     if (timer) { lv_timer_delete(timer); timer = NULL; }
-    if (status && boolean(status, "voice_running")) {
-        json_object *cancel = object(); putstr(cancel, "op", "voice.cancel");
-        char error[100] = ""; json_object *reply = exchange(cancel, error, sizeof(error));
-        if (reply) json_object_put(reply); json_object_put(cancel);
-    }
+    const char *play_state = str(field(status, "player"), "state");
+    if (!strcmp(str(status, "state"), "stopped") &&
+        (!strcmp(play_state, "playing") || !strcmp(play_state, "loading"))) operation("screen.stop");
+    int cancel_voice = boolean(status, "voice_running") ||
+                       (*pending_id && !strcmp(pending_action, "voice"));
     pthread_mutex_lock(&mutex);
     running = 0;
     pthread_mutex_unlock(&mutex);
     if (worker_started) { pthread_join(worker, NULL); worker_started = 0; }
+    if (cancel_voice) {
+        json_object *cancel = object(); putstr(cancel, "op", "voice.cancel");
+        char error[100] = ""; json_object *reply = exchange(cancel, error, sizeof(error));
+        if (reply) json_object_put(reply); json_object_put(cancel);
+    }
     pthread_mutex_lock(&mutex);
     if (shared_status) { json_object_put(shared_status); shared_status = NULL; }
     pthread_mutex_unlock(&mutex);
