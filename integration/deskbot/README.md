@@ -2,6 +2,8 @@
 
 当前安装和启动请优先阅读 [dev2 安装记录](../../docs/deployment-dev2.md)，日常使用见 [小屏操作](../../docs/small-screen.md)。本文下半部分保留 2026-11-13 的历史安装路径与旧链路。
 
+`0005-partial-display.patch` 在集成构建中采用 LVGL 局部绘制，避免每次视频更新重画整屏。当前脚本关闭 ST7789V 的逐次 SPI 调试日志；临时设置 `ECHOTRACE_LCD_DEBUG=32` 可采集 LCD 更新时间，正常使用默认为 0。30fps 链路和实测记录见 [流畅回放](../../docs/ui-playback-30fps.md)。
+
 ## 集成边界
 
 实际桌面源码是 WSL 的 `/home/guan/Echo-Mate/Demo/DeskBot_demo`。`baseline.json` 记录了打补丁前九个文件的 SHA-256（其中三个来自相邻的 `yolov5_demo`）；Mac 上的同名副本较旧，不能直接覆盖 WSL 版本。
@@ -41,6 +43,7 @@ patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/000
 patch -d "$work" -p1 < /home/guan/EchoTrace/integration/deskbot/0002-ai-camera-backend.patch
 patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0003-ai-camera-page.patch
 patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0004-app-launch.patch
+patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0005-partial-display.patch
 cd "$work/DeskBot_demo"
 cmake -S . -B build-echotrace -DTARGET_ARM=ON \
   -DECHOTRACE_APP_ROOT=/home/guan/EchoTrace -DCMAKE_BUILD_TYPE=Release

@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0.dev3",
+  "date": "2026-11-14",
+  "source_commit": "cb27b0e74016dfafc0742bc5945256e05fcf5e6e",
+  "topology": "Echo USB -> WSL; SSH forwarding through Mac to RK3576",
+  "output": {
+    "width": 160,
+    "height": 90,
+    "target_fps": 30,
+    "pixel_format": "rgb565le",
+    "queue_capacity_frames": 6,
+    "prebuffer_frames": 4,
+    "server_video_lead_ms": 120
+  },
+  "source_video": {
+    "width": 1920,
+    "height": 1080,
+    "avg_frame_rate": "750000/29999"
+  },
+  "render": {
+    "steady_fps": 30.12963734237289,
+    "window_seconds": 6.007374,
+    "last_window_fps": 29.992,
+    "frames_discarded": 0
+  },
+  "lcd": {
+    "measurement": "fbtft DEBUG_TIME_EACH_UPDATE; count consecutive retained update timestamps",
+    "steady_fps": 30.01579581251974,
+    "update_count": 169,
+    "retained_window_seconds": 5.597053000004962,
+    "window_start_after_request_seconds": 3.385554249995039,
+    "window_end_after_request_seconds": 8.982607250000001,
+    "reported_fps_median": 30
+  },
+  "transport": {
+    "frames_received": 300,
+    "frames_forwarded": 300,
+    "frames_dropped": 0,
+    "frames_late": 0
+  },
+  "restored": {
+    "speaker_volume": 25,
+    "lcd_debug": "0"
+  },
+  "scope": "One short recorded segment; no long-duration stability or AV synchronization precision claim"
+}
