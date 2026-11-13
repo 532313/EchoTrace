@@ -45,4 +45,8 @@ GitHub Actions 配置包含 `source-policy` 和 `portable-build` 两项。前者
 
 Mac 是当前源码仓库；WSL 负责 RV1106 构建，鲁班猫负责 RK3576 构建与运行。两边后续使用 `git clone/fetch/checkout` 同一提交，避免只复制几个文件却遗漏依赖。SDK、原 Echo-Mate、模型和运行数据继续保存在仓库之外。
 
+2026-11-13 已在 WSL 建立 Git 构建副本 `/home/guan/EchoTrace-git`，由本地 Git bundle 克隆，已用功能提交构建 RV1106 ARM/uClibc 采集程序并生成产物清单。该副本的 `snapshot` remote 指向本地 bundle，不是云端仓库；云端 URL 确定后另设 `origin`。旧 `/home/guan/EchoTrace` 暂时提供已准备的 `build/deps` 和 `build/vendor` 缓存，原目录未覆盖。
+
+在 WSL 进行后续设备构建时，使用新 Git 副本的源码、工具链文件和 `build/rv1106` 输出目录；通过 `ECHO_DEPS_DIR`、`ECHO_VENDOR_DIR` 指向已准备依赖。依赖仍按仓库锁文件核对，构建后用 `scripts/release.py artifact` 保存版本和摘要。
+
 完整源码备份可使用 `git bundle`；它保存提交、分支和标签，但不包含被忽略的模型、录像和 SDK。实际应用安装须正常结束录制，保存旧二进制、配置和数据迁移备份，再替换新产物。每次部署记录产品版本、完整 Git 提交、产物摘要、板型和恢复命令。
