@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from echotrace.config import Settings
 from echotrace.memory import MemoryService
-from echotrace.protocol import EventIn, SessionCreate
+from echotrace.protocol import EventIn, SessionCreate, Packet, SCREEN_FRAME, SCREEN_BYTES
 from echotrace.store import Store
 from echotrace.terminal import TerminalApp
 
@@ -90,9 +90,12 @@ class ScreenPlaybackTests(unittest.TestCase):
                     async def send_json(self, message):
                         await queue.put(message)
 
+                    async def send_bytes(self, data):
+                        await queue.put(Packet.unpack(data))
+
                 class Devices:
                     connected = {"echo": {"capture_state": "stopped", "socket": Socket(),
-                                          "send_lock": asyncio.Lock()}}
+                                          "send_lock": asyncio.Lock(), "capabilities": ["screen_binary_v1"]}}
 
                     async def command(self, device_id, operation, arguments=None):
                         commands.append((operation, arguments))
@@ -103,11 +106,15 @@ class ScreenPlaybackTests(unittest.TestCase):
                 async def frame(player_id):
                     while True:
                         message = await asyncio.wait_for(queue.get(), 4)
+                        if isinstance(message, Packet):
+                            self.assertEqual(message.kind, SCREEN_FRAME)
+                            self.assertEqual(len(message.payload), 16 + SCREEN_BYTES)
+                            state = player.states["echo"]
+                            if message.payload[:16].hex() != state["stream_id"]:
+                                continue
+                            return {"position_ms": (message.source_time_us - state["begin_us"]) // 1000}
                         if message.get("id") != player_id:
                             continue
-                        if message["type"] == "screen.frame":
-                            self.assertEqual(len(base64.b64decode(message["data"])), 28800)
-                            return message
                         if message.get("state") == "paused":
                             self.fail(message.get("message"))
 

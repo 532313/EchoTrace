@@ -19,7 +19,7 @@
  
  add_subdirectory(lvgl)          # LVGL 核心模块
  add_subdirectory(gui_app)       # GUI_APP 应用模块
-@@ -173,10 +179,28 @@
+@@ -173,10 +179,29 @@
      RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_PATH}"
  )
  
@@ -31,7 +31,8 @@
 +    target_sources(gui_app PRIVATE
 +        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot/echotrace_app.c
 +        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot/media_bridge.c
-+        ${ECHOTRACE_APP_ROOT}/native/src/media_lease.c)
++        ${ECHOTRACE_APP_ROOT}/native/src/media_lease.c
++        ${ECHOTRACE_APP_ROOT}/native/src/screen_frame.c)
 +    target_include_directories(gui_app PUBLIC
 +        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot
 +        ${ECHOTRACE_APP_ROOT}/native/include)

@@ -1,11 +1,14 @@
 """Small-screen evidence playback: RK decodes; Echo displays bounded RGB565 frames."""
 from __future__ import annotations
 import asyncio
-import base64
 import contextlib
 import time
+import uuid
 from .playback import make_playback_plan
+from .protocol import Packet, SCREEN_FRAME, SCREEN_BYTES, SCREEN_WIDTH, SCREEN_HEIGHT
 from .store import Conflict, identifier
+
+FPS = 30
 
 
 class ScreenPlayer:
@@ -15,18 +18,23 @@ class ScreenPlayer:
 
     def view(self, state):
         return {key: state.get(key) for key in (
-            "id", "anchor_id", "state", "position_ms", "duration_ms", "message")}
+            "id", "stream_id", "anchor_id", "state", "position_ms", "duration_ms",
+            "begin_us", "message", "fps", "frames_sent", "frames_late")}
 
     async def publish(self, device_id, state, pixels=None):
         peer = self.devices.connected.get(device_id)
         if not peer:
             raise Conflict("记录终端已离线")
-        message = {"type": "screen.frame" if pixels else "screen.state", **self.view(state)}
         if pixels:
-            message.update(data=base64.b64encode(pixels).decode(), width=160, height=90,
-                           format="rgb565le")
-        async with peer["send_lock"]:
-            await peer["socket"].send_json(message)
+            message = Packet(SCREEN_FRAME, state["frames_sent"], state["frame_us"], 0,
+                             bytes.fromhex(state["stream_id"]) + pixels).pack()
+            async with peer["send_lock"]:
+                await peer["socket"].send_bytes(message)
+            state["frames_sent"] += 1
+        else:
+            async with peer["send_lock"]:
+                await peer["socket"].send_json({"type": "screen.state", **self.view(state),
+                    "width": SCREEN_WIDTH, "height": SCREEN_HEIGHT, "format": "rgb565le"})
 
     async def cancel(self, device_id):
         task = self.tasks.pop(device_id, None)
@@ -43,6 +51,8 @@ class ScreenPlayer:
         peer = self.devices.connected.get(device_id)
         if not peer or peer["capture_state"] not in ("stopped", "unknown"):
             raise Conflict("请先结束录制，再回看原始片段")
+        if "screen_binary_v1" not in peer.get("capabilities", []):
+            raise Conflict("请先更新记录终端，再使用流畅回放")
         await self.cancel(device_id)
         evidence = self.store.evidence(anchor_id)
         plan = make_playback_plan(evidence)
@@ -58,7 +68,8 @@ class ScreenPlayer:
         offset_ms = int(offset_ms)
         if not 0 <= offset_ms < duration:
             raise ValueError("跳转位置超出片段范围")
-        state = dict(id=identifier(), anchor_id=anchor_id, state="loading",
+        state = dict(id=identifier(), stream_id=uuid.uuid4().hex,
+                     anchor_id=anchor_id, state="loading", fps=FPS, frames_sent=0, frames_late=0,
                      position_ms=offset_ms, duration_ms=duration, message="正在准备原片",
                      begin_us=plan["begin_us"], end_us=plan["end_us"],
                      origin_us=plan["begin_us"] + offset_ms * 1000, clock=None)
@@ -139,6 +150,7 @@ class ScreenPlayer:
 
     async def run(self, device_id, state):
         process, audio_task = None, None
+        published_at = 0.
         try:
             evidence = await self.ready_media(self.store.evidence(state["anchor_id"]))
             plan = make_playback_plan(evidence)
@@ -172,7 +184,8 @@ class ScreenPlayer:
                     self.settings.ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "error",
                     "-ss", str((cursor - video["start_us"]) / 1e6), "-i", str(source),
                     "-t", str((stop - cursor) / 1e6), "-an", "-threads", "2",
-                    "-vf", "fps=5,scale=160:90:force_original_aspect_ratio=decrease,pad=160:90:(ow-iw)/2:(oh-ih)/2",
+                    "-vf", "scale=240:136:flags=fast_bilinear:force_original_aspect_ratio=decrease,"
+                    "pad=240:136:(ow-iw)/2:(oh-ih)/2,fps=30",
                     "-pix_fmt", "rgb565le", "-f", "rawvideo", "pipe:1",
                     stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
                 segment_start = cursor
@@ -181,15 +194,16 @@ class ScreenPlayer:
                     if self.devices.connected[device_id]["capture_state"] not in ("stopped", "unknown"):
                         raise Conflict("录制优先，历史播放已停止")
                     try:
-                        pixels = await asyncio.wait_for(process.stdout.readexactly(28800), 8)
+                        pixels = await asyncio.wait_for(process.stdout.readexactly(SCREEN_BYTES), 8)
                     except asyncio.IncompleteReadError:
-                        if index > 0 and stop - cursor <= 250000:
+                        if index > 0 and stop - cursor <= 100000:
                             cursor = stop
                             break
                         raise Conflict("原视频解码中断，播放已暂停")
                     if state["clock"] is None:
                         state["clock"] = time.monotonic()
                         state.update(state="playing", message="" if plan["audio"] else "此段没有原始声音")
+                        await self.publish(device_id, state)
                         audio_task = asyncio.create_task(self.audio(device_id, state, plan["audio"]))
                     deadline = state["clock"] + (cursor - state["origin_us"]) / 1e6
                     delay = deadline - time.monotonic()
@@ -198,13 +212,19 @@ class ScreenPlayer:
                     if audio_task.done() and not audio_task.cancelled() and audio_task.exception():
                         raise audio_task.exception()
                     state["position_ms"] = max(0, (cursor - state["begin_us"]) // 1000)
-                    if time.monotonic() - deadline < .5:
+                    if time.monotonic() - deadline < 2 / FPS:
+                        state["frame_us"] = cursor
                         await self.publish(device_id, state, pixels)
+                    else:
+                        state["frames_late"] += 1
+                    if time.monotonic() - published_at >= .2:
+                        await self.publish(device_id, state)
+                        published_at = time.monotonic()
                     index += 1
-                    cursor = min(stop, segment_start + index * 200000)
+                    cursor = min(stop, segment_start + index * 1000000 // FPS)
                 if process.returncode is None:
                     with contextlib.suppress(ProcessLookupError): process.kill()
-                await process.wait()
+                await process.communicate()
                 process = None
             state.update(state="ended", position_ms=state["duration_ms"], clock=None,
                          message="片段播放结束")
@@ -216,14 +236,14 @@ class ScreenPlayer:
             with contextlib.suppress(Exception):
                 await self.publish(device_id, state)
         finally:
-            if process and process.returncode is None:
+            if process:
                 with contextlib.suppress(ProcessLookupError):
                     process.kill()
                 with contextlib.suppress(asyncio.TimeoutError):
-                    await asyncio.wait_for(process.wait(), 2)
+                    await asyncio.wait_for(process.communicate(), 2)
                 if process.returncode is None:
                     process.kill()
-                    await process.wait()
+                    await process.communicate()
             if audio_task:
                 audio_task.cancel()
                 with contextlib.suppress(asyncio.CancelledError, Exception):
