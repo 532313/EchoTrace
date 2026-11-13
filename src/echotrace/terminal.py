@@ -1,9 +1,12 @@
 """Bounded small-screen views over the existing store and memory services."""
 from __future__ import annotations
 import asyncio
+import base64
+import io
 import subprocess
-from .protocol import SessionCreate
-from .store import Conflict, NotFound
+import wave
+from .protocol import SessionCreate, QueryIn
+from .store import Conflict, NotFound, identifier
 
 
 class TerminalApp:
@@ -20,7 +23,67 @@ class TerminalApp:
             raise ValueError("invalid page offset")
         return offset
 
+    async def query(self, text, project_id=None):
+        query = QueryIn(text=text, project_id=project_id or None, top_k=5)
+        result = await asyncio.to_thread(self.memory.query, query)
+        return {
+            "answer": result["answer"][:700], "status": result["status"],
+            "transcript": text[:300], "warnings": result["warnings"][:3],
+            "hits": [{"id": h["anchor"]["id"],
+                      "label": (h["anchor"]["note"] or h["anchor"]["asr_text"] or
+                                h["anchor"]["caption"] or "操作标记")[:150],
+                      "seconds": max(0, (h["anchor"]["source_time_us"] -
+                                         h["anchor"]["started_us"]) // 1000000)}
+                     for h in result["hits"]],
+        }
+
+    async def voice(self, args):
+        encoded = args.get("audio", "")
+        if not isinstance(encoded, str) or len(encoded) > 540000:
+            raise ValueError("语音超过 12 秒，请缩短后重试")
+        raw = base64.b64decode(encoded, validate=True)
+        with wave.open(io.BytesIO(raw), "rb") as sound:
+            if (sound.getnchannels(), sound.getsampwidth(), sound.getframerate()) != (1, 2, 16000):
+                raise ValueError("语音格式不匹配")
+            if not 1 <= sound.getnframes() <= 12 * 16000:
+                raise ValueError("语音长度不匹配")
+        path = self.settings.root / "staging" / ("question-" + identifier() + ".wav")
+        try:
+            path.write_bytes(raw)
+            text, _ = await asyncio.to_thread(self.memory.ai.transcribe, path)
+        finally:
+            path.unlink(missing_ok=True)
+        if not text.strip():
+            raise ValueError("没有听清，请靠近麦克风再说一次")
+        mode = args.get("mode", "query")
+        if mode == "project.name":
+            name = text.strip(" ，。,.！!？?")
+            for prefix in ("这个项目叫", "项目名称是", "项目叫", "命名为", "叫做"):
+                if name.startswith(prefix):
+                    name = name[len(prefix):].strip(" ，。,.：:")
+                    break
+            return {"mode": mode, "transcript": name[:120]}
+        if mode == "note":
+            return {"mode": mode, "transcript": text[:600]}
+        return {**await self.query(text, args.get("project_id")), "mode": "query"}
+
     async def handle(self, device_id, peer, action, args):
+        if action == "query":
+            return await self.query(str(args.get("text", "")), args.get("project_id"))
+        if action == "voice":
+            return await self.voice(args)
+        if action == "speak":
+            text = str(args.get("text", "")).strip()
+            if not text:
+                raise ValueError("没有可朗读的回答")
+            path = self.settings.root / "staging" / ("answer-" + identifier() + ".wav")
+            try:
+                await asyncio.to_thread(self.memory.ai.speak, text[:80], path)
+                await self.devices.send_audio(device_id, path)
+            finally:
+                path.unlink(missing_ok=True)
+            return {"spoken": True}
+
         if action == "history.sessions":
             offset = self.page(args)
             project_id = args.get("project_id")

@@ -32,6 +32,9 @@ public:
   virtual void stop_playback() {}
   virtual bool playback_active() const { return false; }
   virtual uint64_t preview_time_us() const { return 0; }
+  virtual void listen(const std::filesystem::path &, const std::atomic<bool> &) {
+    throw std::runtime_error("模拟设备不采集语音，请使用文字提问");
+  }
 };
 std::unique_ptr<Capture> make_capture(const CaptureConfig &, MediaCallback,
                                       EventCallback, bool simulated);

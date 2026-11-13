@@ -1,4 +1,7 @@
 import asyncio
+import base64
+import io
+import wave
 import tempfile
 import unittest
 from pathlib import Path
@@ -47,6 +50,21 @@ class TerminalHistoryTests(unittest.TestCase):
                     self.assertEqual(detail["note"], "更换排线是因为接触不良")
                     self.assertFalse(detail["pending"])
                     self.assertNotIn("thumbnail", detail)
+                    query = await app.handle("echo", {}, "query",
+                                             {"text": "为什么更换排线", "project_id": project["id"]})
+                    self.assertTrue(query["hits"])
+                    self.assertEqual(query["transcript"], "为什么更换排线")
+                    before = store.stats()["anchors"]
+                    buffer = io.BytesIO()
+                    with wave.open(buffer, "wb") as audio:
+                        audio.setnchannels(1); audio.setsampwidth(2); audio.setframerate(16000)
+                        audio.writeframes(bytes(3200))
+                    app.memory.ai.transcribe = lambda path: ("项目叫排线维修", "mock-asr")
+                    named = await app.handle("echo", {}, "voice", {
+                        "mode": "project.name", "audio": base64.b64encode(buffer.getvalue()).decode()})
+                    self.assertEqual(named["transcript"], "排线维修")
+                    self.assertEqual(store.stats()["anchors"], before)
+                    self.assertFalse(list((settings.root / "staging").glob("question-*.wav")))
                 asyncio.run(check())
             finally:
                 store.close()

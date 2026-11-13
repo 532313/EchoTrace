@@ -281,6 +281,47 @@ public:
   }
   bool playback_active() const override { return playing_.load(); }
   uint64_t preview_time_us() const override { return preview_stamp_.load(); }
+  void listen(const fs::path &path, const std::atomic<bool> &listening) override {
+    if (config_.capture_channels < 1 || config_.capture_channels > 4 ||
+        config_.microphone_channel >= config_.capture_channels)
+      throw std::runtime_error("invalid microphone channel");
+    snd_pcm_t *input = nullptr;
+    try {
+      if (snd_pcm_open(&input, config_.alsa.c_str(), SND_PCM_STREAM_CAPTURE,
+                       SND_PCM_NONBLOCK) < 0)
+        throw std::runtime_error("麦克风被占用或不可用");
+      if (snd_pcm_set_params(input, SND_PCM_FORMAT_S16_LE,
+              SND_PCM_ACCESS_RW_INTERLEAVED, config_.capture_channels,
+              16000, 1, config_.capture_latency_us) < 0)
+        throw std::runtime_error("麦克风参数设置失败");
+      WaveWriter wave;
+      wave.open(path);
+      std::vector<int16_t> input_samples(640 * config_.capture_channels);
+      std::array<int16_t, 640> mono{};
+      const uint64_t started = monotonic_us();
+      while (listening.load() && wave.samples() < 12 * 16000 &&
+             monotonic_us() - started < 15000000) {
+        auto count = snd_pcm_readi(input, input_samples.data(), 640);
+        if (count == 0) { snd_pcm_wait(input, 100); continue; }
+        if (count == -EAGAIN) { snd_pcm_wait(input, 100); continue; }
+        if (count == -EINTR) continue;
+        if (count < 0) {
+          if (snd_pcm_recover(input, int(count), 1) < 0)
+            throw std::runtime_error("语音采集失败，请重试");
+          continue;
+        }
+        size_t frames = std::min<size_t>(size_t(count), 12 * 16000 - wave.samples());
+        for (size_t i = 0; i < frames; ++i)
+          mono[i] = input_samples[i * config_.capture_channels + config_.microphone_channel];
+        wave.write(mono.data(), frames);
+      }
+      wave.close(false);
+      snd_pcm_close(input);
+    } catch (...) {
+      if (input) snd_pcm_close(input);
+      throw;
+    }
+  }
   void stop_playback() override {
     playing_ = false;
     if (playback_.joinable())

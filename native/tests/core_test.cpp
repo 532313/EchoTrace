@@ -65,6 +65,11 @@ int main() {
          "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
   assert(decode_base64("AAH/", 3) == std::vector<uint8_t>({0, 1, 255}));
   assert(decode_base64("YQ==", 1) == std::vector<uint8_t>({'a'}));
+  assert(encode_base64({0, 1, 255}) == "AAH/");
+  assert(encode_base64({'a'}) == "YQ==");
+  std::vector<uint8_t> all_bytes(256);
+  for (size_t i = 0; i < all_bytes.size(); ++i) all_bytes[i] = uint8_t(i);
+  assert(decode_base64(encode_base64(all_bytes), all_bytes.size()) == all_bytes);
   bool bad_base64 = false;
   try {
     decode_base64("YQ=/", 3);

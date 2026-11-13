@@ -872,7 +872,7 @@ def create_app(settings=None):
                     else:
                         result = await terminal.handle(device_id, peer, action, args)
                     reply.update(ok=True, data=result)
-                except (ValueError, Conflict, NotFound, ValidationError) as error:
+                except (ValueError, Conflict, NotFound, ValidationError, ModelUnavailable) as error:
                     reply["error"] = str(error)[:500]
                 except Exception:
                     logger.exception("Terminal action failed: %s", reply["action"])
