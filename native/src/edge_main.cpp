@@ -210,6 +210,16 @@ public:
         } else if (value["type"] == "app.reply") {
           if (message->get_payload().size() > 60000)
             throw std::runtime_error("app reply exceeds small-screen limit");
+          const auto &thumbnail = value["data"]["thumbnail"];
+          if (thumbnail.isObject() && thumbnail["width"].asInt() == 160 &&
+              thumbnail["height"].asInt() == 90 && thumbnail["format"] == "rgb565le") {
+            const auto pixels = decode_base64(thumbnail["data"].asString(), 28800);
+            const auto path = simulated_ ? root_ / "screen.rgb565"
+                                        : fs::path("/run/echotrace-screen.rgb565");
+            write_preview(path, pixels);
+            value["data"].removeMember("thumbnail");
+            value["data"]["thumbnail_path"] = path.string();
+          }
           std::lock_guard<std::mutex> lock(state_mutex_);
           app_reply_ = value;
         } else if (value["type"] == "media.chunk.ack") {

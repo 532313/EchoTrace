@@ -318,6 +318,202 @@ static void show_thumbnail(const char *path) {
         lv_obj_remove_flag(thumb_image, LV_OBJ_FLAG_HIDDEN);
     }
 }
+
+static lv_obj_t *history_page, *detail, *detail_body, *detail_image, *detail_media_label;
+static json_object *anchor_model;
+static char history_session[100], opened_anchor[100];
+static int history_offset, history_more, detail_pending;
+static uint64_t detail_retry;
+static uint8_t detail_pixels[THUMB_BYTES];
+static lv_image_dsc_t detail_descriptor;
+
+static void request_history(int reset) {
+    if (reset) { history_session[0] = 0; history_offset = 0; }
+    json_object *args = object();
+    if (*history_session) putstr(args, "session_id", history_session);
+    else if (*selected_project) putstr(args, "project_id", selected_project);
+    json_object_object_add(args, "offset", json_object_new_int(history_offset));
+    call(*history_session ? "history.anchors" : "history.sessions", args);
+    json_object_put(args);
+}
+static void free_button_data(lv_event_t *event) {
+    free(lv_event_get_user_data(event));
+}
+static void history_item(lv_event_t *event) {
+    const char *id = lv_event_get_user_data(event);
+    if (*pending_id) { message("请等待当前操作完成"); return; }
+    if (*history_session) {
+        copy(opened_anchor, sizeof(opened_anchor), id);
+        json_object *args = object(); putstr(args, "anchor_id", id);
+        call("anchor.open", args); json_object_put(args);
+    } else {
+        copy(history_session, sizeof(history_session), id);
+        history_offset = 0; request_history(0);
+    }
+}
+static void history_control(lv_event_t *event) {
+    intptr_t op = (intptr_t)lv_event_get_user_data(event);
+    if (*pending_id) { message("正在处理，请稍候"); return; }
+    if (op == 0) request_history(1);
+    else if (op == 1 || op == 2) {
+        if (op == 1 && history_offset >= 8) history_offset -= 8;
+        else if (op == 2 && history_more) history_offset += 8;
+        else return;
+        request_history(0);
+    } else {
+        json_object *args = object(); putstr(args, "session_id", history_session);
+        call(op == 3 ? "session.summary" : "session.continue", args);
+        json_object_put(args);
+    }
+}
+static void close_detail(lv_event_t *event) {
+    (void)event;
+    if (detail) { lv_obj_delete(detail); detail = detail_body = detail_image = NULL; }
+    if (anchor_model) { json_object_put(anchor_model); anchor_model = NULL; }
+    opened_anchor[0] = 0; detail_pending = 0;
+    if (*pending_id && !strcmp(pending_action, "anchor.open")) pending_id[0] = 0;
+}
+static void reader(const char *title) {
+    close_detail(NULL);
+    detail = lv_obj_create(screen);
+    lv_obj_add_flag(detail, LV_OBJ_FLAG_FLOATING);
+    lv_obj_set_pos(detail, 0, 0);
+    lv_obj_set_size(detail, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_style_pad_all(detail, 3, 0);
+    lv_obj_remove_flag(detail, LV_OBJ_FLAG_SCROLLABLE);
+    button(detail, "返回", 55, close_detail, 0);
+    lv_obj_t *heading = label(detail, title, 242);
+    lv_obj_set_pos(heading, 62, 4);
+    lv_label_set_long_mode(heading, LV_LABEL_LONG_DOT);
+    detail_body = lv_obj_create(detail);
+    lv_obj_set_pos(detail_body, 0, 38);
+    lv_obj_set_size(detail_body, 307, 190);
+    lv_obj_set_style_pad_all(detail_body, 3, 0);
+    lv_obj_set_flex_flow(detail_body, LV_FLEX_FLOW_COLUMN);
+}
+static void detail_refresh(lv_event_t *event) {
+    (void)event;
+    json_object *args = object(); putstr(args, "anchor_id", opened_anchor);
+    call("anchor.open", args); json_object_put(args);
+}
+static void update_detail_image(json_object *data) {
+    FILE *file = fopen(str(data, "thumbnail_path"), "rb");
+    size_t got = file ? fread(detail_pixels, 1, sizeof(detail_pixels), file) : 0;
+    if (file) fclose(file);
+    if (got == sizeof(detail_pixels)) {
+        lv_image_cache_drop(&detail_descriptor);
+        lv_image_set_src(detail_image, &detail_descriptor);
+        lv_obj_remove_flag(detail_image, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+static void render_anchor(json_object *data) {
+    if (detail && anchor_model && !strcmp(opened_anchor, str(data, "id")) &&
+        number(anchor_model, "revision") == number(data, "revision")) {
+        update_detail_image(data);
+        lv_label_set_text(detail_media_label, str(data, "media_message"));
+        json_object_put(anchor_model); anchor_model = json_object_get(data);
+        detail_pending = boolean(data, "pending"); detail_retry = now_us();
+        return;
+    }
+    char anchor_id[100]; copy(anchor_id, sizeof(anchor_id), str(data, "id"));
+    char title[100];
+    uint64_t seconds = number(data, "seconds");
+    snprintf(title, sizeof(title), "步骤 %02llu:%02llu",
+             (unsigned long long)(seconds / 60), (unsigned long long)(seconds % 60));
+    reader(title);
+    copy(opened_anchor, sizeof(opened_anchor), anchor_id);
+    anchor_model = json_object_get(data);
+    detail_image = lv_image_create(detail_body);
+    lv_obj_add_flag(detail_image, LV_OBJ_FLAG_HIDDEN);
+    memset(&detail_descriptor, 0, sizeof(detail_descriptor));
+    detail_descriptor.header.magic = LV_IMAGE_HEADER_MAGIC;
+    detail_descriptor.header.cf = LV_COLOR_FORMAT_RGB565;
+    detail_descriptor.header.w = 160; detail_descriptor.header.h = 90;
+    detail_descriptor.header.stride = 320;
+    detail_descriptor.data_size = sizeof(detail_pixels);
+    detail_descriptor.data = detail_pixels;
+    update_detail_image(data);
+    detail_media_label = label(detail_body, str(data, "media_message"), 285);
+    if (*str(data, "note")) {
+        label(detail_body, "你的笔记", 285); label(detail_body, str(data, "note"), 285);
+    }
+    if (*str(data, "asr_text")) {
+        label(detail_body, "当时的口述", 285); label(detail_body, str(data, "asr_text"), 285);
+    }
+    if (*str(data, "caption")) {
+        label(detail_body, "自动描述 · 以原图为准", 285); label(detail_body, str(data, "caption"), 285);
+    }
+    if (!*str(data, "note") && !*str(data, "asr_text") && !*str(data, "caption"))
+        label(detail_body, "本步骤没有文字说明，可查看原始画面。", 285);
+    button(detail_body, "刷新画面", 280, detail_refresh, 0);
+    detail_pending = boolean(data, "pending");
+    detail_retry = now_us();
+    font_tree(detail);
+}
+static void render_history(json_object *data) {
+    lv_obj_clean(history_page);
+    lv_obj_t *controls = row(history_page, 32);
+    button(controls, *history_session ? "会话列表" : "刷新记录", 88, history_control, 0);
+    if (*history_session) {
+        button(controls, "上次进度", 98, history_control, 3);
+        button(controls, "接着记录", 98, history_control, 4);
+    }
+    lv_obj_t *list = lv_obj_create(history_page);
+    lv_obj_set_width(list, LV_PCT(100));
+    lv_obj_set_flex_grow(list, 1);
+    lv_obj_set_style_pad_all(list, 1, 0);
+    lv_obj_set_style_pad_row(list, 3, 0);
+    lv_obj_set_flex_flow(list, LV_FLEX_FLOW_COLUMN);
+    json_object *items = field(data, "items"), *session = field(data, "session");
+    for (size_t i = 0; items && i < json_object_array_length(items); ++i) {
+        json_object *item = json_object_array_get_idx(items, i);
+        char text[1100];
+        if (*history_session) {
+            uint64_t started = number(session, "started_us");
+            uint64_t source = number(item, "source_time_us");
+            uint64_t seconds = source >= started ? (source - started) / 1000000 : 0;
+            const char *description = *str(item, "note") ? str(item, "note") :
+                 *str(item, "asr_text") ? str(item, "asr_text") :
+                 *str(item, "caption") ? str(item, "caption") :
+                 !strcmp(str(item, "kind"), "voice") ? "口述正在识别" : "操作标记";
+            snprintf(text, sizeof(text), "%02llu:%02llu  %s",
+                (unsigned long long)(seconds / 60), (unsigned long long)(seconds % 60), description);
+        } else {
+            uint64_t end = number(item, "ended_us");
+            if (!end) end = number(item, "last_us");
+            uint64_t started = number(item, "started_us");
+            uint64_t seconds = end >= started ? (end - started) / 1000000 : 0;
+            snprintf(text, sizeof(text), "%s\n%llu 分 %llu 秒 · %llu 步 · %.8s",
+                *str(item, "title") ? str(item, "title") : str(item, "project_name"),
+                (unsigned long long)(seconds / 60), (unsigned long long)(seconds % 60),
+                (unsigned long long)number(item, "steps"), str(item, "id"));
+        }
+        char *id = strdup(str(item, "id"));
+        lv_obj_t *item_button = button(list, text, 285, NULL, 0);
+        lv_obj_set_height(item_button, 54);
+        lv_obj_t *caption = lv_obj_get_child(item_button, 0);
+        lv_obj_set_width(caption, 270);
+        lv_label_set_long_mode(caption, LV_LABEL_LONG_DOT);
+        lv_obj_add_event_cb(item_button, history_item, LV_EVENT_CLICKED, id);
+        lv_obj_add_event_cb(item_button, free_button_data, LV_EVENT_DELETE, id);
+    }
+    if (!items || !json_object_array_length(items))
+        label(list, *history_session ? "还没有步骤。新记录可稍后刷新。" : "这个项目还没有记录。", 285);
+    history_more = boolean(data, "more");
+    history_offset = (int)number(data, "offset");
+    controls = row(history_page, 29);
+    lv_obj_t *previous = button(controls, "上一页", 95, history_control, 1);
+    lv_obj_t *next = button(controls, "下一页", 95, history_control, 2);
+    enabled(previous, history_offset > 0); enabled(next, history_more);
+    char page[50]; snprintf(page, sizeof(page), "第 %d 页", history_offset / 8 + 1);
+    label(controls, page, 93);
+    font_tree(history_page);
+}
+static void tab_changed(lv_event_t *event) {
+    (void)event;
+    if (lv_tabview_get_tab_active(tabs) == 2) request_history(1);
+}
+
 static void consume_reply(json_object *reply) {
     if (!*pending_id || strcmp(str(reply, "id"), pending_id)) return;
     pending_id[0] = 0;
@@ -327,6 +523,15 @@ static void consume_reply(json_object *reply) {
         select_project(str(data, "id"));
         message("项目已保存，可直接开始记忆");
         lv_tabview_set_active(tabs, 0, LV_ANIM_OFF);
+    } else if (!strcmp(pending_action, "history.sessions") || !strcmp(pending_action, "history.anchors")) {
+        render_history(data); message("");
+    } else if (!strcmp(pending_action, "anchor.open")) {
+        render_anchor(data); message("");
+    } else if (!strcmp(pending_action, "session.summary")) {
+        reader("上次做到哪里"); label(detail_body, str(data, "summary"), 285); font_tree(detail); message("");
+    } else if (!strcmp(pending_action, "session.continue")) {
+        select_project(str(data, "project_id"));
+        lv_tabview_set_active(tabs, 0, LV_ANIM_OFF); message("已开始后续记录");
     } else message("已完成");
 }
 static void refresh(lv_timer_t *unused) {
@@ -343,6 +548,10 @@ static void refresh(lv_timer_t *unused) {
         pending_id[0] = 0; message("后台未及时回复，请检查连接后重试");
     }
     if (status) consume_reply(field(status, "app_reply"));
+    if (detail && detail_pending && !*pending_id && now_us() - detail_retry > 3000000) {
+        detail_retry = now_us();
+        detail_refresh(NULL);
+    }
     const char *state = str(status, "state");
     char line[200];
     snprintf(line, sizeof(line), "%s%s · %s", boolean(status, "synthetic") ? "模拟 · " : "",
@@ -450,9 +659,10 @@ void ui_EchoTracePage_init(void) {
     lv_tabview_set_tab_bar_size(tabs, 27);
     lv_obj_t *record = lv_tabview_add_tab(tabs, "记录");
     lv_obj_t *project = lv_tabview_add_tab(tabs, "项目");
-    lv_obj_t *memory = lv_tabview_add_tab(tabs, "回看");
-    lv_obj_t *pages[] = {record, project, memory};
-    for (int i = 0; i < 3; ++i) {
+    history_page = lv_tabview_add_tab(tabs, "历史");
+    lv_obj_t *memory = lv_tabview_add_tab(tabs, "提问");
+    lv_obj_t *pages[] = {record, project, history_page, memory};
+    for (int i = 0; i < 4; ++i) {
         lv_obj_set_style_pad_all(pages[i], 2, 0);
         lv_obj_set_style_pad_row(pages[i], 3, 0);
         lv_obj_set_flex_flow(pages[i], LV_FLEX_FLOW_COLUMN);
@@ -494,6 +704,12 @@ void ui_EchoTracePage_init(void) {
     button(actions, "修改名称", 145, project_editor, 1);
     button(project, "用此项目开始记忆", 295, operation_click, 0);
     label(project, "可直接保存默认中文名称，或输入字母数字。", 300);
+    button(history_page, "查看项目历史", 295, history_control, 0);
+    label(history_page, "记录结束后，可在这里查看步骤并接着工作。", 295);
+    lv_obj_add_event_cb(tabs, tab_changed, LV_EVENT_VALUE_CHANGED, NULL);
+    history_session[0] = opened_anchor[0] = 0;
+    history_offset = history_more = detail_pending = 0;
+    detail = detail_body = detail_image = NULL;
     thumb_image = lv_image_create(memory);
     lv_obj_add_flag(thumb_image, LV_OBJ_FLAG_HIDDEN);
     memset(&thumb_descriptor, 0, sizeof(thumb_descriptor));
@@ -525,5 +741,7 @@ void ui_EchoTracePage_deinit(void) {
     if (shared_status) { json_object_put(shared_status); shared_status = NULL; }
     pthread_mutex_unlock(&mutex);
     if (status) { json_object_put(status); status = NULL; }
+    if (anchor_model) { json_object_put(anchor_model); anchor_model = NULL; }
+    detail = detail_body = detail_image = NULL;
     dialog = editor = NULL;
 }
