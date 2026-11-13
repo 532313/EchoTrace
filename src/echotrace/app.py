@@ -310,6 +310,10 @@ def create_app(settings=None):
     @app.post("/api/projects", status_code=201)
     async def project_create(data: ProjectCreate):
         project = store.create_project(data.name)
+        await publish_projects()
+        return project
+
+    async def publish_projects():
         message = {
             "type": "projects.changed",
             "projects": store.rows(
@@ -320,6 +324,11 @@ def create_app(settings=None):
             with contextlib.suppress(Exception):
                 async with peer["send_lock"]:
                     await peer["socket"].send_json(message)
+
+    @app.patch("/api/projects/{project_id}")
+    async def project_rename(project_id: str, data: ProjectCreate):
+        project = store.rename_project(project_id, data.name)
+        await publish_projects()
         return project
 
     @app.get("/api/sessions")
@@ -805,6 +814,7 @@ def create_app(settings=None):
                                 title=args.get("title", "工作台记录"),
                             )
                         )
+                        await publish_projects()
                     else:
                         sid = args.get("session_id") or peer.get("session_id")
                         if not sid:
@@ -834,6 +844,38 @@ def create_app(settings=None):
                         await websocket.send_json(
                             {"type": "error", "error": str(error)}
                         )
+
+            async def terminal_call(data):
+                reply = {
+                    "type": "app.reply",
+                    "id": str(data.get("id", ""))[:100],
+                    "action": str(data.get("action", ""))[:60],
+                    "ok": False,
+                }
+                try:
+                    args = data.get("arguments", {})
+                    if not isinstance(args, dict):
+                        raise ValueError("invalid app arguments")
+                    action = reply["action"]
+                    if action == "projects":
+                        result = projects()
+                    elif action == "project.create":
+                        result = await project_create(ProjectCreate.model_validate(args))
+                    elif action == "project.rename":
+                        result = await project_rename(
+                            str(args.get("project_id", "")),
+                            ProjectCreate(name=args.get("name", "")),
+                        )
+                    else:
+                        raise ValueError("小屏操作暂不支持：" + action)
+                    reply.update(ok=True, data=result)
+                except (ValueError, Conflict, NotFound, ValidationError) as error:
+                    reply["error"] = str(error)[:500]
+                except Exception:
+                    logger.exception("Terminal action failed: %s", reply["action"])
+                    reply["error"] = "操作未完成，请稍后重试"
+                async with peer["send_lock"]:
+                    await websocket.send_json(reply)
 
             while True:
                 message = await asyncio.wait_for(websocket.receive(), 35)
@@ -869,6 +911,21 @@ def create_app(settings=None):
                 elif kind == "intent":
                     # Keep receiving the ACK while a terminal intent awaits command completion.
                     background(intent(data))
+                elif kind == "app.request":
+                    # Keep receiving command ACKs while the requested action awaits
+                    # the recorder. Only one app task per device is admitted.
+                    if peer.get("app_task") and not peer["app_task"].done():
+                        async with peer["send_lock"]:
+                            await websocket.send_json({
+                                "type": "app.reply", "id": data.get("id"),
+                                "action": data.get("action"), "ok": False,
+                                "error": "上一项操作正在处理，请稍候",
+                            })
+                    else:
+                        task = asyncio.create_task(terminal_call(data))
+                        peer["app_task"] = task
+                        tasks.add(task)
+                        task.add_done_callback(tasks.discard)
                 elif kind == "heartbeat":
                     peer["source_time_us"] = int(data["source_time_us"])
                     peer["capture_state"] = data.get(

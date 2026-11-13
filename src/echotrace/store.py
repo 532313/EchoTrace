@@ -213,6 +213,15 @@ class Store:
             )
         return project
 
+    def rename_project(self, project_id, name):
+        name = name.strip()
+        if not name or len(name) > 120:
+            raise ValueError("项目名称需要 1～120 个字")
+        self.one("SELECT id FROM projects WHERE id=?", (project_id,))
+        with self.transaction():
+            self.db.execute("UPDATE projects SET name=? WHERE id=?", (name, project_id))
+        return self.one("SELECT * FROM projects WHERE id=?", (project_id,))
+
     def create_session(self, data: SessionCreate, session_id: Optional[str] = None):
         self.one("SELECT id FROM projects WHERE id=?", (data.project_id,))
         item = dict(
