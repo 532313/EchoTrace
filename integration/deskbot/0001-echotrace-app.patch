@@ -1,0 +1,250 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -22,11 +22,17 @@
+ 
+ project(DeskBot)
+ 
++set(ECHOTRACE_APP_ROOT "" CACHE PATH "EchoTrace source tree for the DeskBot app")
++
+ set(CMAKE_C_STANDARD 99)#C99 # lvgl officially support C99 and above
+ set(CMAKE_CXX_STANDARD 17)#C17
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-set(OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
++if(ECHOTRACE_APP_ROOT)
++    set(OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
++else()
++    set(OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
++endif()
+ 
+ add_subdirectory(lvgl)          # LVGL 核心模块
+ add_subdirectory(gui_app)       # GUI_APP 应用模块
+@@ -173,10 +179,28 @@
+     RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_PATH}"
+ )
+ 
++if(ECHOTRACE_APP_ROOT)
++    if(NOT EXISTS "${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot/echotrace_app.c" OR
++       NOT EXISTS "${ECHOTRACE_APP_ROOT}/build/vendor/fonts/echotrace_font.c")
++        message(FATAL_ERROR "Prepare the EchoTrace DeskBot page and font first")
++    endif()
++    target_sources(gui_app PRIVATE
++        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot/echotrace_app.c
++        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot/media_bridge.c
++        ${ECHOTRACE_APP_ROOT}/native/src/media_lease.c)
++    target_include_directories(gui_app PUBLIC
++        ${ECHOTRACE_APP_ROOT}/native/lvgl/deskbot
++        ${ECHOTRACE_APP_ROOT}/native/include)
++    target_sources(main PRIVATE
++        ${ECHOTRACE_APP_ROOT}/build/vendor/fonts/echotrace_font.c)
++    target_compile_definitions(gui_app PUBLIC ECHOTRACE_APP=1)
++    target_compile_definitions(lvgl PUBLIC ECHOTRACE_APP=1)
++endif()
++
+ # Custom command to clean up generated files
+ if(NOT TARGET clean-all)
+     add_custom_target(clean-all
+         COMMAND find "${CMAKE_BINARY_DIR}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+         COMMENT "Cleaning all generated files."
+     )
+-endif()
+\ No newline at end of file
++endif()
+--- a/lv_conf.h
++++ b/lv_conf.h
+@@ -527,7 +527,11 @@
+ /*Enable handling large font and/or fonts with a lot of characters.
+  *The limit depends on the font size, font face and bpp.
+  *Compiler error will be triggered if a font needs it.*/
+-#define LV_FONT_FMT_TXT_LARGE 0
++#ifdef ECHOTRACE_APP
++    #define LV_FONT_FMT_TXT_LARGE 1
++#else
++    #define LV_FONT_FMT_TXT_LARGE 0
++#endif
+ 
+ /*Enables/disables support for compressed fonts.*/
+ #define LV_USE_FONT_COMPRESSED 0
+@@ -1127,4 +1131,4 @@
+ 
+ #endif /*LV_CONF_H*/
+ 
+-#endif /*End of "Content enable"*/
+\ No newline at end of file
++#endif /*End of "Content enable"*/
+--- a/gui_app/ui.c
++++ b/gui_app/ui.c
+@@ -11,6 +11,10 @@
+ #include "./pages/ui_DrawPage/ui_DrawPage.h"
+ #include "./pages/ui_CalculatorPage/ui_CalculatorPage.h"
+ #include "./pages/ui_CameraPage/ui_CameraPage.h"
++#ifdef ECHOTRACE_APP
++#include "echotrace_app.h"
++LV_FONT_DECLARE(echotrace_font);
++#endif
+ ///////////////////// VARIABLES ////////////////////
+ 
+ lv_lib_pm_t page_manager;
+@@ -25,7 +28,11 @@
+ 
+ ///////////////////// all apps ////////////////////
+ 
++#ifdef ECHOTRACE_APP
++#define _APP_NUMS 13 // existing pages plus EchoTrace
++#else
+ #define _APP_NUMS 12 // number of apps (including HomePage)
++#endif
+ 
+ ui_app_data_t ui_apps[_APP_NUMS] = 
+ {
+@@ -107,6 +114,14 @@
+         .deinit = ui_CalculatorPage_deinit,
+         .page_obj = NULL
+     }
++#ifdef ECHOTRACE_APP
++    ,{
++        .name = "EchoTracePage",
++        .init = ui_EchoTracePage_init,
++        .deinit = ui_EchoTracePage_deinit,
++        .page_obj = NULL
++    }
++#endif
+ 
+ };
+ 
+@@ -131,8 +147,13 @@
+     // 创建新消息框
+     current_mbox = lv_msgbox_create(NULL);
+     mbox_exist = true;
++#ifdef ECHOTRACE_APP
++    lv_obj_set_style_text_font(lv_msgbox_add_title(current_mbox, title), &echotrace_font, 0);
++    lv_obj_set_style_text_font(lv_msgbox_add_text(current_mbox, text), &echotrace_font, 0);
++#else
+     lv_msgbox_add_title(current_mbox, title);
+     lv_msgbox_add_text(current_mbox, text);
++#endif
+     lv_obj_t * close_btn = lv_msgbox_add_close_button(current_mbox);
+     lv_obj_add_event_cb(close_btn, msgbox_close_click_event_cb, LV_EVENT_PRESSED, &mbox_exist);
+ }
+@@ -287,4 +308,4 @@
+     }
+     lv_lib_pm_OpenPage(&page_manager, NULL, "HomePage");
+     lv_timer_create(_maintimer_cb, 1000, NULL);
+-}
+\ No newline at end of file
++}
+--- a/gui_app/pages/ui_HomePage/ui_HomePage.c
++++ b/gui_app/pages/ui_HomePage/ui_HomePage.c
+@@ -1,4 +1,9 @@
+ #include "ui_HomePage.h"
++#ifdef ECHOTRACE_APP
++#include "echotrace_app.h"
++#include <string.h>
++LV_FONT_DECLARE(echotrace_font);
++#endif
+ 
+ ///////////////////// CONFIG ////////////////////
+ 
+@@ -118,6 +123,15 @@
+     char *pagename = lv_event_get_user_data(e);
+     if (event_code == LV_EVENT_CLICKED && !ui_desktop_data.drawer_anim_busy)
+     {
++#ifdef ECHOTRACE_APP
++        if ((strcmp(pagename, "ChatBotPage") == 0 ||
++             strcmp(pagename, "YOLOPage") == 0) &&
++            !echotrace_legacy_media_begin(pagename))
++        {
++            ui_msgbox_info("设备使用中", "EchoTrace 正在录制或播放，请先结束；若刚退出聊天，请稍后重试。");
++            return;
++        }
++#endif
+         _drawer_close_animation(ui_DrawerPanel);
+         ui_desktop_data.drawer_open = false;
+         ui_desktop_data.restore_drawer = true;
+@@ -410,7 +424,16 @@
+                                0xFF9A00, 255, "CameraPage");
+         _add_icon_label(btn, "\xEE\x98\x85", &ui_font_iconfont48,
+                         0xF6F7D7, 255);
++    }
++#ifdef ECHOTRACE_APP
++    // A new row keeps every existing app and its grid position intact.
++    y_off += GRID_Y_STEP;
++    {
++        lv_obj_t *btn = _create_app_btn(ui_DrawerPanel, GRID_X0, y_off,
++                                        0x27634e, 255, "EchoTracePage");
++        _add_icon_label(btn, "记忆", &echotrace_font, 0xFFFFFF, 255);
+     }
++#endif
+ }
+ 
+ ///////////////////// SCREEN init ////////////////////
+@@ -559,4 +582,4 @@
+ {
+     lv_timer_delete(ui_home_timer);
+     return;
+-}
+\ No newline at end of file
++}
+--- a/gui_app/pages/ui_ChatBotPage/app_ChatBotPage.c
++++ b/gui_app/pages/ui_ChatBotPage/app_ChatBotPage.c
+@@ -3,6 +3,9 @@
+ #include "ui_ChatBotPage.h"
+ #include "app_ChatBotPage.h"
+ #include "../../../../AIChat_demo/Client/c_interface/AIchat_c_interface.h"
++#ifdef ECHOTRACE_APP
++#include "echotrace_app.h"
++#endif
+ 
+ static void* app_instance = NULL; // AI Chat 应用实例
+ static pthread_t ai_chat_thread;  // 线程 ID
+@@ -17,6 +20,9 @@
+     destroy_aichat_app(app_instance);
+     app_instance = NULL;
+     is_running = 0;
++#ifdef ECHOTRACE_APP
++    echotrace_legacy_media_end("ChatBotPage");
++#endif
+     return NULL;
+ }
+ 
+@@ -35,6 +41,9 @@
+                                      protocolVersion, sample_rate, channels, frame_duration);
+     if (!app_instance) {
+         LV_LOG_ERROR("Error: Failed to create AI Chat application instance.\n");
++#ifdef ECHOTRACE_APP
++        echotrace_legacy_media_end("ChatBotPage");
++#endif
+         return -1;
+     }
+ 
+@@ -45,6 +54,9 @@
+         destroy_aichat_app(app_instance); // 清理实例
+         app_instance = NULL;
+         is_running = 0;
++#ifdef ECHOTRACE_APP
++        echotrace_legacy_media_end("ChatBotPage");
++#endif
+         return -1;
+     }
+ 
+--- a/gui_app/pages/ui_YOLOPage/ui_YOLOPage.c
++++ b/gui_app/pages/ui_YOLOPage/ui_YOLOPage.c
+@@ -1,4 +1,7 @@
+ #include "ui_YOLOPage.h"
++#ifdef ECHOTRACE_APP
++#include "echotrace_app.h"
++#endif
+ #if LV_USE_SIMULATOR == 0
+ #include "../../../../yolov5_demo/cpp/AIcamera_c_interface.h"
+ #endif
+@@ -112,5 +115,8 @@
+     free(img_dsc.data);
+     img_dsc.data = NULL;
+ #endif
++#ifdef ECHOTRACE_APP
++    echotrace_legacy_media_end("YOLOPage");
++#endif
+     lv_timer_del(timer);
+-}
+\ No newline at end of file
++}

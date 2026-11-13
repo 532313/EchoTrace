@@ -1,0 +1,43 @@
+{
+  "capture_binary_sha256": "538c4688c9e94e244a6949ad56a53cb3095ddeef8ab3b4b516654f6d8373fd40",
+  "capture_latency_us_requested": 500000,
+  "wav_sync_before_manifest_in_owner": true,
+  "session_id": "698f9f1a-4a4b-4f4e-a364-2a4f6a4fb852",
+  "completed_duration": true,
+  "elapsed_seconds": 300.00406225,
+  "media": {
+    "video": {
+      "segments": 29,
+      "bytes": 101701528,
+      "duration_seconds": 300.3987629999999,
+      "first_us": 13519405679,
+      "last_us": 13819805334,
+      "maximum_gap_us": 231,
+      "maximum_overlap_us": 291,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 30,
+      "bytes": 9608536,
+      "duration_seconds": 300.2255,
+      "first_us": 13519510927,
+      "last_us": 13819736695,
+      "maximum_gap_us": 151,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 0
+    }
+  },
+  "audio_xrun_events": 0,
+  "minimum_echo_MemAvailable_MiB": 19.80859375,
+  "minimum_hub_MemAvailable_MiB": 2138.67578125,
+  "read_pressure_bytes": 1073741824,
+  "read_pressure_seconds": 285.750031375,
+  "read_pressure_completed_bursts": 64,
+  "read_pressure_passed": true,
+  "scope": "five-minute hardware recording + SSH-encrypted O_DIRECT reads; does not replace a long-duration or physical AV synchronization test",
+  "original_audit_passed": true,
+  "verified_original_files": 59,
+  "source_and_index_metadata_match": true,
+  "video_frames_in_sample_tables": 7510,
+  "memory_reserve_20MiB_met": false
+}

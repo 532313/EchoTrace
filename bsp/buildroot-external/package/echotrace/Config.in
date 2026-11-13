@@ -1,0 +1,33 @@
+config BR2_PACKAGE_ECHOTRACE
+    bool "EchoTrace capture service and display"
+    depends on BR2_INSTALL_LIBSTDCPP
+    depends on BR2_TOOLCHAIN_HAS_THREADS
+    select BR2_PACKAGE_ALSA_LIB
+    help
+      Build the RV1106 capture owner. By default, also build the independent
+      LVGL 9 terminal. The optional DeskBot mode installs EchoTrace as an app
+      in the existing Echo-Mate desktop instead.
+      Prepared pinned sources must exist in build/deps and build/vendor.
+
+if BR2_PACKAGE_ECHOTRACE
+config BR2_PACKAGE_ECHOTRACE_SOURCE
+    string "Prepared EchoTrace source directory"
+config BR2_PACKAGE_ECHOTRACE_MEDIA_ROOT
+    string "RV1106 media headers and libraries directory"
+config BR2_PACKAGE_ECHOTRACE_LVGL_ROOT
+    string "Existing Echo-Mate LVGL 9 source directory"
+config BR2_PACKAGE_ECHOTRACE_DESKBOT
+    bool "Install prepared Echo-Mate desktop with EchoTrace app"
+    help
+      Use a separately built, baseline-checked DeskBot output directory.
+      This mode does not install or start the independent LVGL terminal.
+      The original DeskBot sources stay outside the Buildroot package.
+if BR2_PACKAGE_ECHOTRACE_DESKBOT
+config BR2_PACKAGE_ECHOTRACE_DESKBOT_BIN
+    string "Prepared integrated DeskBot bin directory"
+    help
+      Path to the bin directory produced by integration/deskbot/build_integrated.sh.
+      It must contain main, the original desktop assets, model, lib and
+      third_party directories.
+endif
+endif

@@ -1,0 +1,16 @@
+{
+  "source": "WSL /home/guan/Echo-Mate/Demo/DeskBot_demo",
+  "files": {
+    "CMakeLists.txt": "807f10e6990a8f8e3d2ce47c9a1698baf0d15a6b3895385a59308bb6ce907381",
+    "lv_conf.h": "c00f96538ca29e3c807ac290f1d0b255002d3363739ad4d2037b75dc961e5ace",
+    "gui_app/ui.c": "f6a87ddf3fcb2639370f3c64fc28912a5aa77dc1ac7abafe07ee6cfec53d350a",
+    "gui_app/pages/ui_HomePage/ui_HomePage.c": "e1eb76138ceb6fdcf35ca5a65d27bb3da4a34578a766724186abb6f950e561bf",
+    "gui_app/pages/ui_ChatBotPage/app_ChatBotPage.c": "43135d22c705d8ce7d6710d1a407ca718c3a4f39155db2489b9cc876017a4b34",
+    "gui_app/pages/ui_YOLOPage/ui_YOLOPage.c": "f7af7c3d395011a256696894dc862407990f7dab7fb4133ebbcde30c2424b8c6"
+  },
+  "yolov5_demo_files": {
+    "cpp/AIcamera_c_interface.h": "c61656bfca2a081c9c445323460b6ba2073188634147ba45d39132b2876219cc",
+    "cpp/AIcamera_c_interface.cc": "6e4fdddbee615b23b357abf5e9a52ce2c92f65f7fe8218b02ae5bec91f7d44c5",
+    "cpp/rknpu2/yolov5_rv1106_1103.cc": "5f5a848e48896dc17ee565b428e04bf165676e5f636b9041dbf142c31e13f1ba"
+  }
+}

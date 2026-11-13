@@ -1,0 +1,7 @@
+rga_api version 1.10.3_[3]
+{"backend":"mpp-rga","relative_time_us":3039389,"width":1920,"height":1080}
+
+mpp[185673]: mpp_info: mpp version: 43a191ed author: Yanjun Liao   2025-03-26 feat[vepu_511]: Add rv1126b 265e/264e/jpge support
+mpp[185673]: mpp_dec: mpp_dec use internal frame buffer group
+mpp[185673]: mpp_buffer: ~MppBufferService cleaning misc group
+

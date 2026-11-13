@@ -1,0 +1,43 @@
+{
+  "capture_pid": 606,
+  "capture_start_ticks": "2048440",
+  "terminal_pid": 608,
+  "wrong_pid_stop_left_capture_alive": true,
+  "start_was_idempotent": true,
+  "actual_restart_tested": true,
+  "scope": "PID guard and idempotency during recording; actual stop, start and independent restart on RV1106",
+  "actual_stop_tested": true,
+  "terminal_stop_left_idle_capture_alive": true,
+  "actual_stop_scope": "after the full one-hour session had stopped; capture PID 606 remained alive until separately stopped",
+  "idle_restart": {
+    "capture_pid": 1141,
+    "capture_start_ticks": "2522744",
+    "terminal_pid": 1162,
+    "previous_terminal_pid": 1032,
+    "terminal_restart_did_not_stop_capture": true,
+    "native_binary_sha256": "887640eb68356ce15d18311817eb947cf2e3f6fa3e685c52a3535bb3b34adeee",
+    "terminal_binary_sha256": "e7ea8cdf1bb0e203639638dc62be2383dc35fea08da5749b8283be96b75dc942",
+    "reserve_mb": 256,
+    "bounded_watchdog": false,
+    "log": "/mnt/sdcard/echotrace/validation/capture-online-25227422705.log",
+    "observed_utc_ms": 1794483555950,
+    "device": {
+      "device_id": "echo-mate",
+      "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+      "source_time_us": 27287736978,
+      "last_seen_seconds": 0.0006171739660203457,
+      "capabilities": [
+        "rv1106_capture",
+        "durable_replay",
+        "media_upload",
+        "media_chunk_ack"
+      ],
+      "session_id": "faa235d5-0140-4970-9a3a-ab4be2cc32e0",
+      "capture_state": "stopped"
+    },
+    "physical_connection": "Echo USB to WSL; existing SSH forwards to RK3576 retained at user request",
+    "autostart_enabled": false,
+    "watchdog_cancelled_after_test": true,
+    "recording": false
+  }
+}

@@ -1,0 +1,8 @@
+.playback-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.playback-controls button,.playback-controls label{font-size:11px}
+.playback-controls output{font-size:10px;color:var(--muted);margin-left:auto}
+.playback-slider{width:100%;accent-color:var(--accent);margin:12px 0}
+.playback-message{font-size:11px;color:#a16b36;margin-bottom:8px}
+.playback-gaps{font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+#evidencePlayer video{min-height:180px;display:block}
+#evidencePlayer video[hidden]{display:none}

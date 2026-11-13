@@ -1,0 +1,6 @@
+test_operator_stop_is_successful_without_claiming_full_duration (test_capture_coordinator.CoordinatorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.771s
+
+OK

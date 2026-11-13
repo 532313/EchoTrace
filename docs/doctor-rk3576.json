@@ -1,0 +1,37 @@
+{
+  "platform": "Linux-6.1.99-rk3576-aarch64-with-glibc2.36",
+  "python": "3.11.2",
+  "executables": {
+    "ffmpeg": "/usr/bin/ffmpeg",
+    "ffprobe": "/usr/bin/ffprobe",
+    "cmake": "/usr/bin/cmake",
+    "qmake": "/usr/bin/qmake",
+    "g++": "/usr/bin/g++"
+  },
+  "models": {
+    "asr": {
+      "status": "files_present",
+      "verified_runtime": false
+    },
+    "embedding": {
+      "status": "files_present",
+      "verified_runtime": false
+    },
+    "tts": {
+      "status": "files_present",
+      "verified_runtime": false
+    },
+    "vad": {
+      "status": "files_present",
+      "verified_runtime": false
+    },
+    "vlm": {
+      "status": "files_present",
+      "verified_runtime": false
+    }
+  },
+  "data": "/root/echotrace/runtime/real-smoke",
+  "hardware_checked": false,
+  "board": "EmbedFire LubanCat-3-v2",
+  "npu_driver": "RKNPU driver: v0.9.8"
+}

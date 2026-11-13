@@ -1,0 +1,1737 @@
+{
+  "synthetic": false,
+  "automated_test": true,
+  "quality_evaluation": false,
+  "synchronization_measured": false,
+  "requested_seconds": 60,
+  "samples": [
+    {
+      "elapsed_seconds": 0.0,
+      "hub_MemAvailable": 3431313408,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": []
+    },
+    {
+      "elapsed_seconds": 5.09,
+      "hub_MemAvailable": 3430916096,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3146.17,
+        "metrics": {
+          "MemAvailable": 25560,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 8284,
+          "available_kB": 60658496
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "",
+          "last_marker_us": 0,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3146097443,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 10.503,
+      "hub_MemAvailable": 3434745856,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320044,
+          "duration_seconds": 10.0,
+          "first_us": 3144484905,
+          "last_us": 3154484905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3151.22,
+        "metrics": {
+          "MemAvailable": 24708,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9156,
+          "available_kB": 60656736
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "",
+          "last_marker_us": 0,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3149111980,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 15.574,
+      "hub_MemAvailable": 3434696704,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 3741340,
+          "duration_seconds": 10.999717,
+          "first_us": 3144420785,
+          "last_us": 3155420502,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320044,
+          "duration_seconds": 10.0,
+          "first_us": 3144484905,
+          "last_us": 3154484905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3156.29,
+        "metrics": {
+          "MemAvailable": 24636,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9196,
+          "available_kB": 60654912
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3150015520,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3155852129,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 21.094,
+      "hub_MemAvailable": 3435913216,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 3741340,
+          "duration_seconds": 10.999717,
+          "first_us": 3144420785,
+          "last_us": 3155420502,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 640664,
+          "duration_seconds": 20.018,
+          "first_us": 3144484905,
+          "last_us": 3164502905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3161.35,
+        "metrics": {
+          "MemAvailable": 24608,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9172,
+          "available_kB": 60653216
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "",
+          "last_marker_us": 3160497801,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3161207035,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 26.182,
+      "hub_MemAvailable": 3436871680,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 7249585,
+          "duration_seconds": 21.999589,
+          "first_us": 3144420785,
+          "last_us": 3166420253,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 640664,
+          "duration_seconds": 20.018,
+          "first_us": 3144484905,
+          "last_us": 3164502905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3166.4,
+        "metrics": {
+          "MemAvailable": 24584,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9124,
+          "available_kB": 60651360
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3160497801,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3164632597,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 31.615,
+      "hub_MemAvailable": 3436969984,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 7249585,
+          "duration_seconds": 21.999589,
+          "first_us": 3144420785,
+          "last_us": 3166420253,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 960724,
+          "duration_seconds": 30.018500000000003,
+          "first_us": 3144484905,
+          "last_us": 3174503405,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3171.47,
+        "metrics": {
+          "MemAvailable": 24580,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9124,
+          "available_kB": 60649568
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3160497801,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3170245747,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 36.687,
+      "hub_MemAvailable": 3436449792,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 10475583,
+          "duration_seconds": 31.999825,
+          "first_us": 3144420785,
+          "last_us": 3176420499,
+          "maximum_gap_us": 10,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 960724,
+          "duration_seconds": 30.018500000000003,
+          "first_us": 3144484905,
+          "last_us": 3174503405,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3176.53,
+        "metrics": {
+          "MemAvailable": 24788,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9124,
+          "available_kB": 60647776
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3171103586,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3176257272,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 42.141,
+      "hub_MemAvailable": 3436777472,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 10475583,
+          "duration_seconds": 31.999825,
+          "first_us": 3144420785,
+          "last_us": 3176420499,
+          "maximum_gap_us": 10,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281456,
+          "duration_seconds": 40.040000000000006,
+          "first_us": 3144484905,
+          "last_us": 3184524905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3181.63,
+        "metrics": {
+          "MemAvailable": 24732,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9124,
+          "available_kB": 60645984
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3171103586,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3179263963,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 47.226,
+      "hub_MemAvailable": 3436486656,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 13973225,
+          "duration_seconds": 42.999924,
+          "first_us": 3144420785,
+          "last_us": 3187420507,
+          "maximum_gap_us": 10,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281456,
+          "duration_seconds": 40.040000000000006,
+          "first_us": 3144484905,
+          "last_us": 3184524905,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3186.7,
+        "metrics": {
+          "MemAvailable": 24688,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9124,
+          "available_kB": 60644160
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3181626660,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3185272234,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 52.625,
+      "hub_MemAvailable": 3436404736,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 13973225,
+          "duration_seconds": 42.999924,
+          "first_us": 3144420785,
+          "last_us": 3187420507,
+          "maximum_gap_us": 10,
+          "maximum_overlap_us": 121,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1602732,
+          "duration_seconds": 50.078500000000005,
+          "first_us": 3144484905,
+          "last_us": 3194563405,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3196.83,
+        "metrics": {
+          "MemAvailable": 24680,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9096,
+          "available_kB": 60640544
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "media request queue full",
+          "last_marker_us": 3192159263,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3194721627,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    },
+    {
+      "elapsed_seconds": 57.735,
+      "hub_MemAvailable": 3437182976,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 17579481,
+          "duration_seconds": 53.999998,
+          "first_us": 3144420785,
+          "last_us": 3198420419,
+          "maximum_gap_us": 10,
+          "maximum_overlap_us": 162,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1602732,
+          "duration_seconds": 50.078500000000005,
+          "first_us": 3144484905,
+          "last_us": 3194563405,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [],
+      "echo": {
+        "source_seconds": 3201.9,
+        "metrics": {
+          "MemAvailable": 24576,
+          "CmaAllocated": 22460,
+          "CmaReleased": 45124,
+          "VmRSS_kB": 9096,
+          "available_kB": 60638752
+        },
+        "state": {
+          "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+          "connected": true,
+          "device_id": "echo-mate",
+          "error": "",
+          "last_marker_us": 3192159263,
+          "playback_active": false,
+          "projects": [
+            {
+              "created_ms": 1794459411697,
+              "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+              "name": "SD 音频连续性修复后实录（自动化）"
+            },
+            {
+              "created_ms": 1794459212308,
+              "id": "bd75a885-cae9-4ae1-ad5d-5bf79e11ac33",
+              "name": "SD 流控修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458899666,
+              "id": "27cbe79f-b5fb-4e99-81e6-023bb6bdd50a",
+              "name": "SD 修复后一分钟实录（自动化）"
+            },
+            {
+              "created_ms": 1794458497514,
+              "id": "782e3a50-c91d-45d9-8788-bc196d485ea2",
+              "name": "SD 连接诊断二（自动化）"
+            },
+            {
+              "created_ms": 1794457962949,
+              "id": "773a3184-771c-435e-8424-720f7d1980a0",
+              "name": "SD 一分钟实录验证（自动化）"
+            },
+            {
+              "created_ms": 1794407106342,
+              "id": "32345250-8eea-46d6-aee0-604e1b9acf57",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387319412,
+              "id": "8707e090-3d32-43be-9582-53c102a87c28",
+              "name": "实板短时验证 · 自动化标记"
+            },
+            {
+              "created_ms": 1794387003172,
+              "id": "9ca8b800-4529-4472-ad0e-ba70987ff974",
+              "name": "实板短时验证 · 自动化标记"
+            }
+          ],
+          "query": null,
+          "session": {
+            "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+            "clock_quality": "unknown",
+            "created_ms": 1794459411732,
+            "device_id": "echo-mate",
+            "ended_us": null,
+            "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+            "last_us": 3143083857,
+            "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+            "started_us": 3143083857,
+            "state": "recording",
+            "summary": "",
+            "title": "SD 音频连续性修复后实录（自动化）",
+            "utc_ms": null
+          },
+          "source_time_us": 3200348801,
+          "state": "recording",
+          "synthetic": false
+        }
+      }
+    }
+  ],
+  "markers": [
+    {
+      "elapsed_seconds": 5.089578084,
+      "roundtrip_ms": 335.5836249999999,
+      "ack": {
+        "id": "3c7f27ce-bb2e-406f-8f49-af70aa62846d",
+        "ok": true,
+        "source_time_us": 3150021804,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 15.574420499999999,
+      "roundtrip_ms": 453.6999590000015,
+      "ack": {
+        "id": "cdd00736-d6ef-4a6d-a28d-9ab81294b7f7",
+        "ok": true,
+        "source_time_us": 3160505962,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 26.181777916999998,
+      "roundtrip_ms": 363.79179099999703,
+      "ack": {
+        "id": "377341d3-9436-4be2-9bda-7289c78be174",
+        "ok": true,
+        "source_time_us": 3171109002,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 36.686642375000005,
+      "roundtrip_ms": 370.52729199999845,
+      "ack": {
+        "id": "b4dbd02d-fed7-4490-be1c-239e60dd3590",
+        "ok": true,
+        "source_time_us": 3181631766,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 47.225588917,
+      "roundtrip_ms": 316.34712500000006,
+      "ack": {
+        "id": "2cb6c625-5df5-44c8-85ab-fc0a1ae99993",
+        "ok": true,
+        "source_time_us": 3192164420,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 57.735169334000005,
+      "roundtrip_ms": 417.99587500000257,
+      "ack": {
+        "id": "416fe04e-6497-482c-a890-4ddce833ae2a",
+        "ok": true,
+        "source_time_us": 3202708980,
+        "type": "ack"
+      }
+    }
+  ],
+  "connection_interruptions": [],
+  "project": {
+    "id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+    "name": "SD 音频连续性修复后实录（自动化）",
+    "created_ms": 1794459411697
+  },
+  "session": {
+    "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+    "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+    "device_id": "echo-mate",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "SD 音频连续性修复后实录（自动化）",
+    "state": "recording",
+    "started_us": 3143083857,
+    "last_us": 3143083857,
+    "ended_us": null,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794459411732,
+    "capture": {
+      "id": "3cb15e2a-1c57-4f2e-b808-423f817ef5ca",
+      "ok": true,
+      "source_time_us": 3144525368,
+      "type": "ack"
+    }
+  },
+  "elapsed_seconds": 60.005050542000006,
+  "stopped": {
+    "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+    "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+    "device_id": "echo-mate",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "SD 音频连续性修复后实录（自动化）",
+    "state": "stopped",
+    "started_us": 3143083857,
+    "last_us": 3206723531,
+    "ended_us": 3206723531,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794459411732,
+    "end_reason": "",
+    "project_name": "SD 音频连续性修复后实录（自动化）"
+  },
+  "timeline": {
+    "session": {
+      "id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+      "project_id": "dcbb4be8-2da4-4ac7-a09e-ca847bac1aa5",
+      "device_id": "echo-mate",
+      "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+      "title": "SD 音频连续性修复后实录（自动化）",
+      "state": "stopped",
+      "started_us": 3143083857,
+      "last_us": 3206723531,
+      "ended_us": 3206723531,
+      "utc_ms": null,
+      "clock_quality": "unknown",
+      "summary": "",
+      "created_ms": 1794459411732,
+      "end_reason": "",
+      "project_name": "SD 音频连续性修复后实录（自动化）"
+    },
+    "anchors": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-146",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3144420785,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-147",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3150015520,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 5 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-149",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3160497801,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 16 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-151",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3171103586,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 26 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-152",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3174460265,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-154",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3181626660,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 37 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-156",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3192159263,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 47 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-158",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3202698998,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 58 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-159",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "source_time_us": 3204500382,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      }
+    ],
+    "events": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-145",
+        "source_time_us": 3144491671,
+        "kind": "gap",
+        "body": "{\"boot_id\":\"fed7fc64-44e3-4501-a017-b8626dc9b64c\",\"device_id\":\"echo-mate\",\"id\":\"fed7fc64-44e3-4501-a017-b8626dc9b64c-145\",\"kind\":\"gap\",\"note\":\"视频时间源初始化，精度需声画同步实验验证\",\"payload\":{\"alignment_requires_hardware_validation\":true,\"native_offset_us\":0,\"synthetic\":false},\"seq\":145,\"session_id\":\"3cb4bfb1-9258-4473-983b-d6638f92c343\",\"source_time_us\":3144491671}"
+      }
+    ],
+    "media": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3144420785",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3144420785,
+        "end_us": 3155420502,
+        "kind": "video",
+        "size_bytes": 3741340,
+        "sha256": "6ee1a75448765455320d3b1bd5a3b5eb02e3337cfbfb76cac53931ebbed1183d",
+        "mime": "video/mp4",
+        "discontinuity": 1,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3144484905",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3144484905,
+        "end_us": 3154484905,
+        "kind": "audio",
+        "size_bytes": 320044,
+        "sha256": "85b110cd310e2d66585cfa67bab6dea379009a0bfdc0144e99fdc1b7d10b9c9c",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3154484905",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3154484905,
+        "end_us": 3164502905,
+        "kind": "audio",
+        "size_bytes": 320620,
+        "sha256": "51c2169e62547f31c468e846d46e9758f4208c0addc0bd19fbfa18e1bd12d889",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3155420381",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3155420381,
+        "end_us": 3166420253,
+        "kind": "video",
+        "size_bytes": 3508245,
+        "sha256": "a002a5b916048743a127b747779e9cf15ab5fd3f7347e1397f9bec8f92f9fc1b",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3164502905",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3164502905,
+        "end_us": 3174503405,
+        "kind": "audio",
+        "size_bytes": 320060,
+        "sha256": "1adad733384188bd6ddb5ae6d74840b3b300e0663bbd24e1e7edd47974ff7c70",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3166420263",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3166420263,
+        "end_us": 3176420499,
+        "kind": "video",
+        "size_bytes": 3225998,
+        "sha256": "5ee9513bbe0bf3d914b5dbc5ec0ed9b998c4387ecd9a91921d317ce4488ba0d4",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3174503405",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3174503405,
+        "end_us": 3184524905,
+        "kind": "audio",
+        "size_bytes": 320732,
+        "sha256": "98bd337cf007e14192f52cf3ffa10c04cc9c8f127f6e2ebd327b0998796eea0f",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3176420408",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3176420408,
+        "end_us": 3187420507,
+        "kind": "video",
+        "size_bytes": 3497642,
+        "sha256": "058097c0e646966376960468dad794f263f1053e0b681b0b6caf59b169e7eb9a",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3184524905",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3184524905,
+        "end_us": 3194563405,
+        "kind": "audio",
+        "size_bytes": 321276,
+        "sha256": "3e22ed493acb3fada3503b29928f8e17b203f7fb766868c002a00416f8e7f2ee",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3187420345",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3187420345,
+        "end_us": 3198420419,
+        "kind": "video",
+        "size_bytes": 3606256,
+        "sha256": "da94a310d7f9cf95d8a326fe67c65706ba10881bad8f212eb17316db77c3c480",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3194563405",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3194563405,
+        "end_us": 3204587405,
+        "kind": "audio",
+        "size_bytes": 320812,
+        "sha256": "d3a8298eeab4c45fc630abf9ef35d8006d9188ab6e61f77be331ad883faf4617",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-3198420384",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3198420384,
+        "end_us": 3205140498,
+        "kind": "video",
+        "size_bytes": 2155023,
+        "sha256": "5e326aca816f054d49e9b3322b36b9b74eedcb5feebe5e07d0cb155d8877340d",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-3204587405",
+        "session_id": "3cb4bfb1-9258-4473-983b-d6638f92c343",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 3204587405,
+        "end_us": 3205047405,
+        "kind": "audio",
+        "size_bytes": 14764,
+        "sha256": "8850f979cda515ae4b00096829792863742c8f54de05d59560e955b41b34364c",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      }
+    ]
+  },
+  "media_summary": {
+    "video": {
+      "segments": 6,
+      "bytes": 19734504,
+      "duration_seconds": 60.720112,
+      "first_us": 3144420785,
+      "last_us": 3205140498,
+      "maximum_gap_us": 10,
+      "maximum_overlap_us": 162,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 7,
+      "bytes": 1938308,
+      "duration_seconds": 60.56250000000001,
+      "first_us": 3144484905,
+      "last_us": 3205047405,
+      "maximum_gap_us": 0,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 0
+    }
+  },
+  "echo_samples": 12,
+  "minimum_echo_MemAvailable_kB": 24576,
+  "minimum_hub_MemAvailable": 3430916096,
+  "completed_duration": true
+}

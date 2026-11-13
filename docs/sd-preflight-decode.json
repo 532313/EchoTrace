@@ -1,0 +1,28 @@
+{
+  "container": {
+    "frames": 275,
+    "fragment_count": 275,
+    "width": 1920,
+    "height": 1080,
+    "timescale": 90000,
+    "duration_us": 10999511,
+    "average_fps": 25.001111160496023,
+    "maximum_sample_duration_us": 40244.444444444445,
+    "sample_intervals_over_60ms": 0
+  },
+  "ffprobe_full_decode": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "25/1",
+        "avg_frame_rate": "562500/22499",
+        "duration": "10.999511",
+        "nb_read_frames": "275"
+      }
+    ]
+  }
+}

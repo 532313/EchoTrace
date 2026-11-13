@@ -1,0 +1,70 @@
+{
+  "quality_evaluation": false,
+  "results": {
+    "vad": {
+      "ok": true,
+      "seconds": 0.8498901505954564,
+      "output": [
+        [
+          9888,
+          84832
+        ]
+      ]
+    },
+    "asr": {
+      "ok": true,
+      "seconds": 7.335411436855793,
+      "output": "开饭时间早上9点至下午5点。"
+    },
+    "embedding": {
+      "ok": true,
+      "seconds": 0.7462498117238283,
+      "output": {
+        "shape": [
+          2,
+          512
+        ],
+        "norms": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "tts": {
+      "ok": true,
+      "seconds": 9.161318426951766,
+      "output": {
+        "pcm_wav_bytes": 63792
+      }
+    },
+    "vlm": {
+      "ok": true,
+      "seconds": 23.742073329165578,
+      "output": "一个空的房间角落，右侧有白色柜子，左侧有窗户和窗帘。"
+    }
+  },
+  "minimum_MemAvailable": 1511153664,
+  "memory_samples": 411,
+  "models": {
+    "asr": {
+      "status": "files_present",
+      "verified_runtime": true
+    },
+    "embedding": {
+      "status": "files_present",
+      "verified_runtime": true
+    },
+    "tts": {
+      "status": "files_present",
+      "verified_runtime": true
+    },
+    "vad": {
+      "status": "files_present",
+      "verified_runtime": true
+    },
+    "vlm": {
+      "status": "files_present",
+      "verified_runtime": true
+    }
+  }
+}

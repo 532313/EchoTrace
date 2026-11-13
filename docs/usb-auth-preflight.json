@@ -1,0 +1,17 @@
+{
+  "scope": "RK3576 loopback authentication preflight; no USB transport or source recording is simulated as validated",
+  "token_files_mode": "0600",
+  "http": {
+    "correct_token": 200,
+    "missing": 401,
+    "wrong": 401
+  },
+  "websocket": {
+    "missing": 403,
+    "wrong": 403,
+    "correct_token_hello_accepted": true
+  },
+  "anonymous_network_listener_rejected": true,
+  "passed": true,
+  "preflight_process_stopped": true
+}

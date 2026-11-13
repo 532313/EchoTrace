@@ -1,0 +1,44 @@
+test_real_callback_error_unlock_and_timestamp_scan (test_hx711.DriverTests) ... ok
+test_auth_and_no_phantom_recording (test_integration.HttpTests) ... ok
+test_closed_socket_and_missing_ack_are_conflicts (test_integration.HttpTests) ... ok
+test_undecodable_container_is_marked_unavailable (test_integration.HttpTests) ... ok
+test_upload_hash_range_and_truncation (test_integration.HttpTests) ... ok
+test_continuous_segments_with_control_and_fetch (test_integration.NativeIntegration) ... /Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+  warnings.warn(  # deprecated in 14.0 - 2024-11-09
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+ok
+test_record_reconnect_fetch_and_delete (test_integration.NativeIntegration) ... ok
+test_slow_handshake_does_not_create_parallel_connections (test_integration.NativeIntegration) ... ok
+test_asr_worker_indexes_a_derived_utterance (test_memory.MemoryTests) ... ok
+test_boot_identity_and_late_replay (test_memory.MemoryTests) ... ok
+test_cache_eviction_preserves_local_original (test_memory.MemoryTests) ... ok
+test_cause_search_unknown_and_visual_unavailable (test_memory.MemoryTests) ... ok
+test_deleted_session_cannot_resurrect (test_memory.MemoryTests) ... ok
+test_edit_preserves_raw_fact_and_checks_revision (test_memory.MemoryTests) ... ok
+test_idempotent_replay_and_conflicting_content (test_memory.MemoryTests) ... ok
+test_legacy_schema_migration_preserves_history_and_cascade (test_memory.MemoryTests) ... ok
+test_manual_job_preserved_auto_queue_bounded (test_memory.MemoryTests) ... ok
+test_media_identity_corruption_and_export (test_memory.MemoryTests) ... ok
+test_nonfinite_sensor_event_rejected (test_memory.MemoryTests) ... ok
+test_packet_wire_contract (test_memory.MemoryTests) ... ok
+test_single_writer_owns_the_data_directory (test_memory.MemoryTests) ... ok
+test_speech_window_joins_original_chunks_with_bounded_time (test_memory.MemoryTests) ... ok
+test_vad_child_preserves_source_and_parent_export (test_memory.MemoryTests) ... ok
+test_a_recording_gap_is_not_removed_from_the_timeline (test_playback.PlaybackPlanTests) ... ok
+test_cached_overlap_does_not_create_a_false_gap (test_playback.PlaybackPlanTests) ... ok
+test_source_clock_and_uncached_interval_are_preserved (test_playback.PlaybackPlanTests) ... ok
+test_decode_transition_seek_gap_and_audio_command_order (test_playback.QtPlaybackTests) ... skipped 'build the native Qt playback test on RK3576'
+test_bounded_probe_cleans_only_its_files (test_storage.StorageTests) ... ok
+test_fragment_tables_match_generated_frames_and_reject_truncation (test_storage.StorageTests) ... ok
+test_migration_keeps_originals_and_rejects_damage (test_storage.StorageTests) ... ok
+test_summary_rejects_missing_changed_and_duplicate_index_identity (test_storage.StorageTests) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 54.932s
+
+OK (skipped=1)

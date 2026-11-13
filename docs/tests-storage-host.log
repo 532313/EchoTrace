@@ -1,0 +1,9 @@
+test_bounded_probe_cleans_only_its_files (test_storage.StorageTests) ... ok
+test_fragment_tables_match_generated_frames_and_reject_truncation (test_storage.StorageTests) ... ok
+test_migration_keeps_originals_and_rejects_damage (test_storage.StorageTests) ... ok
+test_summary_rejects_missing_changed_and_duplicate_index_identity (test_storage.StorageTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.086s
+
+OK

@@ -1,0 +1,15 @@
+{
+  "synthetic_workload": true,
+  "quality_evaluation": false,
+  "anchors": 10000,
+  "vector_dimensions": 512,
+  "queries": 100,
+  "modes": [
+    "hybrid"
+  ],
+  "seed_seconds": 115.46289134398103,
+  "p50_seconds": 0.6540970541536808,
+  "p95_seconds": 0.7008219640702009,
+  "max_seconds": 0.703573175240308,
+  "notes": "Vectors are synthetic. No Recall/precision claims may be derived from this report."
+}

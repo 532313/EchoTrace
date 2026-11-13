@@ -1,0 +1,347 @@
+--- a/yolov5_demo/cpp/AIcamera_c_interface.h
++++ b/yolov5_demo/cpp/AIcamera_c_interface.h
+@@ -7,6 +7,7 @@
+ 
+ int start_ai_camera(const char* model_path);
+ int stop_ai_camera();
++int ai_camera_has_failed();
+ 
+ void get_buf_data(uint8_t* buffer);
+ 
+--- a/yolov5_demo/cpp/AIcamera_c_interface.cc
++++ b/yolov5_demo/cpp/AIcamera_c_interface.cc
+@@ -19,6 +19,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <atomic>
+ 
+ #include "yolov5.h"
+ #include "image_utils.h"
+@@ -53,7 +54,8 @@
+ static pthread_t ai_camera_thread;
+ static int ai_camera_running = 0;
+ static pthread_mutex_t running_mutex = PTHREAD_MUTEX_INITIALIZER;  // 保护状态访问的互斥锁
+-static int ai_camera_stop = 0;
++static std::atomic<bool> ai_camera_stop{false};
++static std::atomic<bool> ai_camera_failed{false};
+ 
+ void mapCoordinates(cv::Mat input, cv::Mat output, int *x, int *y) {	
+ 	float scaleX = (float)output.cols / (float)input.cols; 
+@@ -71,7 +73,7 @@
+ 
+     clock_t start_time;
+     clock_t end_time;
+-    char text[8];
++    char text[64];
+     float fps = 0;
+     int ret;
+ 
+@@ -85,9 +87,20 @@
+     memset(&rknn_app_ctx, 0, sizeof(rknn_app_context_t));
+ 
+     // init yolov5
+-    init_yolov5_model((char*)model_path, &rknn_app_ctx);
++    ret = init_yolov5_model((char*)model_path, &rknn_app_ctx);
++    if (ret != 0 || rknn_app_ctx.input_mems[0] == NULL ||
++        rknn_app_ctx.input_mems[0]->virt_addr == NULL) {
++        printf("AI camera model initialization failed\n");
++        release_yolov5_model(&rknn_app_ctx);
++        ai_camera_failed.store(true);
++        return NULL;
++    }
+     printf("model_path: %s\n", (char*)model_path);
+-    init_post_process();
++    if (init_post_process() != 0) {
++        release_yolov5_model(&rknn_app_ctx);
++        ai_camera_failed.store(true);
++        return NULL;
++    }
+     
+     //fb paras
+     int pixel_size = 2;
+@@ -105,16 +118,28 @@
+     cv::Mat bgr_model_input(model_height, model_width, CV_8UC3, rknn_app_ctx.input_mems[0]->virt_addr);
+     cap.set(cv::CAP_PROP_FRAME_WIDTH,  disp_width*2);
+     cap.set(cv::CAP_PROP_FRAME_HEIGHT, disp_height*2);
+-    cap.open(0); 
++    if (!cap.open(0)) {
++        deinit_post_process();
++        release_yolov5_model(&rknn_app_ctx);
++        ai_camera_failed.store(true);
++        return NULL;
++    }
+ 
+     while(!ai_camera_stop)
+     {
+         start_time = clock();
+         cap >> bgr;
++        if (bgr.empty()) {
++            usleep(100000);
++            continue;
++        }
+ 
+         //letterbox       
+         cv::resize(bgr, bgr_model_input, cv::Size(model_width,model_height), 0, 0, cv::INTER_LINEAR);
+-        inference_yolov5_model(&rknn_app_ctx, &od_results);
++        if (inference_yolov5_model(&rknn_app_ctx, &od_results) != 0) {
++            ai_camera_failed.store(true);
++            break;
++        }
+ 
+         // Add rectangle and probability
+         for (int i = 0; i < od_results.count; i++)
+@@ -133,14 +158,15 @@
+             cv::rectangle(bgr,cv::Point(det_result->box.left ,det_result->box.top),
+                               cv::Point(det_result->box.right,det_result->box.bottom),cv::Scalar(0,255,0),3);
+ 
+-            sprintf(text, "%s %.1f%%", coco_cls_to_name(det_result->cls_id), det_result->prop * 100);
++            snprintf(text, sizeof(text), "%s %.1f%%",
++                     coco_cls_to_name(det_result->cls_id), det_result->prop * 100);
+             cv::putText(bgr,text,cv::Point(det_result->box.left, det_result->box.top - 8),
+                                          cv::FONT_HERSHEY_SIMPLEX,1.5,
+                                          cv::Scalar(0,255,0),1.5); 
+         }
+         cv::resize(bgr, bgr, cv::Size(disp_width, disp_height), 0, 0, cv::INTER_LINEAR);
+         //Fps Show
+-        sprintf(text,"fps=%.1f",fps); 
++        snprintf(text, sizeof(text), "fps=%.1f", fps);
+         cv::putText(bgr,text,cv::Point(0, 20),
+                     cv::FONT_HERSHEY_SIMPLEX,0.5,
+                     cv::Scalar(0,255,0),1);
+@@ -159,7 +185,7 @@
+         if(elapsed_us < 66000) usleep(66000 - elapsed_us);
+         if(elapsed_us > 0)
+             fps = (float)(1000000.0f / elapsed_us);
+-        memset(text,0,8);
++        memset(text, 0, sizeof(text));
+     }
+ 
+     deinit_post_process();
+@@ -182,14 +208,25 @@
+     }
+     ai_camera_running = 1;
+     pthread_mutex_unlock(&running_mutex);
++    ai_camera_stop.store(false);
++    ai_camera_failed.store(false);
+     
+     yolo_pic_buf_size = disp_width * disp_height * 2; // BGR565格式，每个像素占2字节
+     yolo_pic_buf = (uint8_t*)malloc(yolo_pic_buf_size);
++    if (yolo_pic_buf == NULL) {
++        pthread_mutex_lock(&running_mutex);
++        ai_camera_running = 0;
++        pthread_mutex_unlock(&running_mutex);
++        return -1;
++    }
+ 
+     if(pthread_create(&ai_camera_thread, NULL, _inference_loop, (void*)model_path) != 0){
+         printf("Failed to create thread.\n");
+         free(yolo_pic_buf);
+-        stop_ai_camera();
++        yolo_pic_buf = NULL;
++        pthread_mutex_lock(&running_mutex);
++        ai_camera_running = 0;
++        pthread_mutex_unlock(&running_mutex);
+         return -1;
+     }
+ 
+@@ -204,23 +241,31 @@
+         return -1;
+     }
+     pthread_mutex_unlock(&running_mutex);
+-    ai_camera_stop = 1;
++    ai_camera_stop.store(true);
+ 
+     pthread_join(ai_camera_thread, NULL); // 等待线程结束
++    pthread_mutex_lock(&running_mutex);
+     ai_camera_running = 0;
+-    ai_camera_stop = 0;
++    pthread_mutex_unlock(&running_mutex);
++    ai_camera_stop.store(false);
+ 
+     free(yolo_pic_buf); // 释放分配的缓冲区
++    yolo_pic_buf = NULL;
+     
+     return 0;
+ }
+ 
+ void get_buf_data(uint8_t* buffer)
+ {
+-    if (yolo_pic_buf == NULL) {
++    if (buffer == NULL || yolo_pic_buf == NULL) {
+         printf("Error: yolo_pic_buf is not initialized.\n");
+         return;
+     }
+     memcpy(buffer, yolo_pic_buf, yolo_pic_buf_size);
+ }
+ 
++int ai_camera_has_failed()
++{
++    return ai_camera_failed.load() ? 1 : 0;
++}
++
+--- a/yolov5_demo/cpp/rknpu2/yolov5_rv1106_1103.cc
++++ b/yolov5_demo/cpp/rknpu2/yolov5_rv1106_1103.cc
+@@ -33,17 +33,20 @@
+ 
+ int init_yolov5_model(const char *model_path, rknn_app_context_t *app_ctx)
+ {
++    if (app_ctx == NULL)
++        return -1;
+     int ret;
+     int model_len = 0;
+     char *model;
+     rknn_context ctx = 0;
+ 
+     ret = rknn_init(&ctx, (char *)model_path, 0, 0, NULL);
+-    if (ret < 0)
++    if (ret != RKNN_SUCC)
+     {
+         printf("rknn_init fail! ret=%d\n", ret);
+         return -1;
+     }
++    app_ctx->rknn_ctx = ctx;
+ 
+     // Get Model Input Output Number
+     rknn_input_output_num io_num;
+@@ -51,8 +54,17 @@
+     if (ret != RKNN_SUCC)
+     {
+         printf("rknn_query fail! ret=%d\n", ret);
++        release_yolov5_model(app_ctx);
+         return -1;
+     }
++    if (io_num.n_input != 1 || io_num.n_output < 1 || io_num.n_output > 3)
++    {
++        printf("unsupported tensor count: input=%u output=%u\n",
++               io_num.n_input, io_num.n_output);
++        release_yolov5_model(app_ctx);
++        return -1;
++    }
++    app_ctx->io_num = io_num;
+     //printf("model input num: %d, output num: %d\n", io_num.n_input, io_num.n_output);
+ 
+     // Get Model Input Info
+@@ -66,6 +78,7 @@
+         if (ret != RKNN_SUCC)
+         {
+             printf("rknn_query fail! ret=%d\n", ret);
++            release_yolov5_model(app_ctx);
+             return -1;
+         }
+         dump_tensor_attr(&(input_attrs[i]));
+@@ -83,6 +96,7 @@
+         if (ret != RKNN_SUCC)
+         {
+             printf("rknn_query fail! ret=%d\n", ret);
++            release_yolov5_model(app_ctx);
+             return -1;
+         }
+         dump_tensor_attr(&(output_attrs[i]));
+@@ -95,27 +109,37 @@
+     input_attrs[0].fmt = RKNN_TENSOR_NHWC;
+     //printf("input_attrs[0].size_with_stride=%d\n", input_attrs[0].size_with_stride);
+     app_ctx->input_mems[0] = rknn_create_mem(ctx, input_attrs[0].size_with_stride);
++    if (app_ctx->input_mems[0] == NULL) {
++        printf("rknn input memory allocation failed\n");
++        release_yolov5_model(app_ctx);
++        return -1;
++    }
+ 
+     // Set input tensor memory
+     ret = rknn_set_io_mem(ctx, app_ctx->input_mems[0], &input_attrs[0]);
+-    if (ret < 0) {
++    if (ret != RKNN_SUCC) {
+         printf("input_mems rknn_set_io_mem fail! ret=%d\n", ret);
++        release_yolov5_model(app_ctx);
+         return -1;
+     }
+ 
+     // Set output tensor memory
+     for (uint32_t i = 0; i < io_num.n_output; ++i) {
+         app_ctx->output_mems[i] = rknn_create_mem(ctx, output_attrs[i].size_with_stride);
++        if (app_ctx->output_mems[i] == NULL) {
++            printf("rknn output memory allocation failed at %u\n", i);
++            release_yolov5_model(app_ctx);
++            return -1;
++        }
+         ret = rknn_set_io_mem(ctx, app_ctx->output_mems[i], &output_attrs[i]);
+-        if (ret < 0) {
++        if (ret != RKNN_SUCC) {
+             printf("output_mems rknn_set_io_mem fail! ret=%d\n", ret);
++            release_yolov5_model(app_ctx);
+             return -1;
+         }
+     }
+ 
+     // Set to context
+-    app_ctx->rknn_ctx = ctx;
+-
+     // TODO
+     if (output_attrs[0].qnt_type == RKNN_TENSOR_QNT_AFFINE_ASYMMETRIC)
+     {
+@@ -126,10 +150,17 @@
+         app_ctx->is_quant = false;
+     }
+ 
+-    app_ctx->io_num = io_num;
+     app_ctx->input_attrs = (rknn_tensor_attr *)malloc(io_num.n_input * sizeof(rknn_tensor_attr));
++    if (app_ctx->input_attrs == NULL) {
++        release_yolov5_model(app_ctx);
++        return -1;
++    }
+     memcpy(app_ctx->input_attrs, input_attrs, io_num.n_input * sizeof(rknn_tensor_attr));
+     app_ctx->output_attrs = (rknn_tensor_attr *)malloc(io_num.n_output * sizeof(rknn_tensor_attr));
++    if (app_ctx->output_attrs == NULL) {
++        release_yolov5_model(app_ctx);
++        return -1;
++    }
+     memcpy(app_ctx->output_attrs, output_attrs, io_num.n_output * sizeof(rknn_tensor_attr));
+ 
+     if (input_attrs[0].fmt == RKNN_TENSOR_NCHW) 
+@@ -154,8 +185,23 @@
+ 
+ int release_yolov5_model(rknn_app_context_t *app_ctx)
+ {
+-    if (app_ctx->rknn_ctx != 0)
+-    {
++    if (app_ctx == NULL)
++        return -1;
++    /* rknn_destroy_mem frees descriptors allocated by rknn_create_mem.
++     * Release tensor memory while its context is still valid. */
++    if (app_ctx->rknn_ctx != 0) {
++        for (int i = 0; i < 1; ++i) {
++            if (app_ctx->input_mems[i] != NULL) {
++                rknn_destroy_mem(app_ctx->rknn_ctx, app_ctx->input_mems[i]);
++                app_ctx->input_mems[i] = NULL;
++            }
++        }
++        for (int i = 0; i < 3; ++i) {
++            if (app_ctx->output_mems[i] != NULL) {
++                rknn_destroy_mem(app_ctx->rknn_ctx, app_ctx->output_mems[i]);
++                app_ctx->output_mems[i] = NULL;
++            }
++        }
+         rknn_destroy(app_ctx->rknn_ctx);
+         app_ctx->rknn_ctx = 0;
+     }
+@@ -169,18 +215,7 @@
+         free(app_ctx->output_attrs);
+         app_ctx->output_attrs = NULL;
+     }
+-    for (int i = 0; i < app_ctx->io_num.n_input; i++) {
+-        if (app_ctx->input_mems[i] != NULL) {
+-            rknn_destroy_mem(app_ctx->rknn_ctx, app_ctx->input_mems[i]);
+-            free(app_ctx->input_mems[i]);
+-        }
+-    }
+-    for (int i = 0; i < app_ctx->io_num.n_output; i++) {
+-        if (app_ctx->output_mems[i] != NULL) {
+-            rknn_destroy_mem(app_ctx->rknn_ctx, app_ctx->output_mems[i]);
+-            free(app_ctx->output_mems[i]);
+-        }
+-    }
++    memset(&app_ctx->io_num, 0, sizeof(app_ctx->io_num));
+     return 0;
+ }
+ 

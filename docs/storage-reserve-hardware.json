@@ -1,0 +1,76 @@
+{
+  "scope": "pre-start storage reserve rejection using a separate profile; SD is not filled",
+  "identity": {
+    "pid": 578,
+    "ticks": "2017029",
+    "device_id": "reserve-probe-7e0d10221d8b",
+    "data": "/mnt/sdcard/echotrace-reserve-7e0d10221d8b",
+    "socket": "/run/echotrace-reserve-7e0d10221d8b.sock",
+    "root": "/root/echotrace/reserve-probes/7e0d10221d8b",
+    "reserve_mb": 58831,
+    "actual_available_bytes": 60615196672
+  },
+  "http_status": 409,
+  "response": {
+    "detail": "storage reserve reached"
+  },
+  "session": {
+    "id": "ba2c83f1-2ca9-40ca-ab3b-eba0e087a9ba",
+    "project_id": "129ea52e-b313-429f-8324-1056ce2f3b75",
+    "device_id": "reserve-probe-7e0d10221d8b",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "应在打开相机前拒绝",
+    "state": "interrupted",
+    "started_us": 20170430690,
+    "last_us": 20170430690,
+    "ended_us": null,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794476438183,
+    "end_reason": ""
+  },
+  "timeline": {
+    "session": {
+      "id": "ba2c83f1-2ca9-40ca-ab3b-eba0e087a9ba",
+      "project_id": "129ea52e-b313-429f-8324-1056ce2f3b75",
+      "device_id": "reserve-probe-7e0d10221d8b",
+      "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+      "title": "应在打开相机前拒绝",
+      "state": "interrupted",
+      "started_us": 20170430690,
+      "last_us": 20170430690,
+      "ended_us": null,
+      "utc_ms": null,
+      "clock_quality": "unknown",
+      "summary": "",
+      "created_ms": 1794476438183,
+      "end_reason": "",
+      "project_name": "容量预留拒绝测试（自动化）"
+    },
+    "anchors": [],
+    "events": [],
+    "media": []
+  },
+  "closed": {
+    "id": "ba2c83f1-2ca9-40ca-ab3b-eba0e087a9ba",
+    "project_id": "129ea52e-b313-429f-8324-1056ce2f3b75",
+    "device_id": "reserve-probe-7e0d10221d8b",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "应在打开相机前拒绝",
+    "state": "stopped",
+    "started_us": 20170430690,
+    "last_us": 20171093010,
+    "ended_us": 20171093010,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794476438183,
+    "end_reason": "",
+    "project_name": "容量预留拒绝测试（自动化）"
+  },
+  "passed": true,
+  "cleanup": {
+    "raw_media_files": []
+  }
+}

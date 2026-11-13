@@ -1,0 +1,21 @@
+test_auth_and_no_phantom_recording (test_integration.HttpTests) ... ok
+test_closed_socket_and_missing_ack_are_conflicts (test_integration.HttpTests) ... ok
+test_undecodable_container_is_marked_unavailable (test_integration.HttpTests) ... ok
+test_upload_hash_range_and_truncation (test_integration.HttpTests) ... ok
+test_capture_fault_is_visible_and_cannot_resume (test_integration.NativeIntegration) ... ok
+test_continuous_segments_with_control_and_fetch (test_integration.NativeIntegration) ... /Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+  warnings.warn(  # deprecated in 14.0 - 2024-11-09
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+/Users/gsy/Library/Python/3.9/lib/python/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+ok
+test_record_reconnect_fetch_and_delete (test_integration.NativeIntegration) ... ok
+test_slow_handshake_does_not_create_parallel_connections (test_integration.NativeIntegration) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 63.768s
+
+OK

@@ -1,0 +1,64 @@
+#!/bin/sh
+set -eu
+# The integrated DeskBot is the only display owner; capture remains independent.
+prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
+run=${ECHOTRACE_RUN_DIR:-/run/echotrace}
+socket=${ECHOTRACE_SOCKET:-/run/echotrace/control.sock}
+program=${ECHOTRACE_DESKBOT_BIN:-$prefix/deskbot/bin/main}
+pid=${ECHOTRACE_DESKBOT_PID:-$run/deskbot.pid}
+old_terminal_pid=$run/terminal.pid
+
+running() {
+    [ -r "$pid" ] || return 1
+    process=$(cat "$pid")
+    case "$process" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$(readlink "/proc/$process/exe" 2>/dev/null || true)" = "$program" ] &&
+        kill -0 "$process" 2>/dev/null
+}
+
+terminal_running() {
+    [ -r "$old_terminal_pid" ] || return 1
+    process=$(cat "$old_terminal_pid")
+    case "$process" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$(readlink "/proc/$process/exe" 2>/dev/null || true)" = "$prefix/bin/echotrace-terminal" ] &&
+        kill -0 "$process" 2>/dev/null
+}
+
+case "${1:-}" in
+start)
+    running && exit 0
+    terminal_running && { echo 'stop the independent EchoTrace terminal first' >&2; exit 1; }
+    [ -x "$program" ] || { echo 'integrated DeskBot is not installed' >&2; exit 1; }
+    [ -c /dev/fb0 ] || { echo 'integrated DeskBot requires the framebuffer' >&2; exit 1; }
+    attempts=0
+    while [ ! -S "$socket" ]; do
+        attempts=$((attempts + 1))
+        [ "$attempts" -le 5 ] || { echo 'EchoTrace capture socket is not ready' >&2; exit 1; }
+        sleep 1
+    done
+    umask 077
+    mkdir -p "$run" "$(dirname "$pid")"
+    rm -f "$pid"
+    cd "$(dirname "$program")"
+    export ECHOTRACE_SOCKET="$socket"
+    export LD_LIBRARY_PATH="$(dirname "$program")/lib:$prefix/lib:/oem/usr/lib:/usr/lib:/lib"
+    start-stop-daemon -S -b -m -p "$pid" -x "$program"
+    sleep 1
+    running || { echo 'integrated DeskBot exited during startup' >&2; exit 1; }
+    ;;
+stop)
+    if running; then
+        start-stop-daemon -K -p "$pid" -x "$program" -s TERM
+        attempts=0
+        while running; do
+            attempts=$((attempts + 1))
+            [ "$attempts" -lt 15 ] || { echo 'integrated DeskBot has not stopped' >&2; exit 1; }
+            sleep 1
+        done
+    fi
+    rm -f "$pid"
+    ;;
+restart) "$0" stop; "$0" start ;;
+status) running ;;
+*) echo 'usage: S96echotrace-deskbot start|stop|restart|status' >&2; exit 2 ;;
+esac

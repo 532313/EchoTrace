@@ -1,0 +1,51 @@
+#!/bin/sh
+set -eu
+# A separate service lets the display restart without stopping recording.
+prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
+run=${ECHOTRACE_RUN_DIR:-/run/echotrace}
+socket=${ECHOTRACE_SOCKET:-/run/echotrace/control.sock}
+program=$prefix/bin/echotrace-terminal
+pid=$run/terminal.pid
+
+running() {
+    [ -r "$pid" ] || return 1
+    process=$(cat "$pid")
+    case "$process" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$(readlink "/proc/$process/exe" 2>/dev/null || true)" = "$program" ] &&
+        kill -0 "$process" 2>/dev/null
+}
+
+case "${1:-}" in
+start)
+    running && exit 0
+    [ -x "$program" ] || { echo 'EchoTrace terminal is not installed' >&2; exit 1; }
+    [ -c /dev/fb0 ] || { echo 'EchoTrace terminal requires the framebuffer' >&2; exit 1; }
+    attempts=0
+    while [ ! -S "$socket" ]; do
+        attempts=$((attempts+1))
+        [ "$attempts" -le 5 ] || { echo 'EchoTrace capture socket is not ready' >&2; exit 1; }
+        sleep 1
+    done
+    umask 077
+    mkdir -p "$run"
+    export LD_LIBRARY_PATH="$prefix/lib:/oem/usr/lib:/usr/lib:/lib"
+    start-stop-daemon -S -b -m -p "$pid" -x "$program" -- --socket "$socket"
+    sleep 1
+    running || { echo 'EchoTrace terminal exited during startup' >&2; exit 1; }
+    ;;
+stop)
+    if running; then
+        start-stop-daemon -K -p "$pid" -x "$program" -s TERM
+        attempts=0
+        while running; do
+            attempts=$((attempts+1))
+            [ "$attempts" -lt 15 ] || { echo 'EchoTrace terminal has not stopped' >&2; exit 1; }
+            sleep 1
+        done
+    fi
+    rm -f "$pid"
+    ;;
+restart) "$0" stop; "$0" start ;;
+status) running ;;
+*) echo 'usage: S96echotrace-terminal start|stop|restart|status' >&2; exit 2 ;;
+esac

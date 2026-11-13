@@ -1,0 +1,8 @@
+[  0%] Built target echo_json
+[  0%] Built target echo_core
+[100%] Built target lvgl
+Consolidate compiler generated dependencies of target echotrace-terminal
+[100%] Building CXX object CMakeFiles/echotrace-terminal.dir/native/lvgl/main.cpp.o
+[100%] Linking CXX executable echotrace-terminal
+[100%] Built target echotrace-terminal
+e7ea8cdf1bb0e203639638dc62be2383dc35fea08da5749b8283be96b75dc942  build/rv1106/echotrace-terminal

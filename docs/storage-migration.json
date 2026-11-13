@@ -1,0 +1,19 @@
+{
+  "source": "/root/echotrace/smoke",
+  "destination": "/mnt/sdcard/echotrace",
+  "copied_bytes": 7075519,
+  "verified_original_media": 4,
+  "source_preserved": true,
+  "journal_bytes_preserved": true,
+  "private_media_paths_rebased": true,
+  "storage": {
+    "source": "/dev/mmcblk1p1",
+    "filesystem": "vfat",
+    "options": "rw,noatime",
+    "mount": "/mnt/sdcard",
+    "device": "/dev/mmcblk1p1",
+    "total_bytes": 62327717888,
+    "available_bytes": 62327685120,
+    "root_device_distinct": true
+  }
+}

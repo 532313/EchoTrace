@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /root/echotrace/build/rk3576
+Test project /root/echotrace/build/rk3576
+    Start 1: core
+1/1 Test #1: core .............................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.03 sec

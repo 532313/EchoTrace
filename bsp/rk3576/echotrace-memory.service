@@ -1,0 +1,21 @@
+[Unit]
+Description=EchoTrace offline process memory
+After=network.target
+[Service]
+Type=simple
+User=echotrace
+WorkingDirectory=/opt/echotrace
+EnvironmentFile=/etc/echotrace/hub.env
+ExecStart=/opt/echotrace/.venv/bin/python -m echotrace serve --data /var/lib/echotrace --host 192.168.77.1 --port 18081 --models /opt/echotrace/models/config.json
+Restart=on-failure
+RestartSec=3
+KillMode=control-group
+TimeoutStopSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/echotrace
+# /dev/dri, /dev/rknpu and DMA heap permissions must be provided to this account.
+[Install]
+WantedBy=multi-user.target

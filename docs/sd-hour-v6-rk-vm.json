@@ -1,0 +1,15 @@
+{
+  "scope": "global RK3576 VM counters over the final six-minute observation window; includes existing NAS services, not process attribution or a full-hour no-swap test",
+  "samples": 72,
+  "duration_seconds": 355.9499999997206,
+  "page_size_bytes": 4096,
+  "pswpin_delta_pages": 21,
+  "pswpout_delta_pages": 5574,
+  "oom_kill_delta": 0,
+  "swap_device": "zram0",
+  "swappiness": 60,
+  "no_swap_activity": false,
+  "psi_available": false,
+  "swapin_bytes": 86016,
+  "swapout_bytes": 22831104
+}

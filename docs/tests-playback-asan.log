@@ -1,0 +1,9 @@
+test_a_recording_gap_is_not_removed_from_the_timeline (test_playback.PlaybackPlanTests.test_a_recording_gap_is_not_removed_from_the_timeline) ... ok
+test_cached_overlap_does_not_create_a_false_gap (test_playback.PlaybackPlanTests.test_cached_overlap_does_not_create_a_false_gap) ... ok
+test_source_clock_and_uncached_interval_are_preserved (test_playback.PlaybackPlanTests.test_source_clock_and_uncached_interval_are_preserved) ... ok
+test_decode_transition_seek_gap_and_audio_command_order (test_playback.QtPlaybackTests.test_decode_transition_seek_gap_and_audio_command_order) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 18.077s
+
+OK

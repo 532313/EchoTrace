@@ -1,0 +1,54 @@
+{
+  "asr.model": {
+    "sha256": "c71f0ce00bec95b07744e116345e33d8cbbe08cef896382cf907bf4b51a2cd51",
+    "size_bytes": 239233841
+  },
+  "asr.tokens": {
+    "sha256": "f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc",
+    "size_bytes": 315894
+  },
+  "asr.test_audio": {
+    "sha256": "b77f1794fe374a0ba1ee1dc458bfaf9349496cbbfc32780c50ba3c5a7ad8e373",
+    "size_bytes": 178988
+  },
+  "tts.model": {
+    "sha256": "78a9fd17e9a6c20198dca4e69d18f941303f8ab39ec61dde04cfc7595262ddfd",
+    "size_bytes": 75624188
+  },
+  "tts.tokens": {
+    "sha256": "56209b2bf609d5ac1d66ede6dae7bf5254bd3f8aa24c4a6823713d5b884d87ba",
+    "size_bytes": 19591
+  },
+  "tts.lexicon": {
+    "sha256": "38b886d46aefa50da6322a64d72fd595d5f4fae1051adb160d647541b1e0a4a2",
+    "size_bytes": 1363705
+  },
+  "tts.vocoder": {
+    "sha256": "0574a135aa1db2de6e181050db2ec528496cacd4a4701fc5d7faf9f9804c0081",
+    "size_bytes": 53884024
+  },
+  "vad.model": {
+    "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+    "size_bytes": 2327524
+  },
+  "embedding.model": {
+    "sha256": "395ea22ee2bb116a375369ed489d5e8d74db8374d84a99a7ba0696bba64c31d4",
+    "size_bytes": 57146929
+  },
+  "embedding.vocab": {
+    "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c",
+    "size_bytes": 109540
+  },
+  "vlm.worker": {
+    "sha256": "12c3e90f4096b810dddd96d8693223b5db0911c5d059de6029cfcc5ec408e147",
+    "size_bytes": 317192
+  },
+  "vlm.vision": {
+    "sha256": "054f2453e17fef847560e299f31a457fa4f441628629c0fd744312edf9babc42",
+    "size_bytes": 225298097
+  },
+  "vlm.language": {
+    "sha256": "2eeda516ddf91bd68aaa153eaf870cd60a2b354fa99b8dfd6da203044f44bcf5",
+    "size_bytes": 1068081932
+  }
+}

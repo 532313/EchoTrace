@@ -1,0 +1,23 @@
+{
+  "session_id": "faa235d5-0140-4970-9a3a-ab4be2cc32e0",
+  "prompt_source_us": 25478008461,
+  "prompt_utc_ms": 1794481745354,
+  "prompt_ack": {
+    "id": "19dff032-af22-4253-af8e-213e5878b23e",
+    "ok": true,
+    "source_time_us": 25478008461,
+    "type": "ack"
+  },
+  "maximum_recording_seconds": 600,
+  "phase": "completed_and_six_physical_hits_paired",
+  "completion_source_us": 25535796153,
+  "completion_utc_ms": 1794481803310,
+  "completion_ack": {
+    "id": "6f0695ce-183a-4d91-abb6-cff2761ed7fd",
+    "ok": true,
+    "source_time_us": 25535796153,
+    "type": "ack"
+  },
+  "user_clap_pattern": "two hits per group, three groups",
+  "capture_stopped_on_completion": true
+}

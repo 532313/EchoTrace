@@ -1,0 +1,53 @@
+{
+  "capture_pid": 3272,
+  "old_terminal_pid": 3277,
+  "before_benchmark_elapsed": 1493.822,
+  "before_media": {
+    "video": {
+      "segments": 141,
+      "bytes": 483523548,
+      "duration_seconds": 1483.9982340000001,
+      "first_us": 3265106910,
+      "last_us": 4749106412,
+      "maximum_gap_us": 285,
+      "maximum_overlap_us": 247,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 149,
+      "bytes": 47748412,
+      "duration_seconds": 1491.933,
+      "first_us": 3265154078,
+      "last_us": 4757385721,
+      "maximum_gap_us": 297805,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 1
+    }
+  },
+  "new_terminal_pid": 3361,
+  "capture_start_ticks_after": "324036",
+  "after_benchmark_elapsed": 1729.333,
+  "after_media": {
+    "video": {
+      "segments": 164,
+      "bytes": 562453522,
+      "duration_seconds": 1725.9978800000004,
+      "first_us": 3265106910,
+      "last_us": 4991106652,
+      "maximum_gap_us": 285,
+      "maximum_overlap_us": 286,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 172,
+      "bytes": 55118896,
+      "duration_seconds": 1722.2290000000005,
+      "first_us": 3265154078,
+      "last_us": 4987681721,
+      "maximum_gap_us": 297805,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 1
+    }
+  },
+  "after_capture_state": "recording"
+}

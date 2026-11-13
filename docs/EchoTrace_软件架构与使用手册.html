@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="EchoTrace 离线多模态过程记忆机器人：已实现的软件架构、功能、实板入口、使用方法与验收边界。">
+  <title>EchoTrace｜软件架构与使用手册</title>
+  <style>
+:root{color-scheme:light;--bg:#f5f3ec;--paper:#fffefa;--ink:#1e2825;--muted:#586a63;--green:#27634e;--green-2:#194d3a;--mint:#e5f2e9;--line:#dce4d9;--warm:#efe8d6;--orange:#ad6536;--shadow:0 16px 48px rgba(32,65,48,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}a{color:var(--green)}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #82b598;outline-offset:3px}::selection{background:#cce9d4;color:#163a2b}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;background:#183d30;color:#e7f0e8;padding:28px 17px 22px;border-right:1px solid #355d48;scrollbar-width:thin;z-index:20}.brand{display:flex;gap:11px;align-items:center;padding:0 11px 21px;border-bottom:1px solid #426452}.brand-mark{display:grid;place-items:center;width:36px;height:36px;background:#c8ddbd;color:#1a4633;border-radius:11px;font-weight:900;font-size:20px;letter-spacing:-2px;transform:rotate(-5deg)}.brand strong{display:block;font-size:15px;letter-spacing:.02em}.brand small{display:block;color:#b8cfbd;line-height:1.45;font-size:11px}.sidebar-label{margin:24px 11px 10px;color:#9cb9a7;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800}.nav-search{width:100%;padding:10px 12px;background:#214a3a;color:#fff;border:1px solid #466e54;border-radius:9px;outline:none;font-size:12px}.nav-search::placeholder{color:#aac5b2}.toc{display:flex;flex-direction:column;gap:2px;margin-top:11px}.toc a{text-decoration:none;color:#c9dacf;display:grid;grid-template-columns:29px 1fr;gap:8px;align-items:start;padding:9px 10px;border-radius:9px;font-size:12.5px;line-height:1.45}.toc a span:first-child{font-variant-numeric:tabular-nums;color:#86b495;font-weight:800}.toc a:hover,.toc a.active{color:#fff;background:#2d6049}.toc a.active span:first-child{color:#c5dfb0}.toc a[hidden]{display:none}.search-empty{display:none;color:#bfd4c3;padding:7px 10px;font-size:12px}.search-empty.visible{display:block}.sidebar-foot{margin-top:23px;padding:15px 12px;border-top:1px solid #426452;color:#afc8b5;font-size:11px;line-height:1.6}.sidebar-foot b{color:#e7f0e8}
+.mobile-bar{display:none}.scrim{display:none}.main{min-width:0}.content-shell{max-width:1100px;margin:0 auto;padding:36px clamp(24px,5vw,70px) 80px}.hero{position:relative;overflow:hidden;background:#e7efe4;border:1px solid #d4e4d3;border-radius:25px;padding:clamp(30px,5vw,55px);box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-100px;top:-165px;border:60px solid rgba(64,121,85,.07);pointer-events:none}.kicker{display:inline-flex;gap:8px;align-items:center;color:var(--green);font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.kicker:before{content:"";width:7px;height:7px;border-radius:50%;background:#60a374}.hero h1{position:relative;max-width:770px;margin:15px 0 13px;font-size:clamp(32px,4.2vw,52px);line-height:1.2;letter-spacing:-.05em;color:#153e2d}.hero-lead{max-width:750px;color:#405d4a;font-size:17px;line-height:1.8;margin:0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;border:1px solid transparent;line-height:1.4}.btn-primary{background:var(--green);color:#fff}.btn-primary:hover{background:var(--green-2)}.btn-quiet{background:#f8fbf5;border-color:#bad3bb;color:var(--green)}.btn-quiet:hover{background:#fff}.hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}.hero-meta span{display:inline-flex;padding:5px 9px;background:#f8fbf6;border:1px solid #c8dbc9;border-radius:100px;color:#4a6654;font-size:11px;font-weight:700}
+.overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 0}.overview-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px 18px;min-width:0}.overview-card strong{display:block;font-size:27px;color:#204d3a;line-height:1.25;font-variant-numeric:tabular-nums}.overview-card span{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:4px}.status-note{background:#fffbf1;border:1px solid #e8dcb9;border-left:4px solid #bb8e44;border-radius:12px;padding:15px 17px;margin:17px 0 0;color:#554a35;font-size:13px;line-height:1.75}.status-note strong{color:#6c5227}.reading-guide{display:flex;gap:10px;align-items:flex-start;color:#5c6d61;font-size:12px;margin:25px 3px 0}.reading-guide b{color:#2b684e}
+.manual-section{background:var(--paper);border:1px solid var(--line);border-radius:18px;margin-top:22px;padding:clamp(23px,3.6vw,41px);box-shadow:0 4px 20px rgba(32,65,48,.035);min-width:0;overflow:hidden}.manual-section h2{font-size:clamp(22px,2.4vw,29px);line-height:1.34;letter-spacing:-.035em;color:#173f2d;margin:0 0 23px;padding:0 0 17px;border-bottom:1px solid var(--line);scroll-margin-top:28px}.manual-section p{margin:14px 0;color:#31423a}.manual-section p:first-of-type{margin-top:0}.manual-section strong{color:#1e4937}.manual-section ul,.manual-section ol{padding-left:1.4em;margin:14px 0}.manual-section li{padding-left:2px;margin:5px 0}.manual-section li::marker{color:var(--green);font-weight:700}.manual-section code:not(pre code){background:#edf2eb;color:#224c38;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere;font-size:.91em}.manual-section a{text-decoration-thickness:1px;text-underline-offset:3px;overflow-wrap:anywhere}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:17px 0;scrollbar-width:thin}.manual-section table{border-collapse:collapse;width:100%;min-width:500px;font-size:13px;line-height:1.55}.manual-section th{text-align:left;background:#edf4ec;color:#245139;white-space:nowrap;font-weight:800}.manual-section th,.manual-section td{padding:10px 12px;border-bottom:1px solid #e8ede6;vertical-align:top}.manual-section tr:last-child td{border-bottom:0}.manual-section tbody tr:nth-child(even){background:#fafbf8}.manual-section tbody tr:hover{background:#f1f6ef}.manual-section td{overflow-wrap:anywhere}.code-block{position:relative;margin:17px 0;border-radius:11px;overflow:hidden;background:#193a2d;border:1px solid #315942}.code-block pre{margin:0;padding:39px 17px 17px;overflow-x:auto;color:#e7f1e7;line-height:1.65;font-size:12px;tab-size:2;scrollbar-width:thin}.code-block code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.code-label{position:absolute;top:10px;left:16px;color:#b5d4bb;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:10px}.copy-btn{position:absolute;right:10px;top:8px;border:1px solid #53735b;border-radius:6px;background:#2d5640;color:#e9f7e9;padding:3px 9px;font-size:11px}.copy-btn:hover{background:#3d6d51}.manual-section blockquote{border-left:3px solid #a4c5aa;background:#f4f8f2;margin:18px 0;padding:10px 17px;color:#3d5c47}.manual-section blockquote p{margin:0}
+.system-map{margin:19px 0 24px;border:1px solid #d2e2d3;border-radius:15px;background:linear-gradient(145deg,#f2f8ef,#f8faf4);padding:19px}.map-title{font-size:12px;color:#567360;text-transform:uppercase;letter-spacing:.06em;font-weight:800;margin-bottom:15px}.map-grid{display:grid;grid-template-columns:minmax(0,1fr) 128px minmax(0,1fr);gap:9px;align-items:stretch}.board{border:1px solid #c8dbc9;border-radius:12px;background:#fff;padding:15px;min-width:0}.board-edge{border-color:#b9d8ca}.board-hub{border-color:#a6cbbb}.board-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:12px;color:#214f3a}.board-head strong{font-size:15px}.board-tag{font-size:10px;font-weight:800;background:#e8f2e5;border-radius:50px;padding:3px 8px;color:#32604a;white-space:nowrap}.map-node{padding:9px 10px;background:#f4f8f2;border:1px solid #d8e6d8;border-radius:8px;min-width:0}.map-node b{display:block;color:#25523a;font-size:12px;line-height:1.4}.map-node span{display:block;color:#63796a;font-size:10px;line-height:1.5;margin-top:2px}.map-node.emph{background:#e5f2e9;border-color:#9ec9a9}.map-node-last{margin-top:8px}.map-arrow{text-align:center;display:block;color:#5b9c6e;font-weight:800;height:23px;line-height:23px}.map-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.bridge{display:flex;align-items:center;justify-content:center;gap:3px;min-width:0;color:#3c7658}.bridge-line{height:2px;flex:1;min-width:8px;background:#79a98b}.bridge-label{text-align:center;min-width:82px;line-height:1.5}.bridge-label strong{display:block;font-size:10px;white-space:nowrap}.bridge-label span{display:block;font-size:9px}.clients{display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:10px;font-size:10px;font-weight:800;color:#406c51}.clients>span:first-child,.clients>span:last-child{background:#eaf3e9;border:1px solid #c8dbc9;padding:5px 9px;border-radius:50px}.client-link{color:#718a77}.manual-section .map-note{color:#59725f;font-size:11px;margin:13px 0 0;line-height:1.5}
+.page-footer{border-top:1px solid var(--line);margin-top:34px;padding-top:21px;color:#69786d;font-size:12px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.top-link{text-decoration:none;font-weight:700}.mobile-only{display:none}
+@media(max-width:1100px){.map-grid{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}.map-branches{grid-template-columns:1fr}.board-head{display:block}.board-head strong{display:block;margin-top:4px}}
+@media(max-width:900px){.shell{display:block}.sidebar{position:fixed;left:0;top:0;bottom:0;width:min(310px,86vw);transform:translateX(-105%);transition:transform .22s;box-shadow:12px 0 45px rgba(0,0,0,.15)}.sidebar.open{transform:translateX(0)}.scrim.visible{display:block;position:fixed;inset:0;z-index:15;background:rgba(17,36,26,.48)}.mobile-bar{display:flex;position:sticky;top:0;z-index:10;align-items:center;justify-content:space-between;background:#183d30;color:#fff;padding:8px 18px;min-height:54px;box-shadow:0 3px 10px rgba(0,0,0,.12)}.mobile-bar strong{font-size:13px}.menu-btn{border:1px solid #50735a;background:#255039;color:#fff;padding:5px 10px;border-radius:8px;font-size:12px}.content-shell{padding:20px 22px 60px}.manual-section h2{scroll-margin-top:75px}.mobile-only{display:inline}}
+@media(max-width:650px){body{font-size:14px}.content-shell{padding:13px 12px 50px}.hero{border-radius:15px;padding:23px}.hero h1{font-size:31px}.hero-lead{font-size:14px}.hero-actions{margin-top:18px}.hero-meta{margin-top:21px}.overview{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:9px}.overview-card{padding:12px}.overview-card strong{font-size:23px}.manual-section{padding:19px 16px;border-radius:13px;margin-top:12px}.manual-section h2{font-size:22px;margin-bottom:17px}.manual-section table{font-size:11px;min-width:440px}.manual-section th,.manual-section td{padding:8px 9px}.system-map{padding:12px}.map-grid{display:block}.board{padding:12px}.bridge{min-height:56px;flex-direction:column;gap:1px}.bridge-line{height:8px;width:2px;min-width:0;flex:none}.bridge-label strong{font-size:10px}.clients{justify-content:center;flex-wrap:wrap}.map-branches{grid-template-columns:1fr 1fr}.board-head{display:flex}.board-head strong{margin:0}.reading-guide{margin-top:16px}.status-note{font-size:12px;padding:12px}}
+@media print{body{background:#fff;color:#000;font-size:10pt}.shell{display:block}.sidebar,.mobile-bar,.scrim,.hero-actions,.copy-btn,.top-link{display:none!important}.content-shell{padding:0;max-width:none}.hero{box-shadow:none;border:0;border-bottom:2px solid #315c44;border-radius:0;padding:0 0 12pt}.hero h1{font-size:23pt}.hero-meta,.overview,.status-note{break-inside:avoid}.manual-section{box-shadow:none;border:0;border-radius:0;border-top:1px solid #aaa;margin:13pt 0 0;padding:10pt 0;overflow:visible;break-inside:auto}.manual-section h2{font-size:16pt;break-after:avoid}.manual-section table{min-width:0;font-size:8pt}.table-wrap{overflow:visible}.manual-section tr,.code-block,.system-map{break-inside:avoid}.code-block{background:#fff;border:1px solid #aaa}.code-block pre{color:#000;white-space:pre-wrap;padding:18pt 7pt 7pt}.code-label{color:#333}.manual-section a{color:#000;text-decoration:underline}.page-footer{font-size:8pt}}
+</style>
+</head>
+<body id="top">
+<div class="scrim" id="scrim"></div>
+<div class="mobile-bar"><button id="menu-btn" class="menu-btn" type="button" aria-controls="sidebar" aria-expanded="false">☰ 目录</button><strong>EchoTrace · 软件手册</strong><span aria-hidden="true">&nbsp;</span></div>
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="章节目录">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">E</span><div><strong>ECHOTRACE</strong><small>软件架构与使用手册</small></div></div>
+    <div class="sidebar-label">目录 · 14 个章节</div>
+    <label for="nav-search" class="sr-only">筛选章节</label>
+    <input class="nav-search" id="nav-search" type="search" placeholder="搜索章节内容…" autocomplete="off">
+    <nav class="toc" aria-label="章节导航"><a href="#s01" data-section="s01"><span>01</span><span>整体组成与实际连接</span></a><a href="#s02" data-section="s02"><span>02</span><span>两块板的职责</span></a><a href="#s03" data-section="s03"><span>03</span><span>RV1106 进程与线程</span></a><a href="#s04" data-section="s04"><span>04</span><span>事件与时间轴</span></a><a href="#s05" data-section="s05"><span>05</span><span>中枢服务、数据库与任务</span></a><a href="#s06" data-section="s06"><span>06</span><span>AI 各自做什么</span></a><a href="#s07" data-section="s07"><span>07</span><span>检索与证据回放</span></a><a href="#s08" data-section="s08"><span>08</span><span>通信、断线与存储</span></a><a href="#s09" data-section="s09"><span>09</span><span>三个界面能做什么</span></a><a href="#s10" data-section="s10"><span>10</span><span>日常使用一遍完整流程</span></a><a href="#s11" data-section="s11"><span>11</span><span>启动、连接恢复与开发运行</span></a><a href="#s12" data-section="s12"><span>12</span><span>驱动、BSP 与原项目复用</span></a><a href="#s13" data-section="s13"><span>13</span><span>已验证结果与剩余边界</span></a><a href="#s14" data-section="s14"><span>14</span><span>常见问题</span></a></nav>
+    <p id="search-empty" class="search-empty">未找到相关章节</p>
+    <div class="sidebar-foot"><b>当前实板入口</b><br>Mac：127.0.0.1:18084（需恢复转发）<br>已核对：2026-11-13<br><br>浏览器 Ctrl / ⌘ + F 可搜索全文。</div>
+  </aside>
+  <main class="main">
+    <div class="content-shell">
+      <header class="hero">
+        <div class="kicker">EchoTrace / 工程手册</div>
+        <h1>软件架构、功能<br>与使用手册</h1>
+        <p class="hero-lead">记录动手工作的画面、口述与步骤；之后按问题找回原始声画，核对当时做了什么、为什么这样做。</p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#s10">从使用流程开始 →</a><a class="btn btn-quiet" href="#s01">查看架构图</a><button class="btn btn-quiet" type="button" id="print-btn">打印 / 保存 PDF</button></div>
+        <div class="hero-meta"><span>0.1 核心首版</span><span>源码与实板记录核对 · 2026-11-13</span><span>单文件 · 离线可读</span></div>
+      </header>
+      <div class="overview" aria-label="项目概览">
+        <div class="overview-card"><strong>2</strong><span>RV1106 采集端 + RK3576 记忆中枢</span></div>
+        <div class="overview-card"><strong>3</strong><span>Echo 小屏、浏览器与 Qt 入口</span></div>
+        <div class="overview-card"><strong>702</strong><span>一次一小时试录中巡检通过的原件</span></div>
+        <div class="overview-card"><strong>0 XRUN</strong><span>同一小时试录的音频欠/过载次数</span></div>
+      </div>
+      <aside class="status-note"><strong>当前状态：</strong>EchoTrace 已作为原 Echo-Mate DeskBot 抽屉中的“记忆”应用在实板试运行；原聊天、AI 相机等功能保留。采集 → SD 原件 → 中枢索引 → 检索 → 证据回放已形成闭环。两板 USB 直连、实体脚踏与称重托盘、整机开机自启和完整产品评测仍待完成。当前调试链路需要 Windows/WSL 与 Mac 转发。</aside>
+      <p class="reading-guide"><b>阅读建议</b><span>先看第 1、9、10 节理解连接、界面和日常操作；第 11 节用于恢复开发环境；第 13 节区分实测结果与目标。</span></p>
+      <section class="manual-section" data-section="s01"><h2 id="s01">1. 整体组成与实际连接</h2>
+<p>系统由 RV1106 采集端、RK3576 记忆中枢、三个交互入口组成。</p>
+
+<figure class="system-map" aria-labelledby="system-map-title">
+  <figcaption id="system-map-title" class="map-title">两块板的职责与数据流</figcaption>
+  <div class="map-grid">
+    <div class="board board-edge">
+      <div class="board-head"><span class="board-tag">现场 · RV1106</span><strong>Echo-Mate</strong></div>
+      <div class="map-node"><b>硬件与 BSP</b><span>相机 · 麦克风 · 扬声器 · LCD / 触摸</span></div>
+      <span class="map-arrow" aria-hidden="true">↓</span>
+      <div class="map-node emph"><b>C++ 常驻采集服务</b><span>采集、编码、事件、同步与补传</span></div>
+      <div class="map-branches">
+        <div class="map-node"><b>SD 原件</b><span>MP4 · WAV · 日志 · 清单</span></div>
+        <div class="map-node"><b>原 DeskBot 的记忆应用</b><span>Unix socket 现场控制</span></div>
+      </div>
+    </div>
+    <div class="bridge" aria-label="两板通过 WebSocket v3 交换命令、事件和媒体片段">
+      <span class="bridge-line" aria-hidden="true"></span>
+      <div class="bridge-label"><strong>WebSocket v3</strong><span>控制 · 事件 · 补传</span></div>
+      <span class="bridge-line" aria-hidden="true"></span>
+    </div>
+    <div class="board board-hub">
+      <div class="board-head"><span class="board-tag">记忆中枢 · RK3576</span><strong>鲁班猫 3</strong></div>
+      <div class="map-node emph"><b>FastAPI + MemoryService</b><span>项目、任务、检索、证据 API</span></div>
+      <span class="map-arrow" aria-hidden="true">↓</span>
+      <div class="map-branches">
+        <div class="map-node"><b>SQLite</b><span>事件 · FTS5 · 向量 · 修订</span></div>
+        <div class="map-node"><b>端侧 AI</b><span>CPU 语音与检索 · NPU 关键帧</span></div>
+      </div>
+      <div class="map-node map-node-last"><b>媒体与导出</b><span>MPP / RGA · FFmpeg 回退 · 缓存 · ZIP</span></div>
+    </div>
+  </div>
+  <div class="clients"><span>浏览器工作台</span><span class="client-link">HTTP API / 媒体内容</span><span>Qt 工作台</span></div>
+  <p class="map-note">部署目标是两板 USB 直连；当前实板调试链路经过 Windows/WSL、Mac SSH 转发。</p>
+</figure>
+
+<p>部署目标是 Echo USB 网卡直接连接鲁班猫 USB Host。目前按用户选择保留原接法：</p>
+<div class="code-block"><span class="code-label">text</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-text">Echo-Mate USB → Windows/WSL
+                    ↑ SSH 跳板
+                  当前 Mac
+                    ↓ SSH 转发
+                鲁班猫记忆服务
+</code></pre></div>
+<p>模型推理在本地板卡运行，但当前调试链路仍依赖 WSL 和 Mac。不能把它描述成已经完成两板脱离电脑独立使用。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>打开浏览器的位置</th>
+<th>地址</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前 Mac</td>
+<td>http://127.0.0.1:18084</td>
+<td>实板工作台，经 SSH 转发到鲁班猫</td>
+</tr>
+<tr>
+<td>鲁班猫自己的图形桌面</td>
+<td>http://127.0.0.1:18081</td>
+<td>同一实板中枢</td>
+</tr>
+<tr>
+<td>当前 Mac</td>
+<td>http://127.0.0.1:18081</td>
+<td>当前独立模拟演示，不是实板库</td>
+</tr>
+</tbody>
+</table></div>
+<p>上述 localhost 属于打开浏览器的那台电脑。鲁班猫当前服务仅监听回环地址，不能直接用其 LAN 地址加 18081 当作已开放的网站。</p>
+</section><section class="manual-section" data-section="s02"><h2 id="s02">2. 两块板的职责</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>部件</th>
+<th>当前职责</th>
+<th>为什么这样分工</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RV1106</td>
+<td>摄像头、音频、硬件编码、SD 记录、事件、本地控制、补传、扬声器播放</td>
+<td>原件先在现场保存，避免网络或 AI 故障中断记录</td>
+</tr>
+<tr>
+<td>RK3576</td>
+<td>离线模型、数据库、文本与向量检索、关键帧提取、证据缓存、HTTP 服务</td>
+<td>集中承担较大的内存与推理负载</td>
+</tr>
+<tr>
+<td>DeskBot / LVGL</td>
+<td>原桌面保留；新增记忆页负责开始、标记、暂停、结束、状态和查询结果显示</td>
+<td>录制时通过共享设备锁阻止原聊天和 AI 相机争抢声画</td>
+</tr>
+<tr>
+<td>Web / Qt</td>
+<td>项目管理、详细时间线、文字查询、回放、笔记、导出</td>
+<td>大屏更适合复盘</td>
+</tr>
+</tbody>
+</table></div>
+<p>本块 Echo 的运行中设备树为 128MiB 内存，约 66MiB 用于媒体 CMA，Linux 普通内存约 54MiB。当前没有在 RV1106 常驻运行 YOLO 或 VLM；变化检测使用低分辨率灰度图。主要 AI 部署在 RK3576。</p>
+</section><section class="manual-section" data-section="s03"><h2 id="s03">3. RV1106 进程与线程</h2>
+<p>录制期间 <code>echotrace-edge</code> 独占相机和录音设备；未录制时，原聊天或 AI 相机可取得共享设备锁并使用硬件。采集服务内部职责分开：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>执行部分</th>
+<th>工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视频采集线程</td>
+<td>取得 H.264 编码包，交给录像模块；维护视频来源时间</td>
+</tr>
+<tr>
+<td>录像写盘线程</td>
+<td>有界队列、分片 MP4、落盘和片段完成回调</td>
+</tr>
+<tr>
+<td>音频采集线程</td>
+<td>ALSA 持续读取，选有效声道，形成单声道 WAV</td>
+</tr>
+<tr>
+<td>画面变化线程</td>
+<td>约 2Hz 比较缩略灰度图，在变化后稳定时产生候选标记</td>
+</tr>
+<tr>
+<td>输入线程</td>
+<td>预留 evdev 脚踏/暂停开关和 IIO 托盘读数入口</td>
+</tr>
+<tr>
+<td>网络线程</td>
+<td>WebSocket 连接、接收命令与块确认</td>
+</tr>
+<tr>
+<td>服务主循环</td>
+<td>执行命令、登记完成片段、同步与摘要校验、持久化状态、调度补传</td>
+</tr>
+<tr>
+<td>播放任务</td>
+<td>播放历史证据声音或中枢生成的语音</td>
+</tr>
+</tbody>
+</table></div>
+<p>主视频采用 VI 的 NV12 输出绑定 VENC，避免每帧先转 RGB 再交给编码器。低分辨率变化检测保留自己的灰度副本；编码包进入录像队列仍有必要的拷贝，不把整条链路称为完全零拷贝。</p>
+<p>默认记录格式：</p>
+<ul>
+<li>视频：1920×1080、25fps、H.264，目标码率约 8Mbit/s，GOP 约一秒。</li>
+<li>音频：硬件双声道采集，取有效的左声道，保存 16kHz、16bit、单声道 PCM WAV。</li>
+<li>片段：约十秒，边界按编码和采样实际情况浮动。</li>
+<li>视频与音频分开保存，通过来源时间关联。直接双击某个 MP4 没有声音是正常的，应在工作台联合回放。</li>
+</ul>
+<p>音频线程关闭片段后，把路径和时间交给长度为 16 的待登记队列。WAV 数据与目录同步、SHA-256、清单和日志提交在主循环执行，减少慢写盘阻塞录音。停止会话会排空完成片段。</p>
+<p>“暂停”停止新增声画记录，但不等于给相机或声卡断电；继续时保留真实时间缺口。</p>
+</section><section class="manual-section" data-section="s04"><h2 id="s04">4. 事件与时间轴</h2>
+<div class="code-block"><span class="code-label">text</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-text">项目 Project
+  └─ 会话 Session：某一次工作
+       ├─ 原始事件 Event：发生了什么、来源时间、原始内容
+       ├─ 锚点 Anchor：可点击、可检索的步骤
+       └─ 媒体 Media：覆盖哪些来源时间的原始片段
+</code></pre></div>
+<p>已接入软件的事件类型包括步骤标记、口述、画面变化、托盘变化、采集中断和传感器异常。脚踏、托盘、独立暂停开关尚未完成实物接入。</p>
+<p>画面变化后稳定约一秒，选择较清楚的候选帧，自动变化事件有冷却；另外约每三十秒生成周期候选。候选只表示值得观察，不能直接认定某个零件被拿走。</p>
+<p>时间使用 RV 的 <code>CLOCK_MONOTONIC</code> 微秒，同时保存 <code>device_id</code>、<code>boot_id</code>。重启前后的时钟不会混用。视频保留源 PTS，音频保存首样本时间与样本计数。UTC 只辅助展示，当前板端墙钟不准确，不能按 MP4 文件名中的日期推断真实拍摄日期。</p>
+<p>原始事件、人工笔记、语音转写、视觉描述分别保存。改笔记会产生修订历史，不修改原始事件。</p>
+</section><section class="manual-section" data-section="s05"><h2 id="s05">5. 中枢服务、数据库与任务</h2>
+<p>中枢是一个 Python API/业务进程，配合独立的 C++ 视觉和取帧工作进程，并非很多独立微服务。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app.py</code></td>
+<td>FastAPI 路由、WebSocket 设备连接、命令 ACK、媒体上传、前端静态文件</td>
+</tr>
+<tr>
+<td><code>memory.py</code></td>
+<td>后台任务、语音窗口、关键帧、检索回答、会话整理、证据导出</td>
+</tr>
+<tr>
+<td><code>store.py</code></td>
+<td>SQLite 数据模型、事务、去重、修订、全文索引、向量、缓存和删除墓碑</td>
+</tr>
+<tr>
+<td><code>ai.py</code></td>
+<td>本地模型加载、文件摘要校验、推理与模型状态</td>
+</tr>
+<tr>
+<td><code>protocol.py</code></td>
+<td>API 数据校验及 v3 二进制包定义</td>
+</tr>
+<tr>
+<td><code>playback.py</code></td>
+<td>把不同声画片段映射为统一的证据播放清单</td>
+</tr>
+<tr>
+<td><code>text.py</code></td>
+<td>中文双字切分、全文检索查询与词项重叠</td>
+</tr>
+</tbody>
+</table></div>
+<p>SQLite 保存项目、会话、原始事件、锚点、笔记历史、媒体、向量、任务及删除墓碑。使用 WAL、同步提交和数据目录所有权锁。只有中枢通过 Store 修改数据库；客户端不直接写 SQLite，也不能对同一数据目录同时启动两个 Hub。</p>
+<p>后台有两个任务通道：ASR/embedding，以及 caption。角色推理有锁，VLM 在独立进程串行运行，避免视觉模型退出拖垮 API。人工标记先持久化，再异步处理。任务会显示等待、运行、完成、失败或模型阻塞状态。自动画面描述因队列满而暂缓时，空闲 worker 会按视频时间覆盖补建，每轮最多 4 项，待处理队列上限仍为 32 项。</p>
+<p>历史 AI 任务取片和新请求目前仍共用源端串行传输队列，繁忙时会等待；交互取片延迟尚未验收。</p>
+</section><section class="manual-section" data-section="s06"><h2 id="s06">6. AI 各自做什么</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>能力</th>
+<th>模型</th>
+<th>位置</th>
+<th>当前用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语音活动检测</td>
+<td>Silero VAD ONNX</td>
+<td>RK CPU</td>
+<td>从录音中找说话区间</td>
+</tr>
+<tr>
+<td>中文转写</td>
+<td>SenseVoiceSmall INT8 / sherpa-onnx</td>
+<td>RK CPU</td>
+<td>把口述变成检索文本</td>
+</tr>
+<tr>
+<td>语义检索</td>
+<td>BGE-small-zh-v1.5 / ONNX</td>
+<td>RK CPU</td>
+<td>生成文本向量，支持近义表达</td>
+</tr>
+<tr>
+<td>关键帧描述</td>
+<td>Qwen3.5-0.8B / RKNN + RKLLM</td>
+<td>RK NPU</td>
+<td>为稀疏关键帧生成自动描述</td>
+</tr>
+<tr>
+<td>中文反馈</td>
+<td>Matcha + Vocos</td>
+<td>RK CPU，Echo 播放</td>
+<td>把回答转成语音</td>
+</tr>
+</tbody>
+</table></div>
+<p>模型与词典运行时从本地读取，不调用旧项目的云聊天或云 TTS。权重、运行库和转换版本有清单与摘要。</p>
+<p>需要特别区分三点：</p>
+<ol>
+<li>默认回答检索已有笔记、ASR 或描述，引用相关内容并附来源时间、证据 ID；不是让 VLM 自由猜测操作原因。</li>
+<li>“整理过程/会话摘要”当前按时间整理最近最多三十条锚点，不是大模型自动编写完整维修报告。可修正步骤笔记后重新整理。</li>
+<li>VLM 分析的是选出的静态关键帧，不是持续逐帧理解 1080p 视频。细小丝印、准确接线、相似工具身份没有质量保证。</li>
+</ol>
+<p><code>files_present</code> 表示模型文件存在；<code>verified_runtime</code> 表示该角色在当前服务进程中成功执行过。它们不等于领域准确率合格。最近检查中五组文件均在，ASR、VAD、BGE、VLM 当前进程已执行；TTS 另有之前的实板通路记录。</p>
+</section><section class="manual-section" data-section="s07"><h2 id="s07">7. 检索与证据回放</h2>
+<div class="code-block"><span class="code-label">text</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-text">提问 → 项目/会话范围 → 中文双字 FTS5 + BGE 向量检索
+     → 合并排序 → 原始说明/转写优先 → 时间和证据引用
+     → 获取未缓存片段 → 回放或关键帧
+</code></pre></div>
+<p>向量保存在 SQLite 中，先用本地平面计算，不依赖外部向量数据库。语义模型不可用时可以退回全文检索。进度和最后位置问题有最近记录排序；原因问题优先包含“因为、由于、为了”等口述/笔记。</p>
+<p>结果可能是找到记录、证据不足或相关画面不可用。文字存在而原片缺失时，文字仍可能被检索；需要画面的提问不能靠模型补造图像。找物能力依赖用户命名和历史记录，不能证明物品现在还在那里。</p>
+<p>中枢优先调用 <code>echotrace-frame</code> 使用 MPP/RGA 取帧，失败时尝试 FFmpeg。Web 与 Qt 使用同一播放清单，支持一倍速、暂停、跳转、跨片段续播和仅音频回放。缺失或未缓存的区间会提示和暂停，不把缺口剪掉伪装成连续过程。</p>
+<p>浏览器在浏览器所在电脑播放音频；Qt 可选择 Echo 联动声音。小屏只显示查询缩略图和结果，可播放证据声音，不是完整的 1080p 视频播放器。真实显示屏与扬声器的回放延迟尚未做一小时测量。</p>
+<p>Web/Qt 文字查询主要在各自界面显示，不会自动把每次结果都推到小屏。小屏的查询结果与语音反馈主要来自 Echo 端发起的查询；录制中的语音查询会走答案返回与 TTS 通路。</p>
+</section><section class="manual-section" data-section="s08"><h2 id="s08">8. 通信、断线与存储</h2>
+<p>WebSocket v3 承担握手、心跳、命令、事件和约十秒短片段补传。命令带唯一 ID，设备执行后 ACK；事件按来源身份和序号去重。16KiB 媒体块协商逐块确认，整段检查长度和 SHA-256 后提交。HTTP 面向工作台，提供 JSON API、媒体和 Range 读取。</p>
+<p>实时 Opus 包头与边界规则已有定义，当前权威录音及识别通路是闭合 WAV；没有完成实时 Opus 低延迟对话。</p>
+<p>断线后：</p>
+<ul>
+<li>已在录制的会话继续写 Echo SD。</li>
+<li>本地可标记、暂停、继续和结束既有会话。</li>
+<li>重连后补传原始事件和片段登记，按需传原件，避免重复入库。</li>
+<li>新建会话和语音检索仍需要中枢连接，不是 RV 单板独立 AI。</li>
+<li>崩溃后的日志尾部修复、未完成任务恢复和媒体恢复有实现；真实异常断电仍待验收。</li>
+</ul>
+<p>实际数据位置：</p>
+<div class="code-block"><span class="code-label">text</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-text">Echo /mnt/sdcard/echotrace/
+  sessions/&lt;session_id&gt;/video/recordings/*.mp4
+  sessions/&lt;session_id&gt;/audio-*.wav
+  journal/observations.jsonl
+  manifests/*.json
+  state.json
+
+RK /root/echotrace/runtime/real-smoke/
+  memory.sqlite3
+  media/       # 原始字节的缓存
+  frames/      # 关键帧
+  exports/     # 证据 ZIP
+  staging/     # 未提交的临时传输文件
+</code></pre></div>
+<p>原件在 SD，RK 缓存不是唯一权威副本。当前配置保留 256MiB 录制空间，容量保护会停止新增记录并提示，不自动覆盖历史。默认 RK 媒体缓存额度为 2GiB，可清理的是缓存，不是 SD 原件。</p>
+<p>证据 ZIP 包含所选步骤关联的原始 MP4/WAV，以及 <code>evidence.json</code> 中的时间、摘要、当前说明、转写、描述和原始事件。它不是整个项目数据库、模型和所有修订历史的完整备份。</p>
+</section><section class="manual-section" data-section="s09"><h2 id="s09">9. 三个界面能做什么</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>Echo 小屏</th>
+<th>浏览器</th>
+<th>Qt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新建项目</td>
+<td>未提供</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>选择项目、开始/标记/暂停/结束</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>文字检索</td>
+<td>集成页未提供文字输入</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>录制中语音检索</td>
+<td>支持结果接收和播放</td>
+<td>由 Echo 录音触发</td>
+<td>由 Echo 录音触发</td>
+</tr>
+<tr>
+<td>详细时间线和原视频回放</td>
+<td>结果缩略图及证据声音</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>编辑步骤笔记、导出</td>
+<td>未提供完整管理入口</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>两步图像对照</td>
+<td>未提供</td>
+<td>支持，含跨会话选择</td>
+<td>当前未提供同等对照按钮</td>
+</tr>
+<tr>
+<td>删除会话</td>
+<td>未提供</td>
+<td>支持</td>
+<td>当前未提供删除按钮</td>
+</tr>
+</tbody>
+</table></div>
+</section><section class="manual-section" data-section="s10"><h2 id="s10">10. 日常使用一遍完整流程</h2>
+<ol>
+<li>固定摄像头方向、机位和补光，让工作台及手部操作清楚可见。本轮拍手样本原画面倒置，正式使用前需要调整朝向。确认 Echo、SD 和鲁班猫供电；当前经 WSL/Mac 的调试链路需要重新建立转发后才能在 Mac 打开 <strong>http://127.0.0.1:18084</strong>。确认工作台显示“记录终端已连接”。</li>
+<li>点击“＋ 新建项目”，例如“RK3576 串口排障”。项目是一项长期工作，会话是其中某一次操作。</li>
+<li>在 Echo 首页打开底部抽屉，向下滚动进入“记忆”，选择项目并点击“开始记忆”；也可在 Web/Qt 创建会话并填写例如“更换排线前检查”。确认小屏显示“记录中”。单台 Echo 同时只做一个活动会话。返回首页不会停止录制；此时打开原聊天或 AI 相机会提示先结束。</li>
+<li>拆线前点击“记下这一步”。浏览器会弹出笔记框，可写“保留旧接法，下一步换排线”；Echo 按钮建立无文字的步骤点。</li>
+<li>自然口述原因，例如“移动排线就掉串口，所以先换这根线”。录音闭合、传输、VAD 和识别后才出现转写，不会立刻逐字显示。背景任务积压时会更慢。</li>
+<li>需要查询时，在浏览器输入“为什么换排线”。录制期间也可说“查一下，为什么换排线”。支持的句首为“查一下、查一查、回看一下、查询一下”。播报结束后再补充口述。</li>
+<li>点击回答候选或时间线步骤，先“获取原始片段”，等缓存完成后播放、跳转或“提取关键帧”。该证据通常关联标记前后约十秒范围，不只是单个截图。</li>
+<li>Web 中先把一个步骤“设为对照步骤”，再选另一步点击“与已选步骤对照”。两步关联视频均需可用；这是图像并排对照，不会自动认证接线正确。</li>
+<li>修正步骤笔记后保存；点击“整理过程”看时间顺序记录。</li>
+<li>点击“结束记忆”，等停止确认和片段提交完成。AI 可以随后继续补齐，不必等所有描述生成才结束录制。</li>
+<li>选中需要留存的步骤，确认相关片段已获取，再“导出”。需要清理空间时使用界面删除会话；删除会影响 SD 原件和索引，离线终端的原件删除会延后到重连执行。</li>
+</ol>
+<p>普通口述不用强制说“记一下”。目前不能期待通过任意语音口令开始、结束会话或控制硬件；语音入口主要是转写与上述查询前缀。</p>
+<p>Qt 中“记下这一步”会把当前搜索框文字作为标记说明；打标记前留意框中内容。Echo 回看页没有完善的软键盘，日常文字查询建议用 Web 或 Qt。</p>
+</section><section class="manual-section" data-section="s11"><h2 id="s11">11. 启动、连接恢复与开发运行</h2>
+<p>当前服务已运行，无需重新启动。以下命令是连接丢失或服务已经停止后的恢复参考，不能在同一目录重复启动另一个中枢。</p>
+<p>在 Mac 的两个终端分别重建转发，保留终端连接：</p>
+<div class="code-block"><span class="code-label">sh</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-sh"># Mac → 鲁班猫服务
+ssh -o ExitOnForwardFailure=yes -N -L 18084:127.0.0.1:18081 lubancat
+
+# Mac 经 WSL → Echo；Echo 本机 18081 转回 Mac 18084
+ssh -o ExitOnForwardFailure=yes -N -J wsl \
+  -R 127.0.0.1:18081:127.0.0.1:18084 root@172.32.0.93
+</code></pre></div>
+<p>如果当前工作台已经正常，不要重复创建同一端口转发。端口占用时先核对现有连接。</p>
+<p>在鲁班猫启动现有真实数据库服务，前提是旧实例已经停止：</p>
+<div class="code-block"><span class="code-label">sh</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-sh">cd /root/echotrace
+.venv/bin/python -m echotrace serve \
+  --data runtime/real-smoke --models models/config.json \
+  --host 127.0.0.1 --port 18081
+</code></pre></div>
+<p><code>runtime/real-smoke</code> 虽含 smoke 字样，但当前实际记录就在这里。换成 <code>runtime/real</code> 会打开另一个目录，不能把看到空库当成数据被删除。上述命令以前台方式运行。</p>
+<p>在 Echo 通过 SSH 的 shell 启动开发版采集服务，前提是原实例已经停止且 SD 已挂载：</p>
+<div class="code-block"><span class="code-label">sh</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-sh">grep -q ' /mnt/sdcard ' /proc/mounts || exit 1
+export LD_LIBRARY_PATH=/root/echotrace/lib:/oem/usr/lib:/usr/lib:/lib
+/root/echotrace/bin/echotrace-edge \
+  --data /mnt/sdcard/echotrace \
+  --config /root/echotrace/edge-sd.json \
+  --socket /run/echotrace-sd.sock \
+  --hub ws://127.0.0.1:18081/ws/device
+</code></pre></div>
+<p>这里的 Echo loopback 18081 依赖上一条反向转发。此命令也为前台运行；当前已部署的常驻进程则由独立方式启动。</p>
+<p>以下是旧的独立终端恢复命令，仅在集成 DeskBot 已停止时使用。当前集成桌面与旧终端只能运行其一：</p>
+<div class="code-block"><span class="code-label">sh</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-sh">ECHOTRACE_PREFIX=/root/echotrace ECHOTRACE_RUN_DIR=/run/echotrace-terminal \
+  ECHOTRACE_SOCKET=/run/echotrace-sd.sock \
+  /root/echotrace/S96echotrace-terminal restart
+</code></pre></div>
+<p>在有图形显示权限的鲁班猫终端启动 Qt：</p>
+<div class="code-block"><span class="code-label">sh</span><button type="button" class="copy-btn" aria-label="复制代码">复制</button><pre><code class="language-sh">cd /root/echotrace
+build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
+</code></pre></div>
+<p>正式 SysV/systemd 模板、Buildroot 包已经提供，但尚未启用整机开机自启。它们使用 <code>/opt/echotrace</code> 等正式安装路径，不能与当前 <code>/root/echotrace</code> 调试安装混为一套现成自启系统。</p>
+</section><section class="manual-section" data-section="s12"><h2 id="s12">12. 驱动、BSP 与原项目复用</h2>
+<p>相机、ISP/CIF、编码、声卡、LCD、触摸和 USB 网络主要采用匹配板卡的原厂 BSP/SDK，不是从零重写所有驱动。</p>
+<p>本项目新增的底层工作是：HX711 负错误码处理修复、IIO/触发配置、gpio-keys 候选设备树、用户态称重稳定状态机、时间关联和服务整合。修复后的 HX711 对象和候选 DTB 已使用真实 ARM 工具链编译，错误注入也有检查；实体 HX711、脚踏、暂停开关尚未接入，候选节点未启用，没有刷写新内核。</p>
+<p>当前 SDK 默认 SD 启动配置与实板 SPI NAND / UBIFS 启动不同。已有 SPI NAND 分区候选与实板七个 MTD 分区大小匹配，但完整镜像、U-Boot、根文件系统及冷启动仍需整体验证。</p>
+<p>原安防项目贡献了录像封装、恢复、解码和播放器等可复用代码；Echo-Mate 贡献硬件、SDK/BSP、LVGL 依赖与交互经验。融合项目独立实现采集服务、中枢编排、事件协议和过程记忆。没有把原安防的全部 UDP/TCP 方案或原 Echo 云端语音服务原样搬过来。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>阅读入口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>native/src/</code></td>
+<td>设备服务、采集、输入、日志及协议</td>
+</tr>
+<tr>
+<td><code>native/lvgl/</code></td>
+<td>小屏 UI</td>
+</tr>
+<tr>
+<td><code>native/qt/</code></td>
+<td>Qt 工作台和证据播放控制器</td>
+</tr>
+<tr>
+<td><code>native/media/</code></td>
+<td>硬件取帧</td>
+</tr>
+<tr>
+<td><code>native/vlm/</code></td>
+<td>RKNN/RKLLM 推理进程</td>
+</tr>
+<tr>
+<td><code>src/echotrace/</code></td>
+<td>API、数据库、业务、模型及播放清单</td>
+</tr>
+<tr>
+<td><code>src/echotrace/web/</code></td>
+<td>不依赖在线 CDN 的浏览器工作台</td>
+</tr>
+<tr>
+<td><code>bsp/</code></td>
+<td>驱动补丁、设备树、配置和服务模板</td>
+</tr>
+<tr>
+<td><code>scripts/</code></td>
+<td>准备、模型转换、封存、构建探针、部署与验收</td>
+</tr>
+<tr>
+<td><code>tests/</code></td>
+<td>核心、协议、回放、驱动错误路径、存储和同步工具测试</td>
+</tr>
+</tbody>
+</table></div>
+</section><section class="manual-section" data-section="s13"><h2 id="s13">13. 已验证结果与剩余边界</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新版一小时记录</td>
+<td>342 段视频、360 段音频，0 次音频 XRUN；702 原件全部摘要/容器/样本数巡检通过</td>
+</tr>
+<tr>
+<td>终端内存</td>
+<td>该轮录制期采样最低 21.59MiB；另一次压力短测出现过 19.81MiB</td>
+</tr>
+<tr>
+<td>六下拍手短测</td>
+<td>约 19–50ms 对齐偏差，帧间隔约 40ms，有运动模糊；非一小时同步或回放同步验收</td>
+</tr>
+<tr>
+<td>底层</td>
+<td>HX711 ARM 内核对象和候选 DTB 编译通过，未做实体传感器采样和新固件启动</td>
+</tr>
+<tr>
+<td>容量保护与 UI</td>
+<td>实板触发停录、拒绝故障恢复、顶部明显告警、独立界面重启</td>
+</tr>
+<tr>
+<td>检索负载</td>
+<td>一万条模拟锚点下查询 P95 约 0.70 秒；不能转化为真实 Recall@5</td>
+</tr>
+</tbody>
+</table></div>
+<p>尚未完成：两板直接 USB 互联与实际拔插、完整 BSP 镜像和开机部署、真实异常断电、实体外设、一小时物理同步、回放声学同步、零持续换页，以及二十次真实操作和两百条人工问题评测。</p>
+<p>当前 RK 观察过 zram 换出，且共用板上已有 NAS 服务，没有修改其全局换页参数。最近状态接口还保留个别硬件取帧回退和未产出画面的错误记录，需要按片段排查，不能保证所有历史位置都能成功提帧。</p>
+</section><section class="manual-section" data-section="s14"><h2 id="s14">14. 常见问题</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>现象</th>
+<th>检查方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开页面没有 Echo，模型全未安装</td>
+<td>先核对是否误进 Mac 的 18081 演示，真实入口是 18084</td>
+</tr>
+<tr>
+<td>工作台在线、终端离线</td>
+<td>核对 Echo 电源、WSL SSH、两条转发和源端服务；已开始的记录可能仍在 SD 上继续</td>
+</tr>
+<tr>
+<td>有文字但看不了视频</td>
+<td>点击获取原始片段；需要 Echo 在线，缓存和原件可用</td>
+</tr>
+<tr>
+<td>自动描述/转写迟迟未出现</td>
+<td>等闭合片段、补传和模型任务；查看 <code>/api/jobs</code> 的状态与原因；可先补人工笔记</td>
+</tr>
+<tr>
+<td>关键帧提取失败</td>
+<td>核对原片已获取与可解码，查看中枢日志；当前有个别片段回退/无帧记录，需修复而不能凭空补图</td>
+</tr>
+<tr>
+<td>小屏文字框无法方便输入</td>
+<td>当前缺少屏上软键盘，改用 Web/Qt 或录制中的语音查询</td>
+</tr>
+<tr>
+<td>只播放 SD 上的 MP4 没有声音</td>
+<td>WAV 是独立音频，应使用证据工作台联合回放</td>
+</tr>
+<tr>
+<td>显示存储不足但卡未完全满</td>
+<td>检查预留阈值；先结束故障会话，导出/清理后新建，禁止直接恢复故障会话</td>
+</tr>
+<tr>
+<td>重启后不在线</td>
+<td>当前没有完整开机自启，要恢复调试连接与服务</td>
+</tr>
+</tbody>
+</table></div>
+<p>状态入口：当前 Mac 的 <code>http://127.0.0.1:18084/api/status</code>；任务入口：<code>/api/jobs</code>。如果以后切换为有令牌的网络部署，浏览器通过左下角齿轮填写令牌，Qt 使用 <code>ECHOTRACE_TOKEN</code>，HTTP 和 WebSocket 使用同一私有令牌。</p>
+<p>详细证据与开发说明：<a href="verification.md">验证记录</a>、<a href="deployment.md">部署</a>、<a href="sd-validation.md">SD 实测</a>、<a href="bsp-validation.md">BSP 编译</a>、<a href="models.md">模型</a>、<a href="physical-av-sync.md">物理短测</a>、<a href="usb-direct-validation.md">USB 直连准备</a>。</p><p class="reference-note">以上仓库文档链接用于查看进一步证据；本页主要内容可作为单个 HTML 文件离线阅读。</p></section>
+      <footer class="page-footer"><span>EchoTrace · 文档以当前源码与 2026-11-12 实板记录为准</span><a class="top-link" href="#top">↑ 返回顶部</a></footer>
+    </div>
+  </main>
+</div>
+<script>
+const sidebar=document.getElementById('sidebar');
+const scrim=document.getElementById('scrim');
+const menu=document.getElementById('menu-btn');
+const navLinks=[...document.querySelectorAll('.toc a')];
+function setMenu(open){sidebar.classList.toggle('open',open);scrim.classList.toggle('visible',open);menu.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';}
+menu.addEventListener('click',()=>setMenu(!sidebar.classList.contains('open')));
+scrim.addEventListener('click',()=>setMenu(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+navLinks.forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+const search=document.getElementById('nav-search');
+search.addEventListener('input',()=>{let shown=0;const q=search.value.trim().toLocaleLowerCase();navLinks.forEach(a=>{const sec=document.getElementById(a.dataset.section);const visible=!q||(a.textContent+' '+sec.textContent).toLocaleLowerCase().includes(q);a.hidden=!visible;if(visible)shown++});document.getElementById('search-empty').classList.toggle('visible',shown===0)});
+const observer=new IntersectionObserver(entries=>{const visible=entries.filter(x=>x.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length){const id=visible[0].target.id;navLinks.forEach(a=>{const active=a.dataset.section===id;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}},{rootMargin:'-80px 0px -68% 0px',threshold:0});
+document.querySelectorAll('.manual-section h2').forEach(h=>observer.observe(h));
+document.querySelectorAll('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{const code=btn.closest('.code-block').querySelector('code').textContent;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(code);else{const box=document.createElement('textarea');box.value=code;box.style.position='fixed';box.style.opacity='0';document.body.appendChild(box);box.select();if(!document.execCommand('copy'))throw Error('copy');box.remove()}btn.textContent='已复制';setTimeout(()=>btn.textContent='复制',1600)}catch{btn.textContent='请手动选取';setTimeout(()=>btn.textContent='复制',1800)}}));
+document.getElementById('print-btn').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

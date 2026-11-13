@@ -1,0 +1,180 @@
+{
+  "scope": "read-only O_DIRECT file reads encrypted over SSH while recording",
+  "path": "/mnt/sdcard/echotrace/sessions/3cb4bfb1-9258-4473-983b-d6638f92c343/video/recordings/clip_2021-01-01-12-52-24-617_2021-01-01-12-52-35-513.mp4",
+  "bytes_per_completed_burst": 16777216,
+  "requested_seconds": 120,
+  "bursts": [
+    {
+      "elapsed_seconds": 2.540999999967042e-06,
+      "duration_seconds": 3.075630959,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 4.07586725,
+      "duration_seconds": 3.58276925,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 8.662536916,
+      "duration_seconds": 3.0725465419999995,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 12.736678916,
+      "duration_seconds": 3.6869232499999978,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 17.426835625,
+      "duration_seconds": 3.2963755829999997,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 21.724825333,
+      "duration_seconds": 3.3656259580000025,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 26.095558291,
+      "duration_seconds": 3.628299792,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 30.729146375,
+      "duration_seconds": 3.129970874999998,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 34.859943541,
+      "duration_seconds": 3.7533849590000017,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 39.617181166,
+      "duration_seconds": 3.2379726249999976,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 43.8579275,
+      "duration_seconds": 3.7737738749999963,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 48.63325775,
+      "duration_seconds": 3.223207041000002,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 52.857393791,
+      "duration_seconds": 3.165752625000003,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 57.026068958,
+      "duration_seconds": 3.6926822919999935,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 61.719345541,
+      "duration_seconds": 3.2158420419999914,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 65.939661583,
+      "duration_seconds": 3.701272666999998,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 70.64228612500001,
+      "duration_seconds": 3.1952725000000015,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 74.839954625,
+      "duration_seconds": 3.2295145000000076,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 79.07317887500001,
+      "duration_seconds": 3.1225422079999987,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 83.200033583,
+      "duration_seconds": 3.1823310420000013,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 87.38354341600001,
+      "duration_seconds": 3.7955899589999973,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 92.17925537500001,
+      "duration_seconds": 3.4229472079999965,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 96.60571970800001,
+      "duration_seconds": 3.5341455829999973,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 101.143676583,
+      "duration_seconds": 3.324345292000004,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 105.46923608300001,
+      "duration_seconds": 3.3184220829999873,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 109.790892833,
+      "duration_seconds": 3.4290470000000113,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 114.223348083,
+      "duration_seconds": 3.4930337920000056,
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "elapsed_seconds": 118.718165333,
+      "duration_seconds": 3.8994577500000105,
+      "returncode": 0,
+      "stderr": ""
+    }
+  ],
+  "elapsed_seconds": 122.61764154100001,
+  "completed_bursts": 28,
+  "read_bytes": 469762048,
+  "passed": true
+}

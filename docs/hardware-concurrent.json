@@ -1,0 +1,56 @@
+{
+  "automated_hardware_smoke": true,
+  "quality_evaluation": false,
+  "session_id": "3cbaa1c5-0b17-42b2-927c-b3528736ca6d",
+  "capture_state": "stopped",
+  "media": [
+    {
+      "kind": "video",
+      "start_us": 283461649,
+      "end_us": 291821183,
+      "size_bytes": 3962090,
+      "sha256": "6bde94025963d9c0540de7d4e95f8f1760e30538baada1ca64f07b06589cb707",
+      "discontinuity": 1,
+      "status": "ready",
+      "probe": {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "25/1",
+        "nb_read_frames": "209",
+        "duration": "8.359422"
+      }
+    },
+    {
+      "kind": "audio",
+      "start_us": 283547268,
+      "end_us": 291767268,
+      "size_bytes": 263084,
+      "sha256": "00b150b4a32f3b10acfea535cf2ee436119d50598d7bdb8db9e6d5350b81c390",
+      "discontinuity": 0,
+      "status": "ready",
+      "probe": {
+        "codec_name": "pcm_s16le",
+        "r_frame_rate": "0/0",
+        "nb_read_frames": "129",
+        "sample_rate": "16000",
+        "channels": 1,
+        "bits_per_sample": 16,
+        "duration": "8.220000"
+      }
+    }
+  ],
+  "echo_memory": {
+    "samples": 64,
+    "minimum_MemAvailable_kB": 24724,
+    "maximum_CmaAllocated_kB": 22460,
+    "minimum_CmaReleased_kB": 45124,
+    "minimum_CmaFree_kB": 0
+  },
+  "keyframe_available": true,
+  "limitations": [
+    "8-second capture only; no SD installed",
+    "Automated software marker; no physical pedal timing measurement",
+    "No audio/video alignment quality measurement"
+  ]
+}

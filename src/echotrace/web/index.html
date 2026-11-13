@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EchoTrace · 过程记忆</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<aside><a class="brand" href="/">e<span>↗</span><div>EchoTrace<small>留住动手的过程</small></div></a><div class="eyebrow">你的工作台</div><div id="projects"></div><button id="addProject" class="quiet">＋ 新建项目</button><div class="aside-bottom"><span class="live-dot" id="connectionDot"></span><span id="connection">正在连接工作台</span><button id="settings" title="连接设置">⚙</button></div></aside>
+<main><header><div><div class="eyebrow">PERSONAL PROCESS MEMORY</div><h1 id="projectTitle">把过程，变成可以找回的记忆。</h1><p id="projectDescription">开始一次工作，记下关键步骤。下一次，从证据接着做。</p></div><div class="header-actions"><span class="badge">本地运行</span><button id="start" class="primary">＋ 开始记忆</button></div></header>
+<section class="search"><span>⌕</span><input id="question" placeholder="上次为什么更换排线？" aria-label="搜索过程记忆"><button id="ask">查找记忆 <kbd>↵</kbd></button></section>
+<section id="answer" class="answer hidden" aria-live="polite"></section>
+<div class="workspace"><section class="sessions panel"><div class="panel-title"><h2>工作记录</h2><span id="sessionCount">0 次</span></div><div id="sessions"></div></section>
+<section class="timeline panel"><div class="panel-title"><h2 id="timelineTitle">过程时间线</h2><span id="recordingState" class="badge">未选择记录</span></div><div id="recordingControls" class="controls hidden"><button id="mark">＋ 记下这一步</button><button id="pause">暂停</button><button id="stop" class="danger">结束记忆</button></div><div id="timeline" class="empty">选择一段工作记录，找回当时的思路。</div><div class="timeline-footer"><button id="summary">整理过程</button><button id="deleteSession" class="quiet danger">删除记录</button></div><pre id="summaryText" class="hidden"></pre></section>
+<section class="evidence panel"><div class="panel-title"><h2>原始证据</h2><button id="export" class="quiet">导出 ↗</button></div><div id="evidence" class="empty"><div class="evidence-placeholder">▧</div>每条记忆，都有来处。<small>点击步骤，查看对应的画面与口述。</small></div></section></div>
+<footer><span id="statusText">所有记录保存在本地。</span><span>观察 · 记录 · 找回</span></footer></main>
+<dialog id="modal"><form method="dialog"><h2 id="modalTitle"></h2><p id="modalDescription"></p><input id="modalInput" autocomplete="off"><div><button value="cancel">取消</button><button id="modalConfirm" value="ok" class="primary">确定</button></div></form></dialog><div id="toast" role="status"></div>
+<link rel="stylesheet" href="/playback.css"><script src="/playback.js"></script><script src="/app.js"></script></body></html>

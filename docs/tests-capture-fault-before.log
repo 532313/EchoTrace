@@ -1,0 +1,14 @@
+test_capture_fault_is_visible_and_cannot_resume (test_integration.NativeIntegration) ... FAIL
+
+======================================================================
+FAIL: test_capture_fault_is_visible_and_cannot_resume (test_integration.NativeIntegration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/tests/test_integration.py", line 326, in test_capture_fault_is_visible_and_cannot_resume
+    self.assertIn("存储", state["error"])
+AssertionError: '存储' not found in ''
+
+----------------------------------------------------------------------
+Ran 1 test in 10.665s
+
+FAILED (failures=1)

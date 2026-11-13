@@ -1,0 +1,33 @@
+{
+  "asr": {
+    "model": "assets/sensevoice/model.int8.onnx",
+    "tokens": "assets/sensevoice/tokens.txt",
+    "revision": "2365baeacb507f821a0c8120fcee3d484dba7a07",
+    "test_audio": "assets/sensevoice/test-zh.wav"
+  },
+  "vad": {
+    "model": "assets/vad/silero_vad.onnx",
+    "revision": "066409f3d9db45a30d21dfcbf9147826ffdd7052",
+    "context_samples": 64
+  },
+  "embedding": {
+    "model": "assets/bge/model.int8.onnx",
+    "vocab": "assets/bge/vocab.txt",
+    "revision": "fill from conversion.json"
+  },
+  "tts": {
+    "model": "assets/tts/model-steps-3.onnx",
+    "vocoder": "assets/tts/vocos-22khz-univ.onnx",
+    "tokens": "assets/tts/tokens.txt",
+    "lexicon": "assets/tts/lexicon.txt",
+    "dict_dir": "assets/tts/dict",
+    "rule_fsts": "assets/tts/date.fst,assets/tts/number.fst,assets/tts/phone.fst",
+    "license": "Baker dataset: non-commercial use only"
+  },
+  "vlm": {
+    "worker": "../build/rk3576/echotrace-vlm",
+    "vision": "assets/qwen/qwen3.5-0.8b-448-rk3576.rknn",
+    "language": "assets/qwen/qwen3.5-0.8b-w4a16-rk3576.rkllm",
+    "revision": "fill after pinned conversion"
+  }
+}

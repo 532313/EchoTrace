@@ -1,0 +1,32 @@
+#!/bin/sh
+set -eu
+# Install after SD validation; coordinate camera/audio with the integrated DeskBot.
+pid=/run/echotrace/capture.pid
+case "${1:-}" in
+start)
+    [ -s /etc/echotrace/token ] || { echo "Set a private EchoTrace token first" >&2; exit 1; }
+    export LD_LIBRARY_PATH=/opt/echotrace/lib:/oem/usr/lib:/usr/lib:/lib
+    [ -f "$pid" ] && kill -0 "$(cat "$pid")" 2>/dev/null && exit 0
+    grep -q ' /mnt/sdcard ' /proc/mounts || { echo 'EchoTrace requires mounted SD storage' >&2; exit 1; }
+    mkdir -p /run/echotrace /mnt/sdcard/echotrace
+    umask 077
+    start-stop-daemon -S -b -m -p "$pid" -x /opt/echotrace/bin/echotrace-edge -- \
+        --config /etc/echotrace/edge.json --data /mnt/sdcard/echotrace \
+        --socket /run/echotrace/control.sock --hub ws://192.168.77.1:18081/ws/device
+    ;;
+stop)
+    start-stop-daemon -K -p "$pid" -x /opt/echotrace/bin/echotrace-edge -s TERM || true
+    if [ -r "$pid" ]; then
+        process=$(cat "$pid")
+        attempts=0
+        while kill -0 "$process" 2>/dev/null; do
+            attempts=$((attempts+1))
+            [ "$attempts" -lt 15 ] || { echo 'capture service has not stopped' >&2; exit 1; }
+            sleep 1
+        done
+        rm -f "$pid"
+    fi
+    ;;
+restart) "$0" stop; "$0" start ;;
+*) echo 'usage: S95echotrace start|stop|restart' >&2; exit 2 ;;
+esac

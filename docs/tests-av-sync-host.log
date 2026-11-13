@@ -1,0 +1,7 @@
+test_b_frames_nonzero_pts_and_known_offset_never_count_as_real_measurement (test_av_sync.AVSyncTests) ... ok
+test_rejects_corruption_another_boot_and_out_of_range_annotations (test_av_sync.AVSyncTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.262s
+
+OK

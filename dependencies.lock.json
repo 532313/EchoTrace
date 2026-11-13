@@ -1,0 +1,22 @@
+{
+  "jsoncpp": {
+    "version": "1.9.5",
+    "url": "https://codeload.github.com/open-source-parsers/jsoncpp/tar.gz/refs/tags/1.9.5",
+    "sha256": "f409856e5920c18d0c2fb85276e24ee607d2a09b5e7d5f0a371368903c275da2"
+  },
+  "websocketpp": {
+    "version": "0.8.2",
+    "url": "https://codeload.github.com/zaphoyd/websocketpp/tar.gz/refs/tags/0.8.2",
+    "sha256": "6ce889d85ecdc2d8fa07408d6787e7352510750daa66b5ad44aacb47bea76755"
+  },
+  "asio": {
+    "version": "1.28.0",
+    "url": "https://codeload.github.com/chriskohlhoff/asio/tar.gz/refs/tags/asio-1-28-0",
+    "sha256": "226438b0798099ad2a202563a83571ce06dd13b570d8fded4840dbc1f97fa328"
+  },
+  "picosha2": {
+    "version": "1.0.0",
+    "url": "https://codeload.github.com/okdshin/PicoSHA2/tar.gz/refs/tags/v1.0.0",
+    "sha256": "dec99b43440157847cf5dadfad060b9154749523da28eb1599872f87d1ea8e4b"
+  }
+}

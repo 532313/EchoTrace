@@ -1,0 +1,24 @@
+[ 44%] Built target echo_json
+[ 66%] Built target echo_core
+[ 77%] Building CXX object CMakeFiles/echotrace-edge.dir/native/src/edge_main.cpp.o
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/native/src/edge_main.cpp:18:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/websocketpp/websocketpp/config/asio_no_tls_client.hpp:32:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/websocketpp/websocketpp/transport/asio/endpoint.hpp:32:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/websocketpp/websocketpp/transport/asio/connection.hpp:31:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/websocketpp/websocketpp/transport/asio/base.hpp:31:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/websocketpp/websocketpp/common/asio.hpp:52:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio.hpp:30:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio/basic_datagram_socket.hpp:20:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio/basic_socket.hpp:38:
+In file included from /Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio/detail/reactive_socket_service.hpp:23:
+/Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio/buffer.hpp:2884:37: warning: identifier '_buf' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 2884 | inline ASIO_CONST_BUFFER operator"" _buf(const char* data, std::size_t n)
+      |                          ~~~~~~~~~~~^~~~
+      |                          operator""_buf
+/Users/gsy/Desktop/嵌入式Linux智能安防监控系统/EchoTrace/build/deps/asio/asio/include/asio/buffer.hpp:2892:37: warning: identifier '_buf' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 2892 | inline ASIO_CONST_BUFFER operator"" _buf()
+      |                          ~~~~~~~~~~~^~~~
+      |                          operator""_buf
+2 warnings generated.
+[ 88%] Linking CXX executable echotrace-edge
+[100%] Built target echotrace-edge

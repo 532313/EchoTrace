@@ -1,0 +1,47 @@
+{
+  "phase": "one-hour recording with 250ms ALSA buffer, metadata handoff, synchronous WAV close",
+  "session_id": "22f8c0fb-1971-4204-8d98-6a9e8d976ab0",
+  "completed_duration": true,
+  "elapsed_seconds": 3600.001234,
+  "capture_binary_sha256": "193fb8de164f9e693eff731003304f0b57958897de779307e8c795c9c078b916",
+  "media_from_registered_manifests": {
+    "video": {
+      "segments": 342,
+      "bytes": 1215943313,
+      "duration_seconds": 3600.5165309999984,
+      "first_us": 3265106910,
+      "last_us": 6865626759,
+      "maximum_gap_us": 291,
+      "maximum_overlap_us": 286,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 360,
+      "bytes": 115208880,
+      "duration_seconds": 3599.7825000000025,
+      "first_us": 3265154078,
+      "last_us": 6865515662,
+      "maximum_gap_us": 297805,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 2
+    }
+  },
+  "registered_manifest_count": 702,
+  "manifest_metadata_sha256": "51d9ac3b91c989a9a38b0fc2b339a32503d41b3125124bbf7491b6f87bf45e46",
+  "minimum_echo_MemAvailable_MiB": 20.4140625,
+  "minimum_hub_MemAvailable_MiB": 2119.83203125,
+  "observed_audio_xrun_count": 2,
+  "audio_gaps_over_2ms_us": [
+    279835,
+    297805
+  ],
+  "full_original_audit_completed": true,
+  "physical_av_synchronization_measured": false,
+  "physical_usb_disconnect_tested": false,
+  "quality_evaluation": false,
+  "pending_reason": "Updated audio long-duration retest, physical AV synchronization and remaining hardware acceptance are outstanding",
+  "full_original_audit_passed": true,
+  "source_and_index_metadata_match": true,
+  "video_frames_in_sample_tables": 90013,
+  "video_average_fps": 25.000009873577717
+}

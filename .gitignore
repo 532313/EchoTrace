@@ -1,0 +1,60 @@
+# Local environments and generated files
+.venv/
+.convert-venv/
+.rk-convert/
+.rknn-convert/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.DS_Store
+._*
+.idea/
+.vscode/
+
+# Build output, recordings, runtime databases and local experiments
+/build/
+/dist/
+/runtime/
+/scripts/work/
+*.part
+*.sqlite3*
+*.db
+*.mp4
+*.wav
+*.pcm
+*.raw
+
+# Models and machine-specific configuration; keep example files and hash locks
+/models/assets/
+/models/downloads/
+/models/config.json
+/models/artifacts.lock.json
+/sources.lock.json
+*.rknn
+*.rkllm
+*.onnx
+*.pt
+*.pth
+
+# Credentials and local deployment settings
+.env
+.env.*
+!.env.example
+*.token
+*.key
+*.pem
+
+# Firmware, compiled libraries and release bundles
+*.o
+*.a
+*.so
+*.so.*
+*.ko
+*.dtb
+*.img
+*.bin
+*.bundle
+*.tar.gz
+*.tar.bz2
+*.zip

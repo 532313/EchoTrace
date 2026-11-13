@@ -1,0 +1,13 @@
+✔ continues across a file boundary and preserves paused seek and audio offset (4.158208ms)
+✔ stops at unrecorded time and allows explicit seeking after the gap (0.428333ms)
+✔ an uncached segment never replays the preceding file under a new timestamp (0.868666ms)
+✔ late downloads cannot replace a newer selection and dispose releases blob URLs (0.191209ms)
+✔ audio-only evidence continues and seeks without requiring a video file (0.324709ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 50.850292

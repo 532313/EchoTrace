@@ -1,0 +1,34 @@
+annotated-doc==0.0.6
+annotated-types==0.8.0
+anyio==4.16.0
+click==8.5.1
+# Editable install with no version control (echotrace==0.1.0)
+-e .
+fastapi==0.128.8
+filelock==4.2.10
+flatbuffers==25.12.19
+fsspec==2026.9.0
+h11==0.16.0
+hf-xet==1.8.0
+httpcore2==2.16.0
+httpx2==2.16.0
+huggingface_hub==2.4.0
+idna==3.20
+jieba==0.42.1
+numpy==2.4.6
+onnxruntime==1.31.1
+packaging==26.3
+protobuf==7.36.2
+pydantic==2.14.3
+pydantic_core==2.50.4
+PyYAML==6.0.3
+sherpa-onnx-core==1.13.8
+sherpa_onnx==1.13.8
+starlette==0.52.1
+tokenizers==0.23.3
+tqdm==4.70.1
+truststore==0.10.5
+typing-inspection==0.4.5
+typing_extensions==4.16.0
+uvicorn==0.39.0
+websockets==15.0.1

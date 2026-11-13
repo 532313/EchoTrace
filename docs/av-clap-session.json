@@ -1,0 +1,4012 @@
+{
+  "synthetic": false,
+  "automated_test": true,
+  "quality_evaluation": false,
+  "synchronization_measured": false,
+  "requested_seconds": 180,
+  "samples": [
+    {
+      "elapsed_seconds": 0.0,
+      "hub_MemAvailable": 2970112000,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 2.077,
+      "hub_MemAvailable": 2967650304,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 4.191,
+      "hub_MemAvailable": 2967134208,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 6.291,
+      "hub_MemAvailable": 2966392832,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 8.577,
+      "hub_MemAvailable": 2967437312,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 10.654,
+      "hub_MemAvailable": 2967183360,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        },
+        "audio": {
+          "segments": 0,
+          "bytes": 0,
+          "duration_seconds": 0,
+          "first_us": null,
+          "last_us": null,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 12.728,
+      "hub_MemAvailable": 2967224320,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 5480168,
+          "duration_seconds": 10.999442,
+          "first_us": 24699229028,
+          "last_us": 24710228470,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320876,
+          "duration_seconds": 10.026,
+          "first_us": 24699285192,
+          "last_us": 24709311192,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 14.809,
+      "hub_MemAvailable": 2969726976,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 5480168,
+          "duration_seconds": 10.999442,
+          "first_us": 24699229028,
+          "last_us": 24710228470,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320876,
+          "duration_seconds": 10.026,
+          "first_us": 24699285192,
+          "last_us": 24709311192,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 16.89,
+      "hub_MemAvailable": 2968682496,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 5480168,
+          "duration_seconds": 10.999442,
+          "first_us": 24699229028,
+          "last_us": 24710228470,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320876,
+          "duration_seconds": 10.026,
+          "first_us": 24699285192,
+          "last_us": 24709311192,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 19.065,
+      "hub_MemAvailable": 2970525696,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 5480168,
+          "duration_seconds": 10.999442,
+          "first_us": 24699229028,
+          "last_us": 24710228470,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 1,
+          "bytes": 320876,
+          "duration_seconds": 10.026,
+          "first_us": 24699285192,
+          "last_us": 24709311192,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 21.149,
+      "hub_MemAvailable": 2970087424,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 1,
+          "bytes": 5480168,
+          "duration_seconds": 10.999442,
+          "first_us": 24699229028,
+          "last_us": 24710228470,
+          "maximum_gap_us": 0,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 641112,
+          "duration_seconds": 20.032,
+          "first_us": 24699285192,
+          "last_us": 24719317556,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 23.211,
+      "hub_MemAvailable": 2968817664,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 10751155,
+          "duration_seconds": 21.999499999999998,
+          "first_us": 24699229028,
+          "last_us": 24721228533,
+          "maximum_gap_us": 5,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 641112,
+          "duration_seconds": 20.032,
+          "first_us": 24699285192,
+          "last_us": 24719317556,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 25.293,
+      "hub_MemAvailable": 2969751552,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 10751155,
+          "duration_seconds": 21.999499999999998,
+          "first_us": 24699229028,
+          "last_us": 24721228533,
+          "maximum_gap_us": 5,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 641112,
+          "duration_seconds": 20.032,
+          "first_us": 24699285192,
+          "last_us": 24719317556,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 27.381,
+      "hub_MemAvailable": 2970038272,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 10751155,
+          "duration_seconds": 21.999499999999998,
+          "first_us": 24699229028,
+          "last_us": 24721228533,
+          "maximum_gap_us": 5,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 641112,
+          "duration_seconds": 20.032,
+          "first_us": 24699285192,
+          "last_us": 24719317556,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 29.546,
+      "hub_MemAvailable": 2968444928,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 10751155,
+          "duration_seconds": 21.999499999999998,
+          "first_us": 24699229028,
+          "last_us": 24721228533,
+          "maximum_gap_us": 5,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 2,
+          "bytes": 641112,
+          "duration_seconds": 20.032,
+          "first_us": 24699285192,
+          "last_us": 24719317556,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 31.609,
+      "hub_MemAvailable": 2968109056,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 2,
+          "bytes": 10751155,
+          "duration_seconds": 21.999499999999998,
+          "first_us": 24699229028,
+          "last_us": 24721228533,
+          "maximum_gap_us": 5,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 961172,
+          "duration_seconds": 30.0325,
+          "first_us": 24699285192,
+          "last_us": 24729318056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 33.674,
+      "hub_MemAvailable": 2963824640,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 15484771,
+          "duration_seconds": 31.999359,
+          "first_us": 24699229028,
+          "last_us": 24731228413,
+          "maximum_gap_us": 21,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 961172,
+          "duration_seconds": 30.0325,
+          "first_us": 24699285192,
+          "last_us": 24729318056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 35.766,
+      "hub_MemAvailable": 2968633344,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 15484771,
+          "duration_seconds": 31.999359,
+          "first_us": 24699229028,
+          "last_us": 24731228413,
+          "maximum_gap_us": 21,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 961172,
+          "duration_seconds": 30.0325,
+          "first_us": 24699285192,
+          "last_us": 24729318056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 37.841,
+      "hub_MemAvailable": 2968977408,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 15484771,
+          "duration_seconds": 31.999359,
+          "first_us": 24699229028,
+          "last_us": 24731228413,
+          "maximum_gap_us": 21,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 961172,
+          "duration_seconds": 30.0325,
+          "first_us": 24699285192,
+          "last_us": 24729318056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 40.053,
+      "hub_MemAvailable": 2968334336,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 15484771,
+          "duration_seconds": 31.999359,
+          "first_us": 24699229028,
+          "last_us": 24731228413,
+          "maximum_gap_us": 21,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 3,
+          "bytes": 961172,
+          "duration_seconds": 30.0325,
+          "first_us": 24699285192,
+          "last_us": 24729318056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 42.155,
+      "hub_MemAvailable": 2968588288,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 3,
+          "bytes": 15484771,
+          "duration_seconds": 31.999359,
+          "first_us": 24699229028,
+          "last_us": 24731228413,
+          "maximum_gap_us": 21,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281376,
+          "duration_seconds": 40.0375,
+          "first_us": 24699285192,
+          "last_us": 24739323056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 44.225,
+      "hub_MemAvailable": 2962808832,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 20887479,
+          "duration_seconds": 42.999307,
+          "first_us": 24699229028,
+          "last_us": 24742228535,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281376,
+          "duration_seconds": 40.0375,
+          "first_us": 24699285192,
+          "last_us": 24739323056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 46.297,
+      "hub_MemAvailable": 2969022464,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 20887479,
+          "duration_seconds": 42.999307,
+          "first_us": 24699229028,
+          "last_us": 24742228535,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281376,
+          "duration_seconds": 40.0375,
+          "first_us": 24699285192,
+          "last_us": 24739323056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 48.369,
+      "hub_MemAvailable": 2970255360,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 20887479,
+          "duration_seconds": 42.999307,
+          "first_us": 24699229028,
+          "last_us": 24742228535,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 4,
+          "bytes": 1281376,
+          "duration_seconds": 40.0375,
+          "first_us": 24699285192,
+          "last_us": 24739323056,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 50.552,
+      "hub_MemAvailable": 2969468928,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 20887479,
+          "duration_seconds": 42.999307,
+          "first_us": 24699229028,
+          "last_us": 24742228535,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1601420,
+          "duration_seconds": 50.0375,
+          "first_us": 24699285192,
+          "last_us": 24749323109,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 52.64,
+      "hub_MemAvailable": 2971197440,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 4,
+          "bytes": 20887479,
+          "duration_seconds": 42.999307,
+          "first_us": 24699229028,
+          "last_us": 24742228535,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1601420,
+          "duration_seconds": 50.0375,
+          "first_us": 24699285192,
+          "last_us": 24749323109,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 54.735,
+      "hub_MemAvailable": 2968993792,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 26042244,
+          "duration_seconds": 52.999294000000006,
+          "first_us": 24699229028,
+          "last_us": 24752228462,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1601420,
+          "duration_seconds": 50.0375,
+          "first_us": 24699285192,
+          "last_us": 24749323109,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 56.81,
+      "hub_MemAvailable": 2970116096,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 26042244,
+          "duration_seconds": 52.999294000000006,
+          "first_us": 24699229028,
+          "last_us": 24752228462,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1601420,
+          "duration_seconds": 50.0375,
+          "first_us": 24699285192,
+          "last_us": 24749323109,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 58.935,
+      "hub_MemAvailable": 2970558464,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 26042244,
+          "duration_seconds": 52.999294000000006,
+          "first_us": 24699229028,
+          "last_us": 24752228462,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 5,
+          "bytes": 1601420,
+          "duration_seconds": 50.0375,
+          "first_us": 24699285192,
+          "last_us": 24749323109,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 61.145,
+      "hub_MemAvailable": 2970710016,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 26042244,
+          "duration_seconds": 52.999294000000006,
+          "first_us": 24699229028,
+          "last_us": 24752228462,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 6,
+          "bytes": 1922568,
+          "duration_seconds": 60.072,
+          "first_us": 24699285192,
+          "last_us": 24759357609,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 63.255,
+      "hub_MemAvailable": 2971955200,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 5,
+          "bytes": 26042244,
+          "duration_seconds": 52.999294000000006,
+          "first_us": 24699229028,
+          "last_us": 24752228462,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 6,
+          "bytes": 1922568,
+          "duration_seconds": 60.072,
+          "first_us": 24699285192,
+          "last_us": 24759357609,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 65.334,
+      "hub_MemAvailable": 2969300992,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 6,
+          "bytes": 30985520,
+          "duration_seconds": 62.99928500000001,
+          "first_us": 24699229028,
+          "last_us": 24762228543,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 6,
+          "bytes": 1922568,
+          "duration_seconds": 60.072,
+          "first_us": 24699285192,
+          "last_us": 24759357609,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 67.41,
+      "hub_MemAvailable": 2969264128,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 6,
+          "bytes": 30985520,
+          "duration_seconds": 62.99928500000001,
+          "first_us": 24699229028,
+          "last_us": 24762228543,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 6,
+          "bytes": 1922568,
+          "duration_seconds": 60.072,
+          "first_us": 24699285192,
+          "last_us": 24759357609,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 69.484,
+      "hub_MemAvailable": 2968715264,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 6,
+          "bytes": 30985520,
+          "duration_seconds": 62.99928500000001,
+          "first_us": 24699229028,
+          "last_us": 24762228543,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 6,
+          "bytes": 1922568,
+          "duration_seconds": 60.072,
+          "first_us": 24699285192,
+          "last_us": 24759357609,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 71.696,
+      "hub_MemAvailable": 2968649728,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 6,
+          "bytes": 30985520,
+          "duration_seconds": 62.99928500000001,
+          "first_us": 24699229028,
+          "last_us": 24762228543,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 7,
+          "bytes": 2243284,
+          "duration_seconds": 70.093,
+          "first_us": 24699285192,
+          "last_us": 24769378610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 73.77,
+      "hub_MemAvailable": 2967547904,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 7,
+          "bytes": 2243284,
+          "duration_seconds": 70.093,
+          "first_us": 24699285192,
+          "last_us": 24769378610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 75.842,
+      "hub_MemAvailable": 2967359488,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 7,
+          "bytes": 2243284,
+          "duration_seconds": 70.093,
+          "first_us": 24699285192,
+          "last_us": 24769378610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 77.917,
+      "hub_MemAvailable": 2966798336,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 7,
+          "bytes": 2243284,
+          "duration_seconds": 70.093,
+          "first_us": 24699285192,
+          "last_us": 24769378610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 80.003,
+      "hub_MemAvailable": 2967326720,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 7,
+          "bytes": 2243284,
+          "duration_seconds": 70.093,
+          "first_us": 24699285192,
+          "last_us": 24769378610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 82.265,
+      "hub_MemAvailable": 2967834624,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 8,
+          "bytes": 2563744,
+          "duration_seconds": 80.10600000000001,
+          "first_us": 24699285192,
+          "last_us": 24779391610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 84.347,
+      "hub_MemAvailable": 2967109632,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 7,
+          "bytes": 35861581,
+          "duration_seconds": 72.99928200000001,
+          "first_us": 24699229028,
+          "last_us": 24772228549,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 8,
+          "bytes": 2563744,
+          "duration_seconds": 80.10600000000001,
+          "first_us": 24699285192,
+          "last_us": 24779391610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 86.431,
+      "hub_MemAvailable": 2965893120,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 8,
+          "bytes": 41409615,
+          "duration_seconds": 83.999216,
+          "first_us": 24699229028,
+          "last_us": 24783228493,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 8,
+          "bytes": 2563744,
+          "duration_seconds": 80.10600000000001,
+          "first_us": 24699285192,
+          "last_us": 24779391610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 88.553,
+      "hub_MemAvailable": 2966691840,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 8,
+          "bytes": 41409615,
+          "duration_seconds": 83.999216,
+          "first_us": 24699229028,
+          "last_us": 24783228493,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 8,
+          "bytes": 2563744,
+          "duration_seconds": 80.10600000000001,
+          "first_us": 24699285192,
+          "last_us": 24779391610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 90.646,
+      "hub_MemAvailable": 2967937024,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 8,
+          "bytes": 41409615,
+          "duration_seconds": 83.999216,
+          "first_us": 24699229028,
+          "last_us": 24783228493,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 9,
+          "bytes": 2884396,
+          "duration_seconds": 90.12500000000001,
+          "first_us": 24699285192,
+          "last_us": 24789410610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 92.858,
+      "hub_MemAvailable": 2968244224,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 8,
+          "bytes": 41409615,
+          "duration_seconds": 83.999216,
+          "first_us": 24699229028,
+          "last_us": 24783228493,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 9,
+          "bytes": 2884396,
+          "duration_seconds": 90.12500000000001,
+          "first_us": 24699285192,
+          "last_us": 24789410610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 94.949,
+      "hub_MemAvailable": 2967924736,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 9,
+          "bytes": 2884396,
+          "duration_seconds": 90.12500000000001,
+          "first_us": 24699285192,
+          "last_us": 24789410610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 97.039,
+      "hub_MemAvailable": 2966523904,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 9,
+          "bytes": 2884396,
+          "duration_seconds": 90.12500000000001,
+          "first_us": 24699285192,
+          "last_us": 24789410610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 99.13,
+      "hub_MemAvailable": 2968526848,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 9,
+          "bytes": 2884396,
+          "duration_seconds": 90.12500000000001,
+          "first_us": 24699285192,
+          "last_us": 24789410610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 101.234,
+      "hub_MemAvailable": 2970005504,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 10,
+          "bytes": 3204840,
+          "duration_seconds": 100.13750000000002,
+          "first_us": 24699285192,
+          "last_us": 24799423110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 103.505,
+      "hub_MemAvailable": 2968907776,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 10,
+          "bytes": 3204840,
+          "duration_seconds": 100.13750000000002,
+          "first_us": 24699285192,
+          "last_us": 24799423110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 105.591,
+      "hub_MemAvailable": 2967609344,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 9,
+          "bytes": 46444335,
+          "duration_seconds": 93.99914100000001,
+          "first_us": 24699229028,
+          "last_us": 24793228480,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 10,
+          "bytes": 3204840,
+          "duration_seconds": 100.13750000000002,
+          "first_us": 24699285192,
+          "last_us": 24799423110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 107.682,
+      "hub_MemAvailable": 2969321472,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 10,
+          "bytes": 52064632,
+          "duration_seconds": 104.999059,
+          "first_us": 24699229028,
+          "last_us": 24804228559,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 10,
+          "bytes": 3204840,
+          "duration_seconds": 100.13750000000002,
+          "first_us": 24699285192,
+          "last_us": 24799423110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 109.782,
+      "hub_MemAvailable": 2967425024,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 10,
+          "bytes": 52064632,
+          "duration_seconds": 104.999059,
+          "first_us": 24699229028,
+          "last_us": 24804228559,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 10,
+          "bytes": 3204840,
+          "duration_seconds": 100.13750000000002,
+          "first_us": 24699285192,
+          "last_us": 24799423110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 111.868,
+      "hub_MemAvailable": 2967040000,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 10,
+          "bytes": 52064632,
+          "duration_seconds": 104.999059,
+          "first_us": 24699229028,
+          "last_us": 24804228559,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 11,
+          "bytes": 3525508,
+          "duration_seconds": 110.15700000000001,
+          "first_us": 24699285192,
+          "last_us": 24809442610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 114.169,
+      "hub_MemAvailable": 2968363008,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 10,
+          "bytes": 52064632,
+          "duration_seconds": 104.999059,
+          "first_us": 24699229028,
+          "last_us": 24804228559,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 11,
+          "bytes": 3525508,
+          "duration_seconds": 110.15700000000001,
+          "first_us": 24699285192,
+          "last_us": 24809442610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 116.271,
+      "hub_MemAvailable": 2967822336,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 11,
+          "bytes": 3525508,
+          "duration_seconds": 110.15700000000001,
+          "first_us": 24699285192,
+          "last_us": 24809442610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 118.353,
+      "hub_MemAvailable": 2968145920,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 11,
+          "bytes": 3525508,
+          "duration_seconds": 110.15700000000001,
+          "first_us": 24699285192,
+          "last_us": 24809442610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 120.44,
+      "hub_MemAvailable": 2965925888,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 11,
+          "bytes": 3525508,
+          "duration_seconds": 110.15700000000001,
+          "first_us": 24699285192,
+          "last_us": 24809442610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 122.519,
+      "hub_MemAvailable": 2969305088,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 12,
+          "bytes": 3845904,
+          "duration_seconds": 120.168,
+          "first_us": 24699285192,
+          "last_us": 24819453610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 124.811,
+      "hub_MemAvailable": 2970198016,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 12,
+          "bytes": 3845904,
+          "duration_seconds": 120.168,
+          "first_us": 24699285192,
+          "last_us": 24819453610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 126.921,
+      "hub_MemAvailable": 2969341952,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 11,
+          "bytes": 57079938,
+          "duration_seconds": 114.999034,
+          "first_us": 24699229028,
+          "last_us": 24814228532,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 12,
+          "bytes": 3845904,
+          "duration_seconds": 120.168,
+          "first_us": 24699285192,
+          "last_us": 24819453610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 129.025,
+      "hub_MemAvailable": 2968346624,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 12,
+          "bytes": 62604155,
+          "duration_seconds": 125.998986,
+          "first_us": 24699229028,
+          "last_us": 24825228558,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 12,
+          "bytes": 3845904,
+          "duration_seconds": 120.168,
+          "first_us": 24699285192,
+          "last_us": 24819453610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 131.114,
+      "hub_MemAvailable": 2967859200,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 12,
+          "bytes": 62604155,
+          "duration_seconds": 125.998986,
+          "first_us": 24699229028,
+          "last_us": 24825228558,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 13,
+          "bytes": 4166204,
+          "duration_seconds": 130.17600000000002,
+          "first_us": 24699285192,
+          "last_us": 24829461610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 133.199,
+      "hub_MemAvailable": 2969165824,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 12,
+          "bytes": 62604155,
+          "duration_seconds": 125.998986,
+          "first_us": 24699229028,
+          "last_us": 24825228558,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 13,
+          "bytes": 4166204,
+          "duration_seconds": 130.17600000000002,
+          "first_us": 24699285192,
+          "last_us": 24829461610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 135.397,
+      "hub_MemAvailable": 2968891392,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 12,
+          "bytes": 62604155,
+          "duration_seconds": 125.998986,
+          "first_us": 24699229028,
+          "last_us": 24825228558,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 13,
+          "bytes": 4166204,
+          "duration_seconds": 130.17600000000002,
+          "first_us": 24699285192,
+          "last_us": 24829461610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 137.525,
+      "hub_MemAvailable": 2968330240,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 13,
+          "bytes": 68124568,
+          "duration_seconds": 136.999069,
+          "first_us": 24699229028,
+          "last_us": 24836228636,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 13,
+          "bytes": 4166204,
+          "duration_seconds": 130.17600000000002,
+          "first_us": 24699285192,
+          "last_us": 24829461610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 139.619,
+      "hub_MemAvailable": 2969034752,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 13,
+          "bytes": 68124568,
+          "duration_seconds": 136.999069,
+          "first_us": 24699229028,
+          "last_us": 24836228636,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 13,
+          "bytes": 4166204,
+          "duration_seconds": 130.17600000000002,
+          "first_us": 24699285192,
+          "last_us": 24829461610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 141.712,
+      "hub_MemAvailable": 2966044672,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 13,
+          "bytes": 68124568,
+          "duration_seconds": 136.999069,
+          "first_us": 24699229028,
+          "last_us": 24836228636,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 14,
+          "bytes": 4486312,
+          "duration_seconds": 140.17800000000003,
+          "first_us": 24699285192,
+          "last_us": 24839463610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 143.825,
+      "hub_MemAvailable": 2966753280,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 13,
+          "bytes": 68124568,
+          "duration_seconds": 136.999069,
+          "first_us": 24699229028,
+          "last_us": 24836228636,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 14,
+          "bytes": 4486312,
+          "duration_seconds": 140.17800000000003,
+          "first_us": 24699285192,
+          "last_us": 24839463610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 146.031,
+      "hub_MemAvailable": 2968141824,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 13,
+          "bytes": 68124568,
+          "duration_seconds": 136.999069,
+          "first_us": 24699229028,
+          "last_us": 24836228636,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 60,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 14,
+          "bytes": 4486312,
+          "duration_seconds": 140.17800000000003,
+          "first_us": 24699285192,
+          "last_us": 24839463610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 148.124,
+      "hub_MemAvailable": 2968367104,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 14,
+          "bytes": 73175186,
+          "duration_seconds": 146.99892499999999,
+          "first_us": 24699229028,
+          "last_us": 24846228408,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 14,
+          "bytes": 4486312,
+          "duration_seconds": 140.17800000000003,
+          "first_us": 24699285192,
+          "last_us": 24839463610,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 150.213,
+      "hub_MemAvailable": 2966925312,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 14,
+          "bytes": 73175186,
+          "duration_seconds": 146.99892499999999,
+          "first_us": 24699229028,
+          "last_us": 24846228408,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 15,
+          "bytes": 4806468,
+          "duration_seconds": 150.18150000000003,
+          "first_us": 24699285192,
+          "last_us": 24849467110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 152.332,
+      "hub_MemAvailable": 2967441408,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 14,
+          "bytes": 73175186,
+          "duration_seconds": 146.99892499999999,
+          "first_us": 24699229028,
+          "last_us": 24846228408,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 15,
+          "bytes": 4806468,
+          "duration_seconds": 150.18150000000003,
+          "first_us": 24699285192,
+          "last_us": 24849467110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 154.42,
+      "hub_MemAvailable": 2967814144,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 14,
+          "bytes": 73175186,
+          "duration_seconds": 146.99892499999999,
+          "first_us": 24699229028,
+          "last_us": 24846228408,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 15,
+          "bytes": 4806468,
+          "duration_seconds": 150.18150000000003,
+          "first_us": 24699285192,
+          "last_us": 24849467110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 156.578,
+      "hub_MemAvailable": 2966958080,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 14,
+          "bytes": 73175186,
+          "duration_seconds": 146.99892499999999,
+          "first_us": 24699229028,
+          "last_us": 24846228408,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 15,
+          "bytes": 4806468,
+          "duration_seconds": 150.18150000000003,
+          "first_us": 24699285192,
+          "last_us": 24849467110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 158.661,
+      "hub_MemAvailable": 2967785472,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 15,
+          "bytes": 4806468,
+          "duration_seconds": 150.18150000000003,
+          "first_us": 24699285192,
+          "last_us": 24849467110,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 160.759,
+      "hub_MemAvailable": 2966892544,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 16,
+          "bytes": 5126848,
+          "duration_seconds": 160.19200000000004,
+          "first_us": 24699285192,
+          "last_us": 24859477652,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 162.858,
+      "hub_MemAvailable": 2966315008,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 16,
+          "bytes": 5126848,
+          "duration_seconds": 160.19200000000004,
+          "first_us": 24699285192,
+          "last_us": 24859477652,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 164.972,
+      "hub_MemAvailable": 2968219648,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 16,
+          "bytes": 5126848,
+          "duration_seconds": 160.19200000000004,
+          "first_us": 24699285192,
+          "last_us": 24859477652,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 167.158,
+      "hub_MemAvailable": 2967777280,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 16,
+          "bytes": 5126848,
+          "duration_seconds": 160.19200000000004,
+          "first_us": 24699285192,
+          "last_us": 24859477652,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 169.246,
+      "hub_MemAvailable": 2966982656,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 15,
+          "bytes": 78671835,
+          "duration_seconds": 157.998774,
+          "first_us": 24699229028,
+          "last_us": 24857228407,
+          "maximum_gap_us": 174,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 16,
+          "bytes": 5126848,
+          "duration_seconds": 160.19200000000004,
+          "first_us": 24699285192,
+          "last_us": 24859477652,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 171.33,
+      "hub_MemAvailable": 2966376448,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 16,
+          "bytes": 84281997,
+          "duration_seconds": 168.998541,
+          "first_us": 24699229028,
+          "last_us": 24868228406,
+          "maximum_gap_us": 232,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 17,
+          "bytes": 5446908,
+          "duration_seconds": 170.19250000000002,
+          "first_us": 24699285192,
+          "last_us": 24869478152,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 173.425,
+      "hub_MemAvailable": 2967715840,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 16,
+          "bytes": 84281997,
+          "duration_seconds": 168.998541,
+          "first_us": 24699229028,
+          "last_us": 24868228406,
+          "maximum_gap_us": 232,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 17,
+          "bytes": 5446908,
+          "duration_seconds": 170.19250000000002,
+          "first_us": 24699285192,
+          "last_us": 24869478152,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 175.519,
+      "hub_MemAvailable": 2967924736,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 16,
+          "bytes": 84281997,
+          "duration_seconds": 168.998541,
+          "first_us": 24699229028,
+          "last_us": 24868228406,
+          "maximum_gap_us": 232,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 17,
+          "bytes": 5446908,
+          "duration_seconds": 170.19250000000002,
+          "first_us": 24699285192,
+          "last_us": 24869478152,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 177.707,
+      "hub_MemAvailable": 2968788992,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 16,
+          "bytes": 84281997,
+          "duration_seconds": 168.998541,
+          "first_us": 24699229028,
+          "last_us": 24868228406,
+          "maximum_gap_us": 232,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 17,
+          "bytes": 5446908,
+          "duration_seconds": 170.19250000000002,
+          "first_us": 24699285192,
+          "last_us": 24869478152,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    },
+    {
+      "elapsed_seconds": 179.837,
+      "hub_MemAvailable": 2968014848,
+      "state": "recording",
+      "connected": true,
+      "media": {
+        "video": {
+          "segments": 16,
+          "bytes": 84281997,
+          "duration_seconds": 168.998541,
+          "first_us": 24699229028,
+          "last_us": 24868228406,
+          "maximum_gap_us": 232,
+          "maximum_overlap_us": 84,
+          "discontinuous_segments": 1
+        },
+        "audio": {
+          "segments": 17,
+          "bytes": 5446908,
+          "duration_seconds": 170.19250000000002,
+          "first_us": 24699285192,
+          "last_us": 24869478152,
+          "maximum_gap_us": 364,
+          "maximum_overlap_us": 0,
+          "discontinuous_segments": 0
+        }
+      },
+      "hub_errors": [
+        "硬件取帧回退：Command '['/root/echotrace/build/rk3576/echotrace-frame', '--input', '/root/echotrace/runtime/real-smoke/media/02f6da6f24ed8ef7fa1bd82954196584528cc754f3c4236cf44ca33502379883.mp4', '--seconds', '10.9",
+        "decoder produced no frame"
+      ]
+    }
+  ],
+  "markers": [
+    {
+      "elapsed_seconds": 6.290585125,
+      "roundtrip_ms": 189.4860000000005,
+      "ack": {
+        "id": "100590a3-b5c5-4a11-aad1-8df7c68a8f42",
+        "ok": true,
+        "source_time_us": 24705962024,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 16.890162,
+      "roundtrip_ms": 94.01337500000295,
+      "ack": {
+        "id": "90a8795e-5fdf-4a87-90a5-82142ebc60d8",
+        "ok": true,
+        "source_time_us": 24716484401,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 27.381360167,
+      "roundtrip_ms": 91.68645900000172,
+      "ack": {
+        "id": "599f0243-717e-49b8-abb9-f1117a1c550e",
+        "ok": true,
+        "source_time_us": 24726966831,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 37.841455542,
+      "roundtrip_ms": 139.581708999998,
+      "ack": {
+        "id": "e8bc9181-e6fa-4df2-b91f-21f76874e239",
+        "ok": true,
+        "source_time_us": 24737451933,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 48.369279625,
+      "roundtrip_ms": 95.57079199999663,
+      "ack": {
+        "id": "fdb2c1f4-7ccf-4887-9748-6d95cdfe1c63",
+        "ok": true,
+        "source_time_us": 24747964810,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 58.9348265,
+      "roundtrip_ms": 112.26129199999946,
+      "ack": {
+        "id": "fdcd5e7e-e440-45b4-9352-b4ae415dacb0",
+        "ok": true,
+        "source_time_us": 24758567802,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 69.48415200000001,
+      "roundtrip_ms": 121.79575000000398,
+      "ack": {
+        "id": "9e34d1bb-d7be-45c0-b8ff-23f3cb6a89ff",
+        "ok": true,
+        "source_time_us": 24769094680,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 80.002680458,
+      "roundtrip_ms": 179.51775000000225,
+      "ack": {
+        "id": "784a0395-85e6-4bc9-b2d1-5fd193cf301b",
+        "ok": true,
+        "source_time_us": 24779674402,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 90.64608825,
+      "roundtrip_ms": 132.10295800000438,
+      "ack": {
+        "id": "48674a45-584c-4958-a434-17c002d07997",
+        "ok": true,
+        "source_time_us": 24790260067,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 101.23379245800001,
+      "roundtrip_ms": 194.31154200000833,
+      "ack": {
+        "id": "158154c5-cc86-4ba3-97e4-5d50b08916e3",
+        "ok": true,
+        "source_time_us": 24800904921,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 111.868490917,
+      "roundtrip_ms": 207.48112500000104,
+      "ack": {
+        "id": "47305e64-bbc1-4bb6-bc6f-0fb0eb51f3f8",
+        "ok": true,
+        "source_time_us": 24811528225,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 122.518612875,
+      "roundtrip_ms": 176.32858399998952,
+      "ack": {
+        "id": "77f299f3-97f9-4d58-ad12-5d4598f5ab5b",
+        "ok": true,
+        "source_time_us": 24822171194,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 133.19878400000002,
+      "roundtrip_ms": 98.84712499999182,
+      "ack": {
+        "id": "e40a81e1-d01c-4537-b910-1733bd0c6494",
+        "ok": true,
+        "source_time_us": 24832810297,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 143.82465175000002,
+      "roundtrip_ms": 118.53599999997755,
+      "ack": {
+        "id": "885eada8-505d-4d74-a0a7-b2fe9f1a3819",
+        "ok": true,
+        "source_time_us": 24843443141,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 154.42029383300002,
+      "roundtrip_ms": 69.47475000001191,
+      "ack": {
+        "id": "7355f531-e82f-4ec4-84f7-10388397064a",
+        "ok": true,
+        "source_time_us": 24854007501,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 164.971905958,
+      "roundtrip_ms": 95.11049999997567,
+      "ack": {
+        "id": "4dd6c285-8412-4367-9b66-54287e325ee8",
+        "ok": true,
+        "source_time_us": 24864573863,
+        "type": "ack"
+      }
+    },
+    {
+      "elapsed_seconds": 175.518553042,
+      "roundtrip_ms": 86.064915999998,
+      "ack": {
+        "id": "0e88f74f-7936-484d-8d37-591b883c816c",
+        "ok": true,
+        "source_time_us": 24875127396,
+        "type": "ack"
+      }
+    }
+  ],
+  "connection_interruptions": [],
+  "project": {
+    "id": "15e2bf5a-94df-4516-beed-cf558374e8d8",
+    "name": "真实拍手声画同步短测（自动化记录）",
+    "created_ms": 1794480966068
+  },
+  "session": {
+    "id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+    "project_id": "15e2bf5a-94df-4516-beed-cf558374e8d8",
+    "device_id": "echo-mate",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "真实拍手声画同步短测（自动化记录）",
+    "state": "recording",
+    "started_us": 24697222260,
+    "last_us": 24697222260,
+    "ended_us": null,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794480966098,
+    "capture": {
+      "id": "35e56a4c-b0d0-4ce8-b72a-0520ff793f6c",
+      "ok": true,
+      "source_time_us": 24699388318,
+      "type": "ack"
+    }
+  },
+  "elapsed_seconds": 180.002388167,
+  "stopped": {
+    "id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+    "project_id": "15e2bf5a-94df-4516-beed-cf558374e8d8",
+    "device_id": "echo-mate",
+    "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+    "title": "真实拍手声画同步短测（自动化记录）",
+    "state": "stopped",
+    "started_us": 24697222260,
+    "last_us": 24881546180,
+    "ended_us": 24881546180,
+    "utc_ms": null,
+    "clock_quality": "unknown",
+    "summary": "",
+    "created_ms": 1794480966098,
+    "end_reason": "",
+    "project_name": "真实拍手声画同步短测（自动化记录）"
+  },
+  "timeline": {
+    "session": {
+      "id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+      "project_id": "15e2bf5a-94df-4516-beed-cf558374e8d8",
+      "device_id": "echo-mate",
+      "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+      "title": "真实拍手声画同步短测（自动化记录）",
+      "state": "stopped",
+      "started_us": 24697222260,
+      "last_us": 24881546180,
+      "ended_us": 24881546180,
+      "utc_ms": null,
+      "clock_quality": "unknown",
+      "summary": "",
+      "created_ms": 1794480966098,
+      "end_reason": "",
+      "project_name": "真实拍手声画同步短测（自动化记录）"
+    },
+    "anchors": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1218",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24699229028,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1219",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24705913557,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 6 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1221",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24716472774,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 17 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1223",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24726952669,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 27 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1224",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24729268631,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1226",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24733391482,
+        "kind": "pedal",
+        "note": "拍手短测：现在提示用户在镜头前拍手三次；此标记是提示时刻，不是拍手发生时刻。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1227",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24737434654,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 38 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1229",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24747950558,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 48 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1231",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24758546713,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 59 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1232",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24759308480,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1234",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24769081880,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 69 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1237",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24779665162,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 80 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1238",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24789308553,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1240",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24790234081,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 91 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1242",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24800895760,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 101 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1244",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24811447119,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 112 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1245",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24819308559,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1247",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24822140235,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 123 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1249",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24832794906,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 133 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1251",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24843431620,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 144 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1252",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24849348489,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1254",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24853991730,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 154 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1256",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24864563564,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 165 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1258",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24875112207,
+        "kind": "pedal",
+        "note": "自动化稳定性标记，约第 176 秒；不属于真实操作质量题集。",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1259",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "source_time_us": 24879348489,
+        "kind": "scene",
+        "note": "",
+        "asr_text": "",
+        "caption": "",
+        "revision": 0,
+        "frame_path": null,
+        "derivation": "{}",
+        "parent_event_id": null,
+        "hidden": 0
+      }
+    ],
+    "events": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-1217",
+        "source_time_us": 24699296659,
+        "kind": "gap",
+        "body": "{\"boot_id\":\"fed7fc64-44e3-4501-a017-b8626dc9b64c\",\"device_id\":\"echo-mate\",\"id\":\"fed7fc64-44e3-4501-a017-b8626dc9b64c-1217\",\"kind\":\"gap\",\"note\":\"视频时间源初始化，精度需声画同步实验验证\",\"payload\":{\"alignment_requires_hardware_validation\":true,\"native_offset_us\":0,\"synthetic\":false},\"seq\":1217,\"session_id\":\"c014b279-7ec5-4511-a3c7-cdde23a7d82c\",\"source_time_us\":24699296659}"
+      }
+    ],
+    "media": [
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24699229028",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24699229028,
+        "end_us": 24710228470,
+        "kind": "video",
+        "size_bytes": 5480168,
+        "sha256": "0fdb5d1457fca22c01a85c8f4cb17e6d7c6d4b3537b26d7b2ba5270d88b5caae",
+        "mime": "video/mp4",
+        "discontinuity": 1,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24699285192",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24699285192,
+        "end_us": 24709311192,
+        "kind": "audio",
+        "size_bytes": 320876,
+        "sha256": "eab8dc7a4ae5b866bc446e77858c355048aff93fe16b2eec85b26ffc63e9319c",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/ede1e87c642b4738319fca84f89b26af0c791f7b777f9949871af4f00a858b8f.wav",
+        "status": "ready",
+        "accessed_ms": 1794480979775,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24709311556",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24709311556,
+        "end_us": 24719317556,
+        "kind": "audio",
+        "size_bytes": 320236,
+        "sha256": "c5b1a9cf96d6cfd4046102eb58aa4e25316a5790adc47bbac42040cb0856e7a3",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/5b32e06df4b358ed3df95db336c73ed25caa584c699938d8474d2057a9d8ccd4.wav",
+        "status": "ready",
+        "accessed_ms": 1794480993513,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24710228475",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24710228475,
+        "end_us": 24721228533,
+        "kind": "video",
+        "size_bytes": 5270987,
+        "sha256": "9f077e3b25fd1f623c34bca4c11600188e642dcc78af199942eb2ce8221bc2a7",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24719317556",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24719317556,
+        "end_us": 24729318056,
+        "kind": "audio",
+        "size_bytes": 320060,
+        "sha256": "f849c91f2dfc6f9c4958f2445a61783c0436069e17d9480d7020c52749161527",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/94129e347b595c69c2da10732f69453b22c02b5ad321fd7666d7e7c54ab96b84.wav",
+        "status": "ready",
+        "accessed_ms": 1794481023592,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24721228554",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24721228554,
+        "end_us": 24731228413,
+        "kind": "video",
+        "size_bytes": 4733616,
+        "sha256": "ed69ff46cd00ae2bb4b66ad40d36c811b54a44e9665f48b0c6bee1b95eb9b834",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24729318056",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24729318056,
+        "end_us": 24739323056,
+        "kind": "audio",
+        "size_bytes": 320204,
+        "sha256": "ae64c49b125554c2361c2d975df2de3b06008e2f579b2e167dc84981e0520061",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/027b2cf0443afab9241138d3307ee1c975112253ea3e603ac130a5059e838144.wav",
+        "status": "ready",
+        "accessed_ms": 1794481054245,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24731228587",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24731228587,
+        "end_us": 24742228535,
+        "kind": "video",
+        "size_bytes": 5402708,
+        "sha256": "8feece2993c66f1cff6c4538c846bdbeb8c2139af6c216f54f5c4bfe30fa7aa9",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24739323109",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24739323109,
+        "end_us": 24749323109,
+        "kind": "audio",
+        "size_bytes": 320044,
+        "sha256": "89967f21cf5726c420ef74ccd276ac87a0273188fe53514b510c3e4c297ef754",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/93f2689301bb28f0b6260e691f8d1eba6d8f91d658d54def96a4cfb1dd0cd789.wav",
+        "status": "ready",
+        "accessed_ms": 1794481069435,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24742228475",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24742228475,
+        "end_us": 24752228462,
+        "kind": "video",
+        "size_bytes": 5154765,
+        "sha256": "5c0ea981ac72a15e240d688e140d532b25b78a6904b848727ac798cfd818712e",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24749323109",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24749323109,
+        "end_us": 24759357609,
+        "kind": "audio",
+        "size_bytes": 321148,
+        "sha256": "614b9aefdd4e128576efd79170f83e117c36fe46cbcd1d736130a9387b92f6ee",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/31bad7b301cc2fac0252484ce5151b615f696d2aa45c03def166c0f6fa1eefea.wav",
+        "status": "ready",
+        "accessed_ms": 1794481103235,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24752228552",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24752228552,
+        "end_us": 24762228543,
+        "kind": "video",
+        "size_bytes": 4943276,
+        "sha256": "498b7afee2ff7469e04ec64029edca13fe54a2b157fecb906f115a149d922809",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24759357610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24759357610,
+        "end_us": 24769378610,
+        "kind": "audio",
+        "size_bytes": 320716,
+        "sha256": "820d6c11e4f3320e383d89d01b9f5e876912baabe672a5a538c780402f668cbc",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": "media/a7ad10469fc6dfacb0cac4ebaf786c867eb4407d56cb1b6e8b2861869dca277a.wav",
+        "status": "ready",
+        "accessed_ms": 1794481134447,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24762228552",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24762228552,
+        "end_us": 24772228549,
+        "kind": "video",
+        "size_bytes": 4876061,
+        "sha256": "4db4e51c4cc8ba1efb984597c39b961dfc56a753c06c548e460167ac47b899e7",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24769378610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24769378610,
+        "end_us": 24779391610,
+        "kind": "audio",
+        "size_bytes": 320460,
+        "sha256": "a7c2909b5052162a5ba7664e31a467b216bcdbf87865c63c48eb98a261465421",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24772228559",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24772228559,
+        "end_us": 24783228493,
+        "kind": "video",
+        "size_bytes": 5548034,
+        "sha256": "e94fa7ca66e193b834dce0acbd8dfb1d0a5a6d9672d41a210360d1b52cb9f598",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24779391610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24779391610,
+        "end_us": 24789410610,
+        "kind": "audio",
+        "size_bytes": 320652,
+        "sha256": "6f9866338d5917b3be4cd9dc3107f6eab0520d5ecdcb15741e67743fcc9ae618",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24783228555",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24783228555,
+        "end_us": 24793228480,
+        "kind": "video",
+        "size_bytes": 5034720,
+        "sha256": "901a0e994b3140525728383fa3b095d2edaf5a45f9145bb40a57c5433f828c5f",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24789410610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24789410610,
+        "end_us": 24799423110,
+        "kind": "audio",
+        "size_bytes": 320444,
+        "sha256": "6b7f627a1d4d79316be494d5305647140201fff8235ed77e444b9da0c9da6cb9",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24793228641",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24793228641,
+        "end_us": 24804228559,
+        "kind": "video",
+        "size_bytes": 5620297,
+        "sha256": "1c91d7ae66700f3d37e140acc542a4fe0cdad02c889ad9d3b6fc27a5a5fe1bdc",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24799423110",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24799423110,
+        "end_us": 24809442610,
+        "kind": "audio",
+        "size_bytes": 320668,
+        "sha256": "f6cd3fa260894dac9f96a4f2a39bdaab082bdf7b5833fb241f583161be33f36a",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24804228557",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24804228557,
+        "end_us": 24814228532,
+        "kind": "video",
+        "size_bytes": 5015306,
+        "sha256": "a7b2142b5d3c3b91c0608731eae72c70feb66fe50edff87db2fe057a18b69b59",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24809442610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24809442610,
+        "end_us": 24819453610,
+        "kind": "audio",
+        "size_bytes": 320396,
+        "sha256": "09ea022799ed44517be502c752d8481888737b45171450bd6f438d8b91256b29",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24814228606",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24814228606,
+        "end_us": 24825228558,
+        "kind": "video",
+        "size_bytes": 5524217,
+        "sha256": "8c288813b83c043a483a64d0230122574ca6af3fec9260dbaab15ebc456f8055",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24819453610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24819453610,
+        "end_us": 24829461610,
+        "kind": "audio",
+        "size_bytes": 320300,
+        "sha256": "0eb5f6cd3bd668fc4bd63a041b10aa08a694071252b1efea4cd1132b70785ce9",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24825228553",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24825228553,
+        "end_us": 24836228636,
+        "kind": "video",
+        "size_bytes": 5520413,
+        "sha256": "538928d4d03055875902c36a8f4fda09e423516c92851863a4ed86167c4f1a82",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24829461610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24829461610,
+        "end_us": 24839463610,
+        "kind": "audio",
+        "size_bytes": 320108,
+        "sha256": "f6a85268a6c60c65c1cba094db86571f1aec596852774fe91ae9a8dc772eba2d",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24836228552",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24836228552,
+        "end_us": 24846228408,
+        "kind": "video",
+        "size_bytes": 5050618,
+        "sha256": "d1ed1ba8b101725760ce09f45e1ec2b1e4a2967548b41f7f08fe7c61db0cb7e0",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24839463610",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24839463610,
+        "end_us": 24849467110,
+        "kind": "audio",
+        "size_bytes": 320156,
+        "sha256": "7e8024af2b35e5422c01d03da1e35dba77ddd0f4d8635c632ce2ce7010df0d4b",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24846228558",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24846228558,
+        "end_us": 24857228407,
+        "kind": "video",
+        "size_bytes": 5496649,
+        "sha256": "4e8e16e03ea847a02e2d798eb32310d30a6771e2a5cba4f0bbd7b457a1bf1b45",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24849467152",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24849467152,
+        "end_us": 24859477652,
+        "kind": "audio",
+        "size_bytes": 320380,
+        "sha256": "54d29f18ad17b99ca1dfed3f524a72a2ac0f789756cf4fdf0ec598170de41b54",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24857228639",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24857228639,
+        "end_us": 24868228406,
+        "kind": "video",
+        "size_bytes": 5610162,
+        "sha256": "4f58e463ee2d5ecd1b19a651befff1c681256143cf7db1b7a7d8e5ffd2435856",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24859477652",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24859477652,
+        "end_us": 24869478152,
+        "kind": "audio",
+        "size_bytes": 320060,
+        "sha256": "f61d471bfbcac7bc0fee6ed30ce96d1b3ebd68e61a0af6a6e8006c3e5e20fefe",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24868228556",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24868228556,
+        "end_us": 24879228486,
+        "kind": "video",
+        "size_bytes": 5633536,
+        "sha256": "ad4da83bba893a779b2bf8d7c2ca78681f055c679db319dee43f3b63e7672199",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24869478152",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24869478152,
+        "end_us": 24879498652,
+        "kind": "audio",
+        "size_bytes": 320700,
+        "sha256": "2e433214b6a2f7bc472b0e2c7ef96a13affc61de6325a36beaf55e1de0aca841",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-video-24879228563",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24879228563,
+        "end_us": 24880068560,
+        "kind": "video",
+        "size_bytes": 445676,
+        "sha256": "22cd13b341d66ad81359c2e12b4d1a341c5cfc1671553a5bce178ecea9aa200a",
+        "mime": "video/mp4",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      },
+      {
+        "id": "fed7fc64-44e3-4501-a017-b8626dc9b64c-audio-24879498652",
+        "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+        "device_id": "echo-mate",
+        "boot_id": "fed7fc64-44e3-4501-a017-b8626dc9b64c",
+        "start_us": 24879498652,
+        "end_us": 24879930652,
+        "kind": "audio",
+        "size_bytes": 13868,
+        "sha256": "5c55c2596304027f6fb30d96dd6642323c9bce6ca10d7b4cf8062dfda3c9cbb1",
+        "mime": "audio/wav",
+        "discontinuity": 0,
+        "path": null,
+        "status": "remote",
+        "accessed_ms": 0,
+        "authoritative": 0
+      }
+    ]
+  },
+  "media_summary": {
+    "video": {
+      "segments": 18,
+      "bytes": 90361209,
+      "duration_seconds": 180.838468,
+      "first_us": 24699229028,
+      "last_us": 24880068560,
+      "maximum_gap_us": 232,
+      "maximum_overlap_us": 84,
+      "discontinuous_segments": 1
+    },
+    "audio": {
+      "segments": 19,
+      "bytes": 5781476,
+      "duration_seconds": 180.645,
+      "first_us": 24699285192,
+      "last_us": 24879930652,
+      "maximum_gap_us": 364,
+      "maximum_overlap_us": 0,
+      "discontinuous_segments": 0
+    }
+  },
+  "minimum_hub_MemAvailable": 2962808832,
+  "completed_duration": true
+}

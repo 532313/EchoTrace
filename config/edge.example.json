@@ -1,0 +1,14 @@
+{
+  "device_id": "echo-mate",
+  "alsa": "hw:0,0",
+  "iq_directory": "/etc/iqfiles",
+  "reserve_mb": 256,
+  "token_file": "/etc/echotrace/token",
+  "iio_device": "",
+  "input_device": "",
+  "pause_device": "",
+  "calibration_file": "/etc/echotrace/tray-calibration.json",
+  "capture_channels": 2,
+  "microphone_channel": 0,
+  "capture_latency_us": 500000
+}

@@ -1,0 +1,112 @@
+--- a/gui_app/pages/ui_YOLOPage/ui_YOLOPage.c
++++ b/gui_app/pages/ui_YOLOPage/ui_YOLOPage.c
+@@ -1,4 +1,7 @@
+ #include "ui_YOLOPage.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ #ifdef ECHOTRACE_APP
+ #include "echotrace_app.h"
+ #endif
+@@ -22,6 +25,7 @@
+ };
+ lv_obj_t *img_cam; //要显示图像
+ static bool _first_into = true;
++static bool camera_started = false;
+ 
+ static lv_timer_t * timer;
+ ///////////////////// ANIMATIONS ////////////////////
+@@ -41,10 +45,42 @@
+     }
+ }
+ #if LV_USE_SIMULATOR == 0
+-static void _ai_camera_init()
++static bool _npu_pages_available(void)
+ {
++    FILE *file = fopen("/proc/buddyinfo", "r");
++    if (!file)
++        return true;
++    char line[256];
++    bool checked = false, available = false;
++    while (fgets(line, sizeof(line), file)) {
++        char *cursor = strstr(line, "Normal");
++        if (!cursor)
++            continue;
++        cursor += strlen("Normal");
++        for (int order = 0; order < 12; ++order) {
++            char *end = NULL;
++            long blocks = strtol(cursor, &end, 10);
++            if (end == cursor)
++                break;
++            if (order >= 5 && blocks > 0)
++                available = true;
++            if (order >= 5)
++                checked = true;
++            cursor = end;
++        }
++    }
++    fclose(file);
++    return !checked || available;
++}
++
++static int _ai_camera_init()
++{
++    if (!_npu_pages_available()) {
++        ui_msgbox_info("AI 相机", "连续内存不足，请稍后重试。");
++        return -2;
++    }
+     const char * model_path = "./model/yolov5.rknn";
+-    start_ai_camera(model_path);
++    return start_ai_camera(model_path);
+ }
+ 
+ static void _ai_camera_deinit()
+@@ -66,14 +102,26 @@
+             // show msg box
+             ui_msgbox_info("Error", "Failed to allocate memory for img_dsc.data");
+             // 停止
+-            stop_ai_camera();
+             // 返回上一页
+             lv_lib_pm_OpenPrePage(&page_manager);
++            return;
+         }
+-        _ai_camera_init();
++        int result = _ai_camera_init();
++        if (result != 0) {
++            if (result != -2)
++                ui_msgbox_info("AI 相机", "相机启动失败，请检查内存与设备状态。");
++            lv_lib_pm_OpenPrePage(&page_manager);
++            return;
++        }
++        camera_started = true;
+     }
+     else
+     {
++        if (ai_camera_has_failed()) {
++            ui_msgbox_info("AI 相机", "模型初始化或推理失败，已安全退出。");
++            lv_lib_pm_OpenPrePage(&page_manager);
++            return;
++        }
+         get_buf_data(img_dsc.data);
+         lv_img_set_src(img_cam, &img_dsc);
+     }
+@@ -86,6 +134,7 @@
+ {
+ 
+     _first_into = true;
++    camera_started = false;
+ 
+     lv_obj_t * ui_YOLOPage = lv_obj_create(NULL);
+ 
+@@ -110,7 +159,10 @@
+ void ui_YOLOPage_deinit(void)
+ {
+ #if LV_USE_SIMULATOR == 0
+-    _ai_camera_deinit();
++    if (camera_started) {
++        _ai_camera_deinit();
++        camera_started = false;
++    }
+     // 释放 img_dsc.data 分配的内存
+     free(img_dsc.data);
+     img_dsc.data = NULL;

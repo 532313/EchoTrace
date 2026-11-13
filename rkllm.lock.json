@@ -1,0 +1,36 @@
+{
+  "revision": "f7390530443bf84f0394255a449d7cbe81e69d1c",
+  "tag": "release-v1.3.1",
+  "files": {
+    "include/rkllm.h": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/rkllm-runtime/Linux/librkllm_api/include/rkllm.h",
+      "sha256": "4ad19442de58df1b7d1ed0884ed75b8d4b5107cc4e75b7e44900b1f95a32c57c",
+      "size_bytes": 23464
+    },
+    "include/rknn_api.h": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/examples/multimodal_model_demo/deploy/3rdparty/librknnrt/Linux/librknn_api/include/rknn_api.h",
+      "sha256": "c48e11a6f41b451a5fd1e4ad774ea60252d3d94f78bee9b21ea3d21b21deba9a",
+      "size_bytes": 35707
+    },
+    "src/image_enc.cc": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/examples/multimodal_model_demo/deploy/src/image_enc.cc",
+      "sha256": "3d725f230a684ab17284cf78d4bc3fff04df5b49c5a84ae2511671357863bf29",
+      "size_bytes": 6336
+    },
+    "include/image_enc.h": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/examples/multimodal_model_demo/deploy/src/image_enc.h",
+      "sha256": "fefcd6ce2f306cce64617fe9fefe0fe38dbf4551064f7842bf43a599b5511f63",
+      "size_bytes": 687
+    },
+    "lib/librkllmrt.so": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/rkllm-runtime/Linux/librkllm_api/aarch64/librkllmrt.so",
+      "sha256": "f25e9b099db08aaacd0a3ac62b4697d3951d6ae61ae41ea09f6702cfa89eb32c",
+      "size_bytes": 7674816
+    },
+    "lib/librknnrt.so": {
+      "url": "https://raw.githubusercontent.com/airockchip/rknn-llm/f7390530443bf84f0394255a449d7cbe81e69d1c/examples/multimodal_model_demo/deploy/3rdparty/librknnrt/Linux/librknn_api/aarch64/librknnrt.so",
+      "sha256": "d31fc19c85b85f6091b2bd0f6af9d962d5264a4e410bfb536402ec92bac738e8",
+      "size_bytes": 7726232
+    }
+  }
+}

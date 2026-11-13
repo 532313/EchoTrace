@@ -1,0 +1,99 @@
+[ 50%] Built target echo_recording
+[ 50%] Built target echo_json
+[ 50%] Building CXX object CMakeFiles/echo_core.dir/native/src/core.cpp.o
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/deque:63,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:3,
+                 from /home/guan/EchoTrace/native/src/core.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h: In function '_ForwardIterator std::__uninitialized_copy_a(_InputIterator, _InputIterator, _ForwardIterator, std::allocator<_Tp>&) [with _InputIterator = std::move_iterator<Json::Value*>; _ForwardIterator = Json::Value*; _Tp = Json::Value]':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:287:5: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+     __uninitialized_copy_a(_InputIterator __first, _InputIterator __last,
+     ^~~~~~~~~~~~~~~~~~~~~~
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:287:5: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/vector:69,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/fs_path.h:37,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/filesystem:37,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:4,
+                 from /home/guan/EchoTrace/native/src/core.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/vector.tcc: In member function 'void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const Json::Value&}; _Tp = Json::Value; _Alloc = std::allocator<Json::Value>]':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/vector.tcc:413:7: note: parameter passing for argument of type 'std::vector<Json::Value>::iterator' {aka '__gnu_cxx::__normal_iterator<Json::Value*, std::vector<Json::Value> >'} changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/deque:63,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:3,
+                 from /home/guan/EchoTrace/native/src/core.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:311:2: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+       return std::__uninitialized_copy_a
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  (_GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__first),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   _GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__last), __result, __alloc);
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:311:2: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+       return std::__uninitialized_copy_a
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  (_GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__first),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   _GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__last), __result, __alloc);
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/vector:64,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/fs_path.h:37,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/filesystem:37,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:4,
+                 from /home/guan/EchoTrace/native/src/core.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_vector.h: In static member function 'static void std::_Function_handler<void(_ArgTypes ...), _Functor>::_M_invoke(const std::_Any_data&, _ArgTypes&& ...) [with _Functor = echotrace::Journal::replay() const::<lambda(const Json::Value&)>; _ArgTypes = {const Json::Value&}]':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_vector.h:1085:4: note: parameter passing for argument of type '__gnu_cxx::__normal_iterator<Json::Value*, std::vector<Json::Value> >' changed in GCC 7.1
+    _M_realloc_insert(end(), __x);
+    ^~~~~~~~~~~~~~~~~
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/deque:63,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:3,
+                 from /home/guan/EchoTrace/native/src/core.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h: In member function 'std::vector<Json::Value> echotrace::Journal::read_from(uint64_t&, size_t) const':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:311:2: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+       return std::__uninitialized_copy_a
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  (_GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__first),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   _GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__last), __result, __alloc);
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_uninitialized.h:311:2: note: parameter passing for argument of type 'std::move_iterator<Json::Value*>' changed in GCC 7.1
+       return std::__uninitialized_copy_a
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  (_GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__first),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   _GLIBCXX_MAKE_MOVE_IF_NOEXCEPT_ITERATOR(__last), __result, __alloc);
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 50%] Linking CXX static library libecho_core.a
+[ 50%] Built target echo_core
+Consolidate compiler generated dependencies of target echotrace-edge
+[ 50%] Building CXX object CMakeFiles/echotrace-edge.dir/native/src/edge_main.cpp.o
+[ 50%] Building CXX object CMakeFiles/echotrace-edge.dir/native/src/capture_sim.cpp.o
+[ 50%] Building CXX object CMakeFiles/echotrace-edge.dir/native/src/capture_rv1106.cpp.o
+[100%] Building CXX object CMakeFiles/echotrace-edge.dir/native/src/inputs_linux.cpp.o
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/vector:69,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/fs_path.h:37,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/filesystem:37,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:4,
+                 from /home/guan/EchoTrace/native/include/echotrace/capture.hpp:2,
+                 from /home/guan/EchoTrace/native/src/edge_main.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/vector.tcc: In member function 'void std::vector<_Tp, _Alloc>::_M_realloc_insert(std::vector<_Tp, _Alloc>::iterator, _Args&& ...) [with _Args = {const asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry&}; _Tp = asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry; _Alloc = std::allocator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry>]':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/vector.tcc:413:7: note: parameter passing for argument of type 'std::vector<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry, std::allocator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry> >::iterator' {aka '__gnu_cxx::__normal_iterator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry*, std::vector<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry, std::allocator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry> > >'} changed in GCC 7.1
+       vector<_Tp, _Alloc>::
+       ^~~~~~~~~~~~~~~~~~~
+In file included from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/vector:64,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/fs_path.h:37,
+                 from /home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/filesystem:37,
+                 from /home/guan/EchoTrace/native/include/echotrace/core.hpp:4,
+                 from /home/guan/EchoTrace/native/include/echotrace/capture.hpp:2,
+                 from /home/guan/EchoTrace/native/src/edge_main.cpp:1:
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_vector.h: In member function 'void asio::detail::epoll_reactor::schedule_timer(asio::detail::timer_queue<Time_Traits>&, const typename Time_Traits::time_type&, typename asio::detail::timer_queue<Time_Traits>::per_timer_data&, asio::detail::wait_op*) [with Time_Traits = asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> >]':
+/home/guan/Echo-Mate/SDK/rv1106-sdk/tools/linux/toolchain/arm-rockchip830-linux-uclibcgnueabihf/arm-rockchip830-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_vector.h:1085:4: note: parameter passing for argument of type '__gnu_cxx::__normal_iterator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry*, std::vector<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry, std::allocator<asio::detail::timer_queue<asio::detail::chrono_time_traits<std::chrono::_V2::steady_clock, asio::wait_traits<std::chrono::_V2::steady_clock> > >::heap_entry> > >' changed in GCC 7.1
+    _M_realloc_insert(end(), __x);
+    ^~~~~~~~~~~~~~~~~
+[100%] Linking CXX executable echotrace-edge
+[100%] Built target echotrace-edge
+Built target echo_json
+Consolidate compiler generated dependencies of target echo_core
+Built target echo_core
+Building CXX object CMakeFiles/echotrace-core-test.dir/native/tests/core_test.cpp.o
+Linking CXX executable echotrace-core-test
+Built target echotrace-core-test

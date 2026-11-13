@@ -1,0 +1,13 @@
+{
+  "session_id": "c014b279-7ec5-4511-a3c7-cdde23a7d82c",
+  "prompt_ack": {
+    "id": "62ae692d-c380-4865-8b72-39c6d27e8061",
+    "ok": true,
+    "source_time_us": 24733399733,
+    "type": "ack"
+  },
+  "prompt_source_us": 24731047256,
+  "phase": "closed_without_claps",
+  "user_report": "3min采集窗口内没有拍手，重新采集",
+  "physical_sync_measured": false
+}
