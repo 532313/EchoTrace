@@ -126,8 +126,10 @@ class ScreenPlayer:
             actual = state["origin_us"] + int((time.monotonic() - state["clock"]) * 1e6)
             offset = max(0., (actual - item["start_us"]) / 1e6)
             if actual < item["end_us"]:
+                if self.devices.connected[device_id]["capture_state"] not in ("stopped", "unknown"):
+                    raise Conflict("录制优先，历史播放已停止")
                 await self.devices.command(device_id, "playback.start",
-                    {"media_id": item["id"], "offset_seconds": offset})
+                    {"media_id": item["id"], "offset_seconds": offset, "screen": True})
 
     async def run(self, device_id, state):
         process, audio_task = None, None
@@ -140,6 +142,8 @@ class ScreenPlayer:
                 state.update(state="playing", message="此段只有原始声音")
                 audio_task = asyncio.create_task(self.audio(device_id, state, plan["audio"]))
                 while cursor < state["end_us"]:
+                    if self.devices.connected[device_id]["capture_state"] not in ("stopped", "unknown"):
+                        raise Conflict("录制优先，历史播放已停止")
                     state["position_ms"] = max(0, (cursor - state["begin_us"]) // 1000)
                     await self.publish(device_id, state)
                     await asyncio.sleep(.2)
@@ -168,6 +172,8 @@ class ScreenPlayer:
                 segment_start = cursor
                 index = 0
                 while cursor < stop:
+                    if self.devices.connected[device_id]["capture_state"] not in ("stopped", "unknown"):
+                        raise Conflict("录制优先，历史播放已停止")
                     try:
                         pixels = await asyncio.wait_for(process.stdout.readexactly(28800), 8)
                     except asyncio.IncompleteReadError:

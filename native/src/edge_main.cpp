@@ -904,6 +904,8 @@ private:
         capture_->play(final, 0);
       } else if (op == "playback.start") {
         if (voice_running_) throw std::runtime_error("请先结束语音输入");
+        if (args.get("screen", false).asBool() && state() != "stopped")
+          throw std::runtime_error("录制优先，请先结束录制");
         auto path = media_path(args["media_id"].asString());
         acquire_media_lease();
         capture_->play(path, args.get("offset_seconds", 0.0).asDouble());
