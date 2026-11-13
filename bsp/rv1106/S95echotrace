@@ -1,32 +1,53 @@
 #!/bin/sh
 set -eu
-# Install after SD validation; coordinate camera/audio with the integrated DeskBot.
-pid=/run/echotrace/capture.pid
+# Site paths and current development forwarding can be configured without
+# changing this managed script. This file contains paths, never a literal token.
+env_file=${ECHOTRACE_SERVICE_ENV:-/etc/echotrace/edge.env}
+[ ! -f "$env_file" ] || . "$env_file"
+prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
+run=${ECHOTRACE_RUN_DIR:-/run/echotrace}
+program=${ECHOTRACE_EDGE_BIN:-$prefix/bin/echotrace-edge}
+config=${ECHOTRACE_CONFIG:-/etc/echotrace/edge.json}
+data=${ECHOTRACE_DATA:-/mnt/sdcard/echotrace}
+socket=${ECHOTRACE_SOCKET:-$run/control.sock}
+hub=${ECHOTRACE_HUB:-ws://192.168.77.1:18081/ws/device}
+pid=${ECHOTRACE_CAPTURE_PID:-$run/capture.pid}
+token_file=${ECHOTRACE_TOKEN_FILE:-/etc/echotrace/token}
+running() {
+    [ -r "$pid" ] || return 1
+    process=$(cat "$pid")
+    case "$process" in ''|*[!0-9]*) return 1 ;; esac
+    [ "$(readlink "/proc/$process/exe" 2>/dev/null || true)" = "$program" ] &&
+        kill -0 "$process" 2>/dev/null
+}
 case "${1:-}" in
 start)
-    [ -s /etc/echotrace/token ] || { echo "Set a private EchoTrace token first" >&2; exit 1; }
-    export LD_LIBRARY_PATH=/opt/echotrace/lib:/oem/usr/lib:/usr/lib:/lib
-    [ -f "$pid" ] && kill -0 "$(cat "$pid")" 2>/dev/null && exit 0
+    running && exit 0
+    [ -s "$token_file" ] || { echo "Set a private EchoTrace token first" >&2; exit 1; }
+    [ -x "$program" ] && [ -f "$config" ] || { echo 'EchoTrace program/config is missing' >&2; exit 1; }
+    export LD_LIBRARY_PATH="$prefix/lib:/oem/usr/lib:/usr/lib:/lib"
     grep -q ' /mnt/sdcard ' /proc/mounts || { echo 'EchoTrace requires mounted SD storage' >&2; exit 1; }
-    mkdir -p /run/echotrace /mnt/sdcard/echotrace
     umask 077
-    start-stop-daemon -S -b -m -p "$pid" -x /opt/echotrace/bin/echotrace-edge -- \
-        --config /etc/echotrace/edge.json --data /mnt/sdcard/echotrace \
-        --socket /run/echotrace/control.sock --hub ws://192.168.77.1:18081/ws/device
+    mkdir -p "$run" "$data" "$(dirname "$pid")"
+    rm -f "$pid"
+    start-stop-daemon -S -b -m -p "$pid" -x "$program" -- \
+        --config "$config" --data "$data" --socket "$socket" --hub "$hub"
+    sleep 1
+    running || { echo 'EchoTrace exited during startup' >&2; exit 1; }
     ;;
 stop)
-    start-stop-daemon -K -p "$pid" -x /opt/echotrace/bin/echotrace-edge -s TERM || true
-    if [ -r "$pid" ]; then
-        process=$(cat "$pid")
+    if running; then
+        start-stop-daemon -K -p "$pid" -x "$program" -s TERM
         attempts=0
-        while kill -0 "$process" 2>/dev/null; do
+        while running; do
             attempts=$((attempts+1))
             [ "$attempts" -lt 15 ] || { echo 'capture service has not stopped' >&2; exit 1; }
             sleep 1
         done
-        rm -f "$pid"
     fi
+    rm -f "$pid"
     ;;
 restart) "$0" stop; "$0" start ;;
-*) echo 'usage: S95echotrace start|stop|restart' >&2; exit 2 ;;
+status) running ;;
+*) echo 'usage: S95echotrace start|stop|restart|status' >&2; exit 2 ;;
 esac

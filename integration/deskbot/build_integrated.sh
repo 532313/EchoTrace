@@ -51,6 +51,7 @@ ln -s "$demo_root/yolov5_demo/cpp/lib" "$work/yolov5_demo/cpp/lib"
 patch -d "$work/DeskBot_demo" -p1 < "$script_dir/0001-echotrace-app.patch"
 patch -d "$work" -p1 < "$script_dir/0002-ai-camera-backend.patch"
 patch -d "$work/DeskBot_demo" -p1 < "$script_dir/0003-ai-camera-page.patch"
+patch -d "$work/DeskBot_demo" -p1 < "$script_dir/0004-app-launch.patch"
 
 sh "$script_dir/tests/run_yolo_failure_test.sh" \
     "$work/yolov5_demo/cpp" > "$work/yolo-failure-test.log" 2>&1

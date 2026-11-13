@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
+env_file=${ECHOTRACE_SERVICE_ENV:-/etc/echotrace/edge.env}
+[ ! -f "$env_file" ] || . "$env_file"
 # The integrated DeskBot is the only display owner; capture remains independent.
 prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
 run=${ECHOTRACE_RUN_DIR:-/run/echotrace}

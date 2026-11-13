@@ -7,6 +7,8 @@ extern "C" {
 
 void ui_EchoTracePage_init(void);
 void ui_EchoTracePage_deinit(void);
+/* Optional launch destination; unset ECHOTRACE_OPEN_APP keeps the Home page. */
+void echotrace_app_startup(void);
 
 /* The existing ChatBot and YOLO pages hold this lease until their media
  * worker is fully stopped. EchoTrace's daemon takes the same lease. */
