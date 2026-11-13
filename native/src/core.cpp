@@ -1,4 +1,5 @@
 #include "echotrace/core.hpp"
+#include "echotrace/screen_frame.h"
 #include "picosha2.h"
 #include <algorithm>
 #include <array>
@@ -202,7 +203,7 @@ std::vector<uint8_t> Packet::encode() const {
     throw std::invalid_argument("invalid packet");
   if (kind == 1 && samples != 640)
     throw std::invalid_argument("audio frame must contain 640 samples");
-  if (kind == 3 && (samples || payload.size() != 16 + 240 * 136 * 2))
+  if (kind == 3 && (samples || payload.size() != 16 + ET_SCREEN_PIXELS))
     throw std::invalid_argument("invalid complete screen frame");
   std::vector<uint8_t> bytes;
   bytes.reserve(24 + payload.size());
@@ -226,7 +227,7 @@ Packet Packet::decode(const std::vector<uint8_t> &bytes) {
   const auto n = get_be(bytes, 4, 4);
   if ((p.kind != 1 && p.kind != 2 && p.kind != 3) || !n || n > 65536 ||
       bytes.size() != 24 + n || (p.kind == 1 && p.samples != 640) ||
-      (p.kind == 3 && (p.samples || n != 16 + 240 * 136 * 2)))
+      (p.kind == 3 && (p.samples || n != 16 + ET_SCREEN_PIXELS)))
     throw std::invalid_argument("bad packet length or type");
   p.payload.assign(bytes.begin() + 24, bytes.end());
   return p;

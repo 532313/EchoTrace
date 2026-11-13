@@ -184,8 +184,8 @@ class ScreenPlayer:
                     self.settings.ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "error",
                     "-ss", str((cursor - video["start_us"]) / 1e6), "-i", str(source),
                     "-t", str((stop - cursor) / 1e6), "-an", "-threads", "2",
-                    "-vf", "scale=240:136:flags=fast_bilinear:force_original_aspect_ratio=decrease,"
-                    "pad=240:136:(ow-iw)/2:(oh-ih)/2,fps=30",
+                    "-vf", "scale=192:108:flags=fast_bilinear:force_original_aspect_ratio=decrease,"
+                    "pad=192:108:(ow-iw)/2:(oh-ih)/2,fps=30",
                     "-pix_fmt", "rgb565le", "-f", "rawvideo", "pipe:1",
                     stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
                 segment_start = cursor

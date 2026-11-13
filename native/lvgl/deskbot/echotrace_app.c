@@ -621,7 +621,7 @@ static void open_player(void) {
     video_descriptor.header.stride = ET_SCREEN_WIDTH * 2;
     video_descriptor.data = video_pixels; video_descriptor.data_size = sizeof(video_pixels);
     player_image = lv_image_create(player_view);
-    lv_obj_set_pos(player_image, (320 - ET_SCREEN_WIDTH) / 2, 32);
+    lv_obj_set_pos(player_image, (320 - ET_SCREEN_WIDTH) / 2, 32 + (136 - ET_SCREEN_HEIGHT) / 2);
     lv_image_set_src(player_image, &video_descriptor);
     player_slider = lv_slider_create(player_view);
     lv_obj_set_pos(player_slider, 13, 176); lv_obj_set_size(player_slider, 294, 9);

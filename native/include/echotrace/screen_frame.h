@@ -8,8 +8,8 @@ extern "C" {
 
 /* Protocol v3 kind 3: existing 24-byte network header, 16-byte stream UUID,
  * followed by one RGB565LE image. No frame fragments or unbounded queue. */
-#define ET_SCREEN_WIDTH 240
-#define ET_SCREEN_HEIGHT 136
+#define ET_SCREEN_WIDTH 192
+#define ET_SCREEN_HEIGHT 108
 #define ET_SCREEN_PIXELS (ET_SCREEN_WIDTH * ET_SCREEN_HEIGHT * 2)
 #define ET_SCREEN_WIRE_BYTES (24 + 16 + ET_SCREEN_PIXELS)
 typedef struct {
