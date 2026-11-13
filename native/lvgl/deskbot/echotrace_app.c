@@ -20,9 +20,13 @@ static pthread_t worker;
 static int running, worker_started, queued, failed_send, rendering;
 static char command[4096], notice[320];
 static json_object *shared_status, *status;
-static lv_obj_t *screen, *status_label, *notice_label, *tabs, *project_select[2];
+static lv_obj_t *screen, *status_label, *notice_label, *tabs, *project_select;
 static lv_obj_t *start_button, *mark_button, *pause_button, *stop_button;
 static lv_obj_t *result_label, *thumb_image, *project_label, *dialog, *editor;
+static lv_obj_t *live_image, *elapsed_label, *record_project_label, *preview_hint;
+static lv_image_dsc_t live_descriptor;
+static uint8_t live_data[128 * 72 * 2];
+static uint64_t live_stamp;
 static lv_timer_t *timer;
 static char selected_project[100], pending_id[100], pending_action[64];
 static char edit_project[100], old_choices[4096], last_query[100];
@@ -341,7 +345,7 @@ static void refresh(lv_timer_t *unused) {
     if (status) consume_reply(field(status, "app_reply"));
     const char *state = str(status, "state");
     char line[200];
-    snprintf(line, sizeof(line), "%s · %s",
+    snprintf(line, sizeof(line), "%s%s · %s", boolean(status, "synthetic") ? "模拟 · " : "",
              !status ? "服务未连接" : !strcmp(state, "recording") ? "记录中" :
              !strcmp(state, "paused") ? "已暂停" : "已停止",
              boolean(status, "connected") ? "在线" : "离线");
@@ -368,16 +372,45 @@ static void refresh(lv_timer_t *unused) {
     if (!count) copy(choices, sizeof(choices), "默认工作记录 · 可直接开始");
     rendering = 1;
     if (strcmp(old_choices, choices)) {
-        for (int i = 0; i < 2; ++i) lv_dropdown_set_options(project_select[i], choices);
+        lv_dropdown_set_options(project_select, choices);
         copy(old_choices, sizeof(old_choices), choices);
     }
-    for (int i = 0; i < 2; ++i) {
-        lv_dropdown_set_selected(project_select[i], selected);
-        enabled(project_select[i], !active);
-    }
+    lv_dropdown_set_selected(project_select, selected);
+    enabled(project_select, !active);
     rendering = 0;
     if (!*selected_project && count) copy(selected_project, sizeof(selected_project), str(json_object_array_get_idx(projects, selected), "id"));
     lv_label_set_text(project_label, selected_name());
+    lv_label_set_text(record_project_label, selected_name());
+    uint64_t started = number(session, "started_us"), current = number(status, "source_time_us");
+    uint64_t end = active ? current : number(session, "ended_us");
+    uint64_t seconds = started && end >= started ? (end - started) / 1000000 : 0;
+    snprintf(line, sizeof(line), "会话 %02llu:%02llu:%02llu",
+             (unsigned long long)(seconds / 3600), (unsigned long long)(seconds / 60 % 60),
+             (unsigned long long)(seconds % 60));
+    lv_label_set_text(elapsed_label, line);
+    lv_label_set_text(preview_hint, !active ? "开始后持续收音" : !strcmp(state, "paused") ? "已暂停采集" : "正在保存声画");
+    uint64_t stamp = number(status, "preview_time_us");
+    if (active && stamp && stamp != live_stamp) {
+        uint8_t pixels[THUMB_BYTES];
+        FILE *file = fopen(str(status, "preview_path"), "rb");
+        size_t got = file ? fread(pixels, 1, sizeof(pixels), file) : 0;
+        if (file) fclose(file);
+        if (got == sizeof(pixels)) {
+            for (unsigned y = 0; y < 72; ++y) for (unsigned x = 0; x < 128; ++x) {
+                size_t from = ((y * 90 / 72) * 160 + x * 160 / 128) * 2;
+                size_t to = (y * 128 + x) * 2;
+                live_data[to] = pixels[from]; live_data[to + 1] = pixels[from + 1];
+            }
+            lv_image_cache_drop(&live_descriptor);
+            lv_image_set_src(live_image, &live_descriptor);
+            lv_obj_remove_flag(live_image, LV_OBJ_FLAG_HIDDEN);
+            live_stamp = stamp;
+        }
+    } else if (!active) {
+        lv_obj_add_flag(live_image, LV_OBJ_FLAG_HIDDEN);
+        live_stamp = 0;
+    }
+    lv_label_set_text(lv_obj_get_child(pause_button, 0), !strcmp(state, "paused") ? "继续记忆" : "暂停记忆");
     enabled(start_button, !active);
     enabled(mark_button, !strcmp(state, "recording"));
     enabled(pause_button, active);
@@ -424,19 +457,37 @@ void ui_EchoTracePage_init(void) {
         lv_obj_set_style_pad_row(pages[i], 3, 0);
         lv_obj_set_flex_flow(pages[i], LV_FLEX_FLOW_COLUMN);
     }
-    for (int i = 0; i < 2; ++i) {
-        project_select[i] = lv_dropdown_create(i ? project : record);
-        lv_obj_set_size(project_select[i], LV_PCT(100), 32);
-        lv_dropdown_set_options(project_select[i], "默认工作记录 · 可直接开始");
-        lv_obj_add_event_cb(project_select[i], project_changed, LV_EVENT_VALUE_CHANGED, NULL);
-    }
-    lv_obj_t *actions = row(record, 34);
+    project_select = lv_dropdown_create(project);
+    lv_obj_set_size(project_select, LV_PCT(100), 32);
+    lv_dropdown_set_options(project_select, "默认工作记录 · 可直接开始");
+    lv_obj_add_event_cb(project_select, project_changed, LV_EVENT_VALUE_CHANGED, NULL);
+    lv_obj_t *live = row(record, 74);
+    live_image = lv_image_create(live);
+    lv_obj_add_flag(live_image, LV_OBJ_FLAG_HIDDEN);
+    memset(&live_descriptor, 0, sizeof(live_descriptor));
+    live_descriptor.header.magic = LV_IMAGE_HEADER_MAGIC;
+    live_descriptor.header.cf = LV_COLOR_FORMAT_RGB565;
+    live_descriptor.header.w = 128; live_descriptor.header.h = 72;
+    live_descriptor.header.stride = 256;
+    live_descriptor.data_size = sizeof(live_data);
+    live_descriptor.data = live_data;
+    lv_obj_t *info = lv_obj_create(live);
+    lv_obj_set_size(info, 164, 74);
+    lv_obj_set_style_pad_all(info, 1, 0);
+    lv_obj_set_style_border_width(info, 0, 0);
+    lv_obj_set_flex_flow(info, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_style_pad_row(info, 2, 0);
+    record_project_label = label(info, "工作台记录", 158);
+    lv_label_set_long_mode(record_project_label, LV_LABEL_LONG_DOT);
+    elapsed_label = label(info, "会话 00:00:00", 158);
+    preview_hint = label(info, "开始后显示预览", 158);
+    live_stamp = 0;
+    lv_obj_t *actions = row(record, 32);
     start_button = button(actions, "开始记忆", 145, operation_click, 0);
     mark_button = button(actions, "记这一步", 145, operation_click, 1);
-    actions = row(record, 34);
+    actions = row(record, 32);
     pause_button = button(actions, "暂停/继续", 145, operation_click, 2);
     stop_button = button(actions, "结束记忆", 145, operation_click, 3);
-    label(record, "返回首页继续记录；口述自动保存。", 300);
     project_label = label(project, "工作台记录", 300);
     actions = row(project, 34);
     button(actions, "新建项目", 145, project_editor, 0);
