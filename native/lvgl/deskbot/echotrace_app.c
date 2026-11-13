@@ -1213,6 +1213,8 @@ void ui_EchoTracePage_init(void) {
     lv_label_set_long_mode(record_project_label, LV_LABEL_LONG_DOT);
     elapsed_label = label(info, "会话 00:00:00", 158);
     preview_hint = label(info, "开始后显示预览", 158);
+    /* Project + clock already fill this 72px card at the Chinese font height. */
+    lv_obj_add_flag(preview_hint, LV_OBJ_FLAG_HIDDEN);
     live_stamp = 0;
     lv_obj_t *actions = row(record, 32);
     start_button = button(actions, "开始记忆", 145, operation_click, 0);
