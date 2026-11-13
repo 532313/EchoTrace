@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
+env_file=${ECHOTRACE_SERVICE_ENV:-/etc/echotrace/edge.env}
+[ ! -f "$env_file" ] || . "$env_file"
 # The integrated DeskBot is the only display owner; capture remains independent.
 prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
 run=${ECHOTRACE_RUN_DIR:-/run/echotrace}
@@ -33,7 +35,7 @@ start)
     attempts=0
     while [ ! -S "$socket" ]; do
         attempts=$((attempts + 1))
-        [ "$attempts" -le 5 ] || { echo 'EchoTrace capture socket is not ready' >&2; exit 1; }
+        [ "$attempts" -le 5 ] || { echo 'Capture is unavailable; starting the original desktop apps anyway' >&2; break; }
         sleep 1
     done
     umask 077

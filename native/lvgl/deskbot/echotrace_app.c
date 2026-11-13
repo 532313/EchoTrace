@@ -49,6 +49,19 @@ static char edit_project[100], edit_anchor[100], old_choices[4096], last_query[1
 static uint64_t edit_revision;
 static int edit_append;
 static uint64_t pending_since;
+static char entry_target[160];
+
+static void open_at_startup(lv_timer_t *once) {
+    lv_timer_delete(once);
+    lv_lib_pm_OpenPage(&page_manager, NULL, "EchoTracePage");
+}
+void echotrace_app_startup(void) {
+    const char *target = getenv("ECHOTRACE_OPEN_APP");
+    if (target && (!strcmp(target, "record") || !strcmp(target, "project") ||
+                   !strcmp(target, "history") || !strcmp(target, "ask") ||
+                   (!strncmp(target, "anchor:", 7) && strlen(target) < sizeof(entry_target))))
+        lv_timer_create(open_at_startup, 200, NULL);
+}
 
 static void copy(char *out, size_t size, const char *text) {
     snprintf(out, size, "%s", text ? text : "");
@@ -810,6 +823,17 @@ static void refresh(lv_timer_t *unused) {
         pending_id[0] = 0; message("后台未及时回复，请检查连接后重试");
     }
     if (status) consume_reply(field(status, "app_reply"));
+    if (*entry_target && boolean(status, "connected") && !*pending_id) {
+        if (!strcmp(entry_target, "project")) lv_tabview_set_active(tabs, 1, LV_ANIM_OFF);
+        else if (!strcmp(entry_target, "history")) {
+            lv_tabview_set_active(tabs, 2, LV_ANIM_OFF); request_history(1);
+        } else if (!strcmp(entry_target, "ask")) lv_tabview_set_active(tabs, 3, LV_ANIM_OFF);
+        else if (!strncmp(entry_target, "anchor:", 7)) {
+            json_object *args = object(); putstr(args, "anchor_id", entry_target + 7);
+            call("anchor.open", args); json_object_put(args);
+        }
+        entry_target[0] = 0;
+    }
     if (detail && detail_pending && !*pending_id && now_us() - detail_retry > 3000000) {
         detail_retry = now_us();
         detail_refresh(NULL);
@@ -933,6 +957,7 @@ static void back_click(lv_event_t *event) {
     lv_lib_pm_OpenPrePage(&page_manager);
 }
 void ui_EchoTracePage_init(void) {
+    copy(entry_target, sizeof(entry_target), getenv("ECHOTRACE_OPEN_APP"));
     selected_project[0] = pending_id[0] = old_choices[0] = last_query[0] = 0;
     dialog = editor = NULL;
     queued = failed_send = rendering = 0;

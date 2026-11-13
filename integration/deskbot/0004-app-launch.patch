@@ -1,0 +1,10 @@
+--- a/gui_app/ui.c
++++ b/gui_app/ui.c
+@@ -308,5 +308,8 @@
+     }
+     lv_lib_pm_OpenPage(&page_manager, NULL, "HomePage");
++#ifdef ECHOTRACE_APP
++    echotrace_app_startup();
++#endif
+     lv_timer_create(_maintimer_cb, 1000, NULL);
+ }
