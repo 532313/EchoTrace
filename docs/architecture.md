@@ -3,7 +3,6 @@
 ```mermaid
 flowchart LR
   Camera[摄像头与麦克风] --> Edge[RV1106 常驻采集服务]
-  Input[evdev 脚踏 / IIO 托盘] --> Edge
   LVGL[LVGL 终端] <-->|Unix socket| Edge
   Edge --> SD[分段 MP4 / PCM WAV / JSONL / 媒体清单]
   Edge <-->|WebSocket v3 + 短片段补传| Hub[RK3576 记忆服务]
@@ -33,7 +32,9 @@ Qt 仍复用原有 `RecordingPlayer/FFmpegDecoder`。新增控制器流式下载
 
 当前声卡只接受 2～4 通道，已在实板确认左侧 ADC 有效。因此按双声道硬件采集，取左声道写入 16kHz、16bit 单声道 WAV。其他硬件可通过 `capture_channels`、`microphone_channel` 配置。
 
-`boot_id` 隔离重启后的时间。UTC 和 `clock_quality` 仅用于显示；当前设备的墙钟不能用于推断真实拍摄日期。脚踏的 evdev 时钟设置为单调时钟；IIO 时间戳只表示主机触发采样锚点。
+`boot_id` 隔离重启后的时间。UTC 和 `clock_quality` 仅用于显示；当前设备的墙钟不能用于推断真实拍摄日期。触屏标记使用采集服务的单调时钟。
+
+新步骤事件类型为 `mark`。旧版 `pedal`、`tray`、`sensor_fault` 仅作为历史日志类型被接收，不再有对应的外设采集模块。更新设备时先升级中枢，再升级采集端；原始历史事件不改写。
 
 ## WebSocket v3
 

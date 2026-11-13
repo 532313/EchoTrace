@@ -52,7 +52,7 @@ class MemoryTests(unittest.TestCase):
             boot_id="boot-a",
             seq=seq,
             source_time_us=2_000_000 + seq * 1000,
-            kind="pedal",
+            kind="mark",
             note=note,
         )
         data.update(extra)
@@ -99,6 +99,15 @@ class MemoryTests(unittest.TestCase):
         with self.assertRaises(Conflict):
             self.store.ingest(item.model_copy(update={"id": "another-id"}))
         self.assertEqual(self.store.stats()["anchors"], 1)
+
+    def test_legacy_marks_replay_without_rewriting_original_events(self):
+        legacy = self.event(kind="pedal")
+        self.store.ingest(legacy)
+        self.store.ingest(self.event(1, kind="mark"))
+        self.assertEqual(self.store.stats()["anchors"], 2)
+        raw = self.store.one("SELECT body FROM events WHERE id=?", (legacy.id,))
+        self.assertEqual(json.loads(raw["body"])["kind"], "pedal")
+        self.assertEqual(self.store.anchor("event-1")["kind"], "mark")
 
     def test_boot_identity_and_late_replay(self):
         with self.assertRaises(Conflict):
@@ -334,7 +343,7 @@ class MemoryTests(unittest.TestCase):
         with self.assertRaises(Conflict):
             Store(self.settings.root)
 
-    def test_nonfinite_sensor_event_rejected(self):
+    def test_legacy_nonfinite_measurement_rejected(self):
         with self.assertRaises(ValueError):
             self.store.ingest(
                 self.event(kind="tray", payload={"delta_g": float("nan")})

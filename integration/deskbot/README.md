@@ -4,7 +4,7 @@
 
 实际桌面源码是 WSL 的 `/home/guan/Echo-Mate/Demo/DeskBot_demo`。`baseline.json` 记录了打补丁前九个文件的 SHA-256（其中三个来自相邻的 `yolov5_demo`）；Mac 上的同名副本较旧，不能直接覆盖 WSL 版本。
 
-`0001-echotrace-app.patch` 只在设置 `ECHOTRACE_APP_ROOT` 时生效：保留原有 12 个页面及其位置，在抽屉末尾增加“记忆”，并从原聊天和 AI 相机入口协调声画设备。未设置该选项时，原桌面构建行为保持原样。原电机功能及引脚不作修改；HX711、脚踏的候选设备树保持禁用，接线前须另选不冲突的引脚。
+`0001-echotrace-app.patch` 只在设置 `ECHOTRACE_APP_ROOT` 时生效：保留原有 12 个页面及其位置，在抽屉末尾增加“记忆”，并从原聊天和 AI 相机入口协调声画设备。未设置该选项时，原桌面构建行为保持原样。原电机功能及引脚不作修改，记忆 App 使用触屏与语音操作。
 
 `0002-ai-camera-backend.patch` 和 `0003-ai-camera-page.patch` 修复隔离构建中的原 AI 相机失败路径。之前上板遇到 NPU 连续内存申请失败，随后出现内核 Oops；完整日志在 `docs/kernel-oops-2026-11-13.log`。补丁检查模型和缓冲分配结果，按 RKNN API 要求先释放张量内存再销毁上下文，避免重复释放，并限制检测文字长度。页面在启动前检查 `/proc/buddyinfo`，启动或推理失败时提示并退出。内核驱动故障是否完全消除仍须实板复测，用户态检查不能替代驱动修复。
 

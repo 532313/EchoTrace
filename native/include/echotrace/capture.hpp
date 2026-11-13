@@ -16,8 +16,6 @@ struct CaptureConfig {
   unsigned capture_latency_us = 500000;
   std::string alsa = "default";
   std::string iq = "/etc/iqfiles";
-  std::string iio_device, input_device, pause_device;
-  std::filesystem::path calibration;
   uint64_t reserve_bytes = 256ULL * 1024 * 1024;
 };
 class Capture {

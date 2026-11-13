@@ -40,7 +40,7 @@ for i in range(a.anchors):
         boot_id="synthetic",
         seq=i,
         source_time_us=i * 1000000 + 1,
-        kind="pedal",
+        kind="mark",
         note=f"测试步骤编号 {i}：因为排线接触不良而更换线缆。",
         payload={"synthetic": True, "not_quality_evaluation": True},
     )

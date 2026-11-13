@@ -96,10 +96,6 @@ public:
     capture_config.iq = config_.get("iq_directory", "/etc/iqfiles").asString();
     capture_config.reserve_bytes =
         config_.get("reserve_mb", 256).asUInt64() * 1024 * 1024;
-    capture_config.iio_device = config_.get("iio_device", "").asString();
-    capture_config.input_device = config_.get("input_device", "").asString();
-    capture_config.pause_device = config_.get("pause_device", "").asString();
-    capture_config.calibration = config_.get("calibration_file", "").asString();
     capture_ = make_capture(
         capture_config,
         [this](const fs::path &path, const std::string &kind, uint64_t begin,
@@ -499,9 +495,9 @@ private:
       outgoing_.push(gap);
       return;
     }
-    if (state() != "recording" && kind != "gap" && kind != "sensor_fault")
+    if (state() != "recording" && kind != "gap")
       return;
-    if (kind == "pedal") {
+    if (kind == "mark") {
       std::lock_guard<std::mutex> lock(state_mutex_);
       last_marker_us_ = stamp;
     }
@@ -656,7 +652,7 @@ private:
         if (args["session_id"].asString() != session_id() ||
             state() != "recording")
           throw std::runtime_error("recording is not active");
-        observation("pedal", monotonic_us(), args.get("note", "").asString(),
+        observation("mark", monotonic_us(), args.get("note", "").asString(),
                     Json::objectValue);
       } else if (op == "media.request") {
         const auto media_id = args["media_id"].asString();

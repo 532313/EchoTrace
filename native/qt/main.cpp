@@ -405,9 +405,9 @@ private:
     return value;
   }
   QString kindLabel(const QString &value) const {
-    if (value == "pedal") return "步骤标记";
+    if (value == "mark" || value == "pedal") return "步骤标记";
     if (value == "voice") return "口述";
-    if (value == "tray") return "托盘变化";
+    if (value == "tray") return "历史标记";
     if (value == "scene") return "画面变化";
     return value;
   }

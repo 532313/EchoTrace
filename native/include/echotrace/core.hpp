@@ -47,27 +47,6 @@ private:
   uint64_t sequence_ = 0;
 };
 
-struct TrayEvent {
-  double weight_g, delta_g, threshold_g;
-  uint64_t source_us;
-};
-class TrayDetector {
-public:
-  explicit TrayDetector(double min_delta = 2.0, uint64_t stable_us = 1000000);
-  std::optional<TrayEvent> sample(double weight_g, uint64_t stamp);
-  void fault();
-
-private:
-  struct Sample {
-    double value;
-    uint64_t stamp;
-  };
-  std::deque<Sample> samples_;
-  std::optional<double> baseline_;
-  double minimum_, noise_ = 0.0;
-  uint64_t stable_, last_us_ = 0;
-};
-
 class WaveWriter {
 public:
   void open(const std::filesystem::path &path);

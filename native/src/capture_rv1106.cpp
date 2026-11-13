@@ -1,5 +1,4 @@
 #include "echotrace/capture.hpp"
-#include "echotrace/inputs.hpp"
 #include "recording.h"
 #include <algorithm>
 #include <alsa/asoundlib.h>
@@ -157,8 +156,6 @@ public:
         std::cerr << "scene channel unavailable: " << e.what()
                   << "; periodic source anchors remain enabled\n";
       }
-      inputs_ = std::make_unique<LinuxInputs>(
-          config_, event_, [this](bool value) { pause(value); });
     } catch (...) {
       stop();
       throw;
@@ -171,7 +168,6 @@ public:
   }
   void stop() override {
     running_ = false;
-    inputs_.reset();
     stop_playback();
     for (auto *thread : {&video_thread_, &audio_thread_, &scene_thread_})
       if (thread->joinable())
@@ -529,7 +525,6 @@ private:
   EventCallback event_;
   fs::path directory_;
   std::unique_ptr<Recording> recording_;
-  std::unique_ptr<LinuxInputs> inputs_;
   snd_pcm_t *pcm_ = nullptr;
   std::atomic<bool> running_{false}, paused_{false}, playing_{false},
       video_discontinuity_{true};

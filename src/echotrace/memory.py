@@ -41,9 +41,9 @@ class MemoryService:
         await asyncio.gather(*self.worker_tasks, return_exceptions=True)
 
     def schedule(self, event):
-        if event.kind not in ("pedal", "voice", "tray", "scene"):
+        if event.kind not in ("mark", "pedal", "voice", "scene"):
             return
-        priority = 1 if event.kind in ("pedal", "voice") else 10
+        priority = 1 if event.kind in ("mark", "pedal", "voice") else 10
         if event.kind == "voice":
             self.store.enqueue_job("asr", event.id, priority, self.settings.max_jobs)
             if event.payload.get("media_id"):

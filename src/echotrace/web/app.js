@@ -2,7 +2,7 @@
 const $ = id => document.getElementById(id);
 const state = {project: null, session: null, anchor: null, compare: null, status: null, projects: [], sessions: [], urls: [], player: null, selection: 0};
 const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-const labels = {pedal:'步骤标记',voice:'口述记录',tray:'托盘变化',scene:'画面变化',gap:'记录中断',sensor_fault:'传感器异常'};
+const labels = {mark:'步骤标记',pedal:'步骤标记',voice:'口述记录',tray:'历史标记',scene:'画面变化',gap:'记录中断',sensor_fault:'历史事件'};
 const sessionLabel=s=>s.end_reason==='source_restart'?'意外中断后归档':(states[s.state]||s.state);
 const states = {recording:'正在记忆',paused:'已暂停',stopped:'记录结束',interrupted:'终端连接中断'};
 const fmt = us => {const sec=Math.max(0,Math.floor(us/1e6));return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;};

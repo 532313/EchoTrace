@@ -2,13 +2,13 @@
 
 面向嵌入式开发、拆装和制作的离线过程记忆机器人。Echo-Mate 保存操作现场，鲁班猫 3 建立可检索的时间线；每个结果都能回到原始记录。
 
-当前源码处于 **0.2.0.dev0 开发阶段**，目标是能在 Echo-Mate 小屏完成项目、录制、主动提问、历史与声画回看的完整 App。已有底层能力和完整小屏产品之间的缺口见 [开发任务](docs/roadmap.md)。Git 分支、提交、CI 与评审约定见 [开发流程](CONTRIBUTING.md)，版本、源码包和产物追溯见 [版本发布](docs/releases.md)。
+当前源码处于 **0.2 开发阶段**，目标是能在 Echo-Mate 小屏完成项目、录制、主动提问、历史与声画回看的完整 App。精确版本可由 `python -m echotrace --version` 查询，功能缺口见 [开发任务](docs/roadmap.md)。Git 分支、提交、CI 与评审约定见 [开发流程](CONTRIBUTING.md)，版本、源码包和产物追溯见 [版本发布](docs/releases.md)。
 
 本工程保留独立的采集与记忆服务，同时把 EchoTrace 接入原版 Echo-Mate DeskBot，成为抽屉里的“记忆”应用。原聊天、AI 相机、游戏、设置和电机功能保留；集成补丁仅应用于隔离构建副本，原工程源码与原可执行文件不被覆盖。接入和恢复步骤见 [DeskBot 集成说明](integration/deskbot/README.md)。
 
 完整的软件分层、当前功能边界、真实工作台入口和操作流程见 [HTML 软件架构与使用手册](docs/EchoTrace_软件架构与使用手册.html)，也可阅读 [Markdown 版本](docs/software-guide.md)。
 
-> 0.1 核心首版已在 RV1106 和 RK3576 上跑通真实采集、原件补传、离线模型和带证据的检索；新版一小时 SD 录制 0 次音频 XRUN，702 个原件全部巡检通过。整小时物理同步、外设接线和真实操作质量仍待验收，详见验证记录。
+> 0.1 核心首版已在 RV1106 和 RK3576 上跑通真实采集、原件补传、离线模型和带证据的检索；新版一小时 SD 录制 0 次音频 XRUN，702 个原件全部巡检通过。整小时物理同步和真实操作质量仍待验收，详见验证记录。
 
 ## 快速运行
 
@@ -43,13 +43,12 @@ build/host/echotrace-edge --simulated --data runtime/simulated-edge \
 | `src/echotrace/` | 记忆服务、SQLite/FTS5、混合检索、模型适配与 HTTP/WebSocket API |
 | `src/echotrace/web/` | 本地浏览器工作台，不依赖在线 CDN |
 | `native/src/capture_rv1106.cpp` | VI→VENC NV12 硬件编码、ALSA、RTSP 和画面变化候选 |
-| `native/src/inputs_linux.cpp` | evdev 脚踏/暂停、IIO HX711、校准与稳定状态判断 |
 | `native/src/edge_main.cpp` | 常驻采集服务、持久事件日志、命令确认、补传和本地控制口 |
 | `native/qt/` | Qt 工作台，复用原安防工程的 FFmpeg 回放组件 |
 | `native/lvgl/` | 独立终端，以及接入原 DeskBot 的 EchoTrace 应用页面 |
 | `integration/deskbot/` | 原桌面基线哈希、可核对补丁、集成构建与恢复说明 |
 | `native/vlm/` | 使用官方 RKNN/RKLLM API 的进程隔离推理程序 |
-| `bsp/rv1106/` | HX711 修复补丁、候选设备树、配置片段、IIO 配置与启动服务 |
+| `bsp/rv1106/` | 显示、音视频、USB 网络所需的配置片段与启动服务 |
 | `bsp/rk3576/` | 记忆服务模板 |
 | `tests/` | 原始事实、协议、HTTP Range、驱动错误路径和原生端断线集成测试 |
 

@@ -49,7 +49,7 @@
         <div class="overview-card"><strong>702</strong><span>一次一小时试录中巡检通过的原件</span></div>
         <div class="overview-card"><strong>0 XRUN</strong><span>同一小时试录的音频欠/过载次数</span></div>
       </div>
-      <aside class="status-note"><strong>当前状态：</strong>EchoTrace 已作为原 Echo-Mate DeskBot 抽屉中的“记忆”应用在实板试运行；原聊天、AI 相机等功能保留。采集 → SD 原件 → 中枢索引 → 检索 → 证据回放已形成闭环。两板 USB 直连、实体脚踏与称重托盘、整机开机自启和完整产品评测仍待完成。当前调试链路需要 Windows/WSL 与 Mac 转发。</aside>
+      <aside class="status-note"><strong>当前状态：</strong>“记忆”应用已接入原 Echo-Mate DeskBot。现有小屏提供录制控制与查询结果显示，项目创建、主动提问、历史和视频回看正在补齐。采集、索引、检索与大屏回放已有基础能力。当前操作使用触屏与语音，调试链路需要 Windows/WSL 与 Mac 转发。</aside>
       <p class="reading-guide"><b>阅读建议</b><span>先看第 1、9、10 节理解连接、界面和日常操作；第 11 节用于恢复开发环境；第 13 节区分实测结果与目标。</span></p>
       <section class="manual-section" data-section="s01"><h2 id="s01">1. 整体组成与实际连接</h2>
 <p>系统由 RV1106 采集端、RK3576 记忆中枢、三个交互入口组成。</p>
@@ -182,10 +182,6 @@
 <td>约 2Hz 比较缩略灰度图，在变化后稳定时产生候选标记</td>
 </tr>
 <tr>
-<td>输入线程</td>
-<td>预留 evdev 脚踏/暂停开关和 IIO 托盘读数入口</td>
-</tr>
-<tr>
 <td>网络线程</td>
 <td>WebSocket 连接、接收命令与块确认</td>
 </tr>
@@ -216,7 +212,7 @@
        ├─ 锚点 Anchor：可点击、可检索的步骤
        └─ 媒体 Media：覆盖哪些来源时间的原始片段
 </code></pre></div>
-<p>已接入软件的事件类型包括步骤标记、口述、画面变化、托盘变化、采集中断和传感器异常。脚踏、托盘、独立暂停开关尚未完成实物接入。</p>
+<p>当前事件包括触屏步骤标记、口述、画面变化、采集中断和播放区间。标记与暂停/继续由 App 完成。</p>
 <p>画面变化后稳定约一秒，选择较清楚的候选帧，自动变化事件有冷却；另外约每三十秒生成周期候选。候选只表示值得观察，不能直接认定某个零件被拿走。</p>
 <p>时间使用 RV 的 <code>CLOCK_MONOTONIC</code> 微秒，同时保存 <code>device_id</code>、<code>boot_id</code>。重启前后的时钟不会混用。视频保留源 PTS，音频保存首样本时间与样本计数。UTC 只辅助展示，当前板端墙钟不准确，不能按 MP4 文件名中的日期推断真实拍摄日期。</p>
 <p>原始事件、人工笔记、语音转写、视觉描述分别保存。改笔记会产生修订历史，不修改原始事件。</p>
@@ -469,7 +465,7 @@ build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
 <p>正式 SysV/systemd 模板、Buildroot 包已经提供，但尚未启用整机开机自启。它们使用 <code>/opt/echotrace</code> 等正式安装路径，不能与当前 <code>/root/echotrace</code> 调试安装混为一套现成自启系统。</p>
 </section><section class="manual-section" data-section="s12"><h2 id="s12">12. 驱动、BSP 与原项目复用</h2>
 <p>相机、ISP/CIF、编码、声卡、LCD、触摸和 USB 网络主要采用匹配板卡的原厂 BSP/SDK，不是从零重写所有驱动。</p>
-<p>本项目新增的底层工作是：HX711 负错误码处理修复、IIO/触发配置、gpio-keys 候选设备树、用户态称重稳定状态机、时间关联和服务整合。修复后的 HX711 对象和候选 DTB 已使用真实 ARM 工具链编译，错误注入也有检查；实体 HX711、脚踏、暂停开关尚未接入，候选节点未启用，没有刷写新内核。</p>
+<p>底层工作围绕现有相机、音频、显示、触摸和 USB 网络展开，包括设备所有权、缓冲管理、声画时间关联、BSP 配置与启动服务整合。当前没有刷写新内核，整机镜像仍在开发范围内。</p>
 <p>当前 SDK 默认 SD 启动配置与实板 SPI NAND / UBIFS 启动不同。已有 SPI NAND 分区候选与实板七个 MTD 分区大小匹配，但完整镜像、U-Boot、根文件系统及冷启动仍需整体验证。</p>
 <p>原安防项目贡献了录像封装、恢复、解码和播放器等可复用代码；Echo-Mate 贡献硬件、SDK/BSP、LVGL 依赖与交互经验。融合项目独立实现采集服务、中枢编排、事件协议和过程记忆。没有把原安防的全部 UDP/TCP 方案或原 Echo 云端语音服务原样搬过来。</p>
 <div class="table-wrap"><table>
@@ -482,7 +478,7 @@ build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
 <tbody>
 <tr>
 <td><code>native/src/</code></td>
-<td>设备服务、采集、输入、日志及协议</td>
+<td>设备服务、采集、日志及协议</td>
 </tr>
 <tr>
 <td><code>native/lvgl/</code></td>
@@ -510,15 +506,15 @@ build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
 </tr>
 <tr>
 <td><code>bsp/</code></td>
-<td>驱动补丁、设备树、配置和服务模板</td>
+<td>BSP 配置和服务模板</td>
 </tr>
 <tr>
 <td><code>scripts/</code></td>
-<td>准备、模型转换、封存、构建探针、部署与验收</td>
+<td>准备、模型转换、版本、打包、部署与验收</td>
 </tr>
 <tr>
 <td><code>tests/</code></td>
-<td>核心、协议、回放、驱动错误路径、存储和同步工具测试</td>
+<td>核心、协议、回放、存储和同步工具检查</td>
 </tr>
 </tbody>
 </table></div>
@@ -545,7 +541,7 @@ build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
 </tr>
 <tr>
 <td>底层</td>
-<td>HX711 ARM 内核对象和候选 DTB 编译通过，未做实体传感器采样和新固件启动</td>
+<td>已核对运行中板型、内存、启动介质与媒体接口；完整镜像尚未部署</td>
 </tr>
 <tr>
 <td>容量保护与 UI</td>
@@ -557,7 +553,7 @@ build/rk3576/echotrace-workbench --hub http://127.0.0.1:18081
 </tr>
 </tbody>
 </table></div>
-<p>尚未完成：两板直接 USB 互联与实际拔插、完整 BSP 镜像和开机部署、真实异常断电、实体外设、一小时物理同步、回放声学同步、零持续换页，以及二十次真实操作和两百条人工问题评测。</p>
+<p>当前开发优先级是完整小屏 App 的项目、主动提问、历史及声画回放。两板直接 USB 互联、完整镜像与开机部署、真实异常断电、一小时物理同步及真实操作质量仍有后续工作。</p>
 <p>当前 RK 观察过 zram 换出，且共用板上已有 NAS 服务，没有修改其全局换页参数。最近状态接口还保留个别硬件取帧回退和未产出画面的错误记录，需要按片段排查，不能保证所有历史位置都能成功提帧。</p>
 </section><section class="manual-section" data-section="s14"><h2 id="s14">14. 常见问题</h2>
 <div class="table-wrap"><table>

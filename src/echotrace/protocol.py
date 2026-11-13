@@ -38,7 +38,8 @@ class EventIn(StrictModel):
     boot_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9_.:-]+$")
     seq: int = Field(ge=0, le=9223372036854775807)
     source_time_us: int = Field(ge=0, le=9223372036854775807)
-    kind: Literal["pedal", "voice", "tray", "scene", "gap", "playback", "sensor_fault"]
+    # Removed peripheral kinds are accepted only to replay existing journals.
+    kind: Literal["mark", "voice", "scene", "gap", "playback", "pedal", "tray", "sensor_fault"]
     note: str = Field(default="", max_length=8000)
     payload: Dict[str, Any] = Field(default_factory=dict)
 

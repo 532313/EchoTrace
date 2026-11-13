@@ -348,7 +348,7 @@ class Store:
                     int(time.time() * 1000),
                 ),
             )
-            if event.kind in ("pedal", "voice", "tray", "scene"):
+            if event.kind in ("mark", "pedal", "voice", "tray", "scene"):
                 self.db.execute(
                     "INSERT INTO anchors(id,session_id,source_time_us,kind,note) VALUES(?,?,?,?,?)",
                     (
@@ -718,7 +718,7 @@ class Store:
             candidates = self.rows(
                 """SELECT a.id,a.kind FROM anchors a
                    JOIN sessions s ON s.id=a.session_id
-                   WHERE a.kind IN ('pedal','tray','scene')
+                   WHERE a.kind IN ('mark','pedal','scene')
                      AND a.hidden=0 AND a.caption=''
                      AND NOT EXISTS (
                        SELECT 1 FROM jobs j WHERE j.kind='caption' AND j.anchor_id=a.id
@@ -728,7 +728,7 @@ class Store:
                          AND m.kind='video' AND m.start_us<=a.source_time_us
                          AND a.source_time_us<m.end_us
                      )
-                   ORDER BY CASE WHEN a.kind='pedal' THEN 0 ELSE 1 END,
+                   ORDER BY CASE WHEN a.kind IN ('mark','pedal') THEN 0 ELSE 1 END,
                             s.created_ms DESC,a.source_time_us ASC LIMIT ?""",
                 (room,),
             )
@@ -738,7 +738,7 @@ class Store:
                     "INSERT INTO jobs(id,kind,anchor_id,priority,status,available_ms,created_ms) "
                     "VALUES(?, 'caption', ?, ?, 'pending', ?, ?)",
                     (identifier(), anchor["id"],
-                     1 if anchor["kind"] == "pedal" else 10, now, now),
+                     1 if anchor["kind"] in ("mark", "pedal") else 10, now, now),
                 )
             return [item["id"] for item in candidates]
 

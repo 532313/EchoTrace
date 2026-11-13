@@ -1,6 +1,5 @@
 #include "echotrace/core.hpp"
 #include <cassert>
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -30,7 +29,7 @@ int main() {
   std::filesystem::create_directories(root);
   {
     Journal journal(root, "unit-device", "unit-boot");
-    auto first = journal.append("session-a", "pedal", 100, "先保存接线");
+    auto first = journal.append("session-a", "mark", 100, "先保存接线");
     assert(first["event"]["seq"].asUInt64() == 0);
   }
   {
@@ -46,7 +45,7 @@ int main() {
   }
   {
     Journal recovered(root, "unit-device", "unit-boot");
-    recovered.append("session-a", "pedal", 300, "断电尾部恢复");
+    recovered.append("session-a", "mark", 300, "断电尾部恢复");
     uint64_t cursor = 0;
     size_t count = 0;
     while (true) {
@@ -73,39 +72,6 @@ int main() {
     bad_base64 = true;
   }
   assert(bad_base64);
-  TrayDetector detector;
-  uint64_t stamp = 1000000;
-  int count = 0;
-  for (int i = 0; i < 12; ++i) {
-    stamp += 200000;
-    assert(!detector.sample(0.02 * std::sin(i), stamp));
-  }
-  // Brief hand pressure must not become a stable object event.
-  assert(!detector.sample(80, stamp += 200000));
-  for (int i = 0; i < 12; ++i) {
-    stamp += 200000;
-    assert(!detector.sample(0, stamp));
-  }
-  for (int i = 0; i < 15; ++i) {
-    stamp += 200000;
-    if (auto event = detector.sample(10, stamp)) {
-      assert(event->delta_g > 9);
-      ++count;
-    }
-  }
-  assert(count == 1);
-  assert(!detector.sample(NAN, stamp += 200000));
-  for (int i = 0; i < 10; ++i) {
-    stamp += 200000;
-    assert(!detector.sample(100, stamp));
-  }
-  // A sensor fault resets calibration baseline; reconnect must not invent a
-  // removal.
-  detector.fault();
-  for (int i = 0; i < 10; ++i) {
-    stamp += 200000;
-    assert(!detector.sample(0, stamp));
-  }
   {
     WaveWriter writer;
     writer.open(root / "audio.part");
@@ -150,5 +116,5 @@ int main() {
   assert(!queue.pop());
   std::filesystem::remove_all(root);
   std::cout
-      << "protocol, durable replay, tray faults, WAV and queue tests passed\n";
+      << "protocol, durable replay, WAV and queue checks passed\n";
 }

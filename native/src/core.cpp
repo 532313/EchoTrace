@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
-#include <cmath>
 #include <cstring>
 #include <fcntl.h>
 #include <fstream>
@@ -311,57 +310,6 @@ std::vector<Json::Value> Journal::replay() const {
   std::vector<Json::Value> result;
   visit([&](const Json::Value &item) { result.push_back(item); });
   return result;
-}
-
-TrayDetector::TrayDetector(double minimum, uint64_t stable)
-    : minimum_(minimum), stable_(stable) {
-  if (minimum <= 0 || !stable)
-    throw std::invalid_argument("invalid tray policy");
-}
-void TrayDetector::fault() {
-  samples_.clear();
-  baseline_.reset();
-  last_us_ = 0;
-  noise_ = 0;
-}
-std::optional<TrayEvent> TrayDetector::sample(double grams, uint64_t stamp) {
-  if (!std::isfinite(grams) || stamp <= last_us_) {
-    fault();
-    return {};
-  }
-  last_us_ = stamp;
-  samples_.push_back({grams, stamp});
-  while (samples_.size() > 1 &&
-         stamp - samples_.front().stamp > stable_ + 250000)
-    samples_.pop_front();
-  if (samples_.size() < 5 || stamp - samples_.front().stamp < stable_)
-    return {};
-  double mean = 0;
-  for (auto s : samples_)
-    mean += s.value;
-  mean /= samples_.size();
-  double variance = 0;
-  for (auto s : samples_)
-    variance += (s.value - mean) * (s.value - mean);
-  double sigma = std::sqrt(variance / samples_.size());
-  const double stable_limit = std::max(.15, minimum_ / 4.0);
-  if (sigma > stable_limit)
-    return {};
-  if (!baseline_) {
-    baseline_ = mean;
-    noise_ = sigma;
-    return {};
-  }
-  const double threshold = std::max(minimum_, 6 * std::max(noise_, sigma));
-  const double delta = mean - *baseline_;
-  if (std::abs(delta) < threshold) {
-    noise_ = std::max(noise_ * .95, sigma);
-    return {};
-  }
-  baseline_ = mean;
-  noise_ = sigma;
-  samples_.clear();
-  return TrayEvent{mean, delta, threshold, stamp};
 }
 
 void WaveWriter::open(const fs::path &path) {

@@ -7,7 +7,7 @@ if(NOT TARGET echo_recording)
 endif()
 find_path(ALSA_INCLUDE_DIR alsa/asoundlib.h REQUIRED)
 find_library(ALSA_LIBRARY asound REQUIRED)
-target_sources(echotrace-edge PRIVATE native/src/capture_rv1106.cpp native/src/inputs_linux.cpp)
+target_sources(echotrace-edge PRIVATE native/src/capture_rv1106.cpp)
 target_compile_definitions(echotrace-edge PRIVATE ECHO_RV1106 ISP_HW_V30 RKPLATFORM UAPI2)
 target_include_directories(echotrace-edge PRIVATE ${ALSA_INCLUDE_DIR} ${ECHO_MEDIA_SOURCE_ROOT}/include
   ${ECHO_MEDIA_SOURCE_ROOT}/include/rkaiq ${ECHO_MEDIA_SOURCE_ROOT}/include/rkaiq/uAPI2

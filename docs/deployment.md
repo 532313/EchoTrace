@@ -92,15 +92,13 @@ Qt 需要 Qt5 Widgets/Network 与 FFmpeg 开发包；NPU 推理需要 `scripts/f
 
 服务模板以独立账户运行，部署时配置相机/NPU/DMA 设备访问权限；开发目录的 root 短测不等于已经完成生产服务加固。没有自动启用开机启动。
 
-## 6. HX711 与脚踏
+## 6. BSP 与版本兼容
 
-`echotrace-peripherals.dtsi` 的 GPIO1_A0/A1/A3/A4 是候选引脚，节点默认禁用。先核对实物、原理图、电平、运行中的 pinctrl 与旧电机连接，再启用；A2/B0/B1 留给蓝牙。未验证接线时不加载驱动、不改引脚复用。
+功能使用 Echo-Mate 自带的摄像头、麦克风、扬声器和触摸屏。标记及暂停/继续均由 App 操作，不需要外接输入设备。原电机和蓝牙引脚不重新分配。
 
-补丁 `0001-hx711-reject-error-samples.patch` 针对现有 5.10.110 文件生成。修复读取错误被写入 u32 缓冲的问题，并跳过时间戳扫描项。`tests/test_hx711.py` 编译实际修复函数验证错误跳过提交、解锁和触发完成；它不代替 DOUT 断开上板实验。
+当前 SDK 默认 SD_CARD 板型与实板 SPI NAND / UBIFS 启动存在差异，整机镜像构建前需固定匹配的启动配置，见 [BSP 基线](bsp-validation.md)。内核配置片段保留触摸事件和 USB 网络所需能力。
 
-修复对象和候选 DTB 已使用实际 ARM 内核构建验证，见 [BSP 编译记录](bsp-validation.md)。当前 SDK 默认 SD_CARD 板型与实板 UBIFS 启动存在差异，整机镜像构建前需固定匹配的启动配置。
-
-合并 `kernel.config` 后用 SDK 的配置合并工具检查实际选项。`setup_iio.sh` 验证 voltage0+timestamp 的扫描布局，设置 5Hz hrtimer；HX711 RATE 引脚使用 10SPS。校准文件包含 `offset_counts`、`counts_per_gram`，不能用示例系数假装完成称重校准。
+从 `0.2.0.dev1` 开始，新步骤事件使用 `mark`。部署时先更新 RK3576 中枢，再更新 RV1106 采集端；新中枢仍接受旧事件日志。已有配置中的旧外设字段会被忽略，推荐采用新的示例配置。安装版本和产物摘要按 [发布流程](releases.md) 记录。
 
 ## 7. 恢复
 
