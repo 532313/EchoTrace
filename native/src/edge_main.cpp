@@ -198,6 +198,7 @@ public:
           if (!download_)
             throw std::runtime_error("feedback audio write failed");
           download_bytes_ += packet.payload.size();
+          if (download_kind_ == "artifact") export_bytes_ = download_bytes_;
           ++download_sequence_;
           return;
         }
@@ -363,6 +364,9 @@ public:
     value["voice_running"] = voice_running_.load();
     value["voice_started_us"] = Json::UInt64(voice_started_us_.load());
     value["player"] = player_;
+    const auto total = export_total_.load();
+    value["export_progress"] = total ?
+        int(std::min(export_bytes_.load(), total) * 100 / total) : -1;
     value["error"] = capture_error_.empty() ? last_error_ : capture_error_;
     return value;
   }
@@ -412,6 +416,7 @@ public:
       auto message = request;
       message.removeMember("op");
       message["type"] = "app.request";
+      if (message["action"] == "export") { export_bytes_ = 0; export_total_ = 0; }
       if (message["id"].asString().empty() || json(message).size() > 4096)
         throw std::runtime_error("invalid app request");
       if (!outgoing_.push(message))
@@ -834,6 +839,7 @@ private:
           drain_closed_media();
           std::lock_guard<std::mutex> lock(state_mutex_);
           state_ = "stopped";
+          session_["ended_us"] = Json::UInt64(monotonic_us());
           capture_error_.clear();
         } else {
           if (op == "session.resume" && capture_faulted_)
@@ -866,18 +872,25 @@ private:
             throw std::runtime_error("media request queue full");
           requested_uploads_.insert(media_id);
         }
-      } else if (op == "playback.cache.begin") {
+      } else if (op == "playback.cache.begin" || op == "artifact.cache.begin") {
         std::lock_guard<std::mutex> lock(download_mutex_);
+        const bool artifact = op == "artifact.cache.begin";
         const auto name = args["id"].asString();
         const auto size = args["size_bytes"].asUInt64();
-        if (!component(name) || !size || size > 2 * 1024 * 1024)
+        if (!component(name) || !size || size > (artifact ? 128ULL : 2ULL) * 1024 * 1024)
           throw std::runtime_error("invalid feedback audio metadata");
+        if (artifact && fs::space(root_).available <
+            size + config_.get("reserve_mb", 256).asUInt64() * 1024 * 1024)
+          throw std::runtime_error("SD 空间不足，无法导出证据");
         if (download_.is_open())
           download_.close();
-        fs::create_directories(root_ / "playback");
-        for (const auto &entry : fs::directory_iterator(root_ / "playback"))
-          fs::remove(entry.path());
-        download_path_ = root_ / "playback" / (name + ".part");
+        const auto directory = root_ / (artifact ? "exports" : "playback");
+        fs::create_directories(directory);
+        for (const auto &entry : fs::directory_iterator(directory))
+          if (!artifact || entry.path().extension() == ".part") fs::remove(entry.path());
+        download_kind_ = artifact ? "artifact" : "playback";
+        if (artifact) { export_bytes_ = 0; export_total_ = size; }
+        download_path_ = directory / (name + ".part");
         download_id_ = name;
         download_size_ = size;
         download_bytes_ = 0;
@@ -887,9 +900,12 @@ private:
         download_.open(download_path_, std::ios::binary | std::ios::trunc);
         if (!download_)
           throw std::runtime_error("feedback cache unavailable");
-      } else if (op == "playback.cache.end") {
-        if (voice_running_) throw std::runtime_error("请先结束语音输入");
+      } else if (op == "playback.cache.end" || op == "artifact.cache.end") {
+        const bool artifact = op == "artifact.cache.end";
+        if (!artifact && voice_running_) throw std::runtime_error("请先结束语音输入");
         std::lock_guard<std::mutex> lock(download_mutex_);
+        if (download_kind_ != (artifact ? "artifact" : "playback"))
+          throw std::runtime_error("cache transfer kind mismatch");
         if (args["id"].asString() != download_id_ || !download_.is_open() ||
             download_bytes_ != download_size_)
           throw std::runtime_error("incomplete feedback audio");
@@ -898,10 +914,15 @@ private:
         if (sha256_file(download_path_) != download_hash_)
           throw std::runtime_error("feedback audio checksum mismatch");
         auto final = download_path_;
-        final.replace_extension(".wav");
+        final.replace_extension(artifact ? ".zip" : ".wav");
         fs::rename(download_path_, final);
-        acquire_media_lease();
-        capture_->play(final, 0);
+        if (artifact) {
+          sync_closed_file(final);
+          reply["path"] = final.string();
+        } else {
+          acquire_media_lease();
+          capture_->play(final, 0);
+        }
       } else if (op == "playback.start") {
         if (voice_running_) throw std::runtime_error("请先结束语音输入");
         if (args.get("screen", false).asBool() && state() != "stopped")
@@ -1102,6 +1123,8 @@ private:
       voice_cancelled_{false};
   std::atomic<bool> screen_stop_requested_{false};
   std::atomic<uint64_t> voice_started_us_{0};
+  std::atomic<uint64_t> export_bytes_{0}, export_total_{0};
+  std::string download_kind_;
   std::atomic<bool> connected_{false}, connecting_{false}, replay_pending_{false},
       chunk_ack_{false};
   BoundedQueue<Json::Value> commands_{64}, outgoing_{128};

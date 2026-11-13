@@ -99,6 +99,7 @@ class Devices:
         self.store, self.settings = store, settings
         self.connected = {}
         self.fetching = {}
+        self.cache_locks = {}
 
     async def command(self, device_id, operation, arguments=None, timeout=8):
         peer = self.connected.get(device_id)
@@ -143,28 +144,38 @@ class Devices:
         return result
 
     async def send_audio(self, device_id, path):
-        size = path.stat().st_size
-        if size > 2 * 1024 * 1024:
-            raise ValueError("spoken feedback exceeds the bounded audio cache")
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        audio_id = "speech-" + identifier()
-        await self.command(
-            device_id,
-            "playback.cache.begin",
-            {"id": audio_id, "size_bytes": size, "sha256": digest},
-        )
-        peer = self.connected.get(device_id)
-        if not peer:
-            raise Conflict("device disconnected during audio feedback")
-        async with peer["send_lock"]:
-            with path.open("rb") as source:
-                sequence = 0
-                for chunk in iter(lambda: source.read(65536), b""):
-                    await peer["socket"].send_bytes(
-                        Packet(MEDIA_CHUNK, sequence, 0, 0, chunk).pack()
-                    )
-                    sequence += 1
-        return await self.command(device_id, "playback.cache.end", {"id": audio_id})
+        return await self._send_cache(device_id, path, "playback", 2 * 1024 * 1024)
+
+    async def send_asset(self, device_id, path):
+        return await self._send_cache(device_id, path, "artifact", 128 * 1024 * 1024)
+
+    async def _send_cache(self, device_id, path, prefix, limit):
+        lock = self.cache_locks.setdefault(device_id, asyncio.Lock())
+        async with lock:
+            size = path.stat().st_size
+            if not 0 < size <= limit:
+                raise ValueError("文件超过终端缓存上限")
+            def digest_file():
+                digest = hashlib.sha256()
+                with path.open("rb") as source:
+                    for block in iter(lambda: source.read(65536), b""):
+                        digest.update(block)
+                return digest.hexdigest()
+            digest = await asyncio.to_thread(digest_file)
+            transfer_id = ("speech-" if prefix == "playback" else "export-") + identifier()
+            peer = self.connected.get(device_id)
+            if not peer:
+                raise Conflict("记录终端已离线")
+            await self.command(device_id, prefix + ".cache.begin",
+                {"id": transfer_id, "size_bytes": size, "sha256": digest})
+            if self.connected.get(device_id) is not peer:
+                raise Conflict("传输期间连接已改变，请重试")
+            async with peer["send_lock"]:
+                with path.open("rb") as source:
+                    for sequence, chunk in enumerate(iter(lambda: source.read(65536), b"")):
+                        await peer["socket"].send_bytes(Packet(MEDIA_CHUNK, sequence, 0, 0, chunk).pack())
+            return await self.command(device_id, prefix + ".cache.end",
+                                      {"id": transfer_id}, timeout=30)
 
     def list(self):
         now = time.monotonic()
@@ -693,7 +704,7 @@ def create_app(settings=None):
             path, media_type="application/zip", filename="EchoTrace-evidence.zip"
         )
 
-    terminal = TerminalApp(settings, store, memory, devices, session_create)
+    terminal = TerminalApp(settings, store, memory, devices, session_create, session_delete, note_update)
 
     @app.websocket("/ws/device")
     async def device_socket(websocket: WebSocket):
@@ -873,7 +884,11 @@ def create_app(settings=None):
                     else:
                         result = await terminal.handle(device_id, peer, action, args)
                     reply.update(ok=True, data=result)
-                except (ValueError, Conflict, NotFound, ValidationError, ModelUnavailable) as error:
+                except NotFound:
+                    reply["error"] = "这条记录已不可用，请返回刷新列表"
+                except ValidationError:
+                    reply["error"] = "输入不符合要求，请检查名称或笔记长度"
+                except (ValueError, Conflict, ModelUnavailable) as error:
                     reply["error"] = str(error)[:500]
                 except Exception:
                     logger.exception("Terminal action failed: %s", reply["action"])

@@ -35,20 +35,26 @@ class ScreenPlayer:
             with contextlib.suppress(asyncio.CancelledError):
                 await task
 
-    async def start(self, device_id, anchor_id, offset_ms=0):
+    async def start(self, device_id, anchor_id, offset_ms=None):
         async with self.locks.setdefault(device_id, asyncio.Lock()):
             return await self._start(device_id, anchor_id, offset_ms)
 
-    async def _start(self, device_id, anchor_id, offset_ms=0):
+    async def _start(self, device_id, anchor_id, offset_ms=None):
         peer = self.devices.connected.get(device_id)
         if not peer or peer["capture_state"] not in ("stopped", "unknown"):
             raise Conflict("请先结束录制，再回看原始片段")
         await self.cancel(device_id)
         evidence = self.store.evidence(anchor_id)
         plan = make_playback_plan(evidence)
+        track_ends = [max(m["end_us"] for m in plan[kind]) for kind in ("video", "audio") if plan[kind]]
+        if track_ends: plan["end_us"] = min(plan["end_us"], *track_ends)
         duration = max(0, (plan["end_us"] - plan["begin_us"]) // 1000)
         if not duration:
             raise Conflict("这一步没有可播放的时间范围")
+        if offset_ms is None:
+            sources = plan["video"] or plan["audio"]
+            if not sources: raise Conflict("这一步没有原始音视频")
+            offset_ms = max(0, (min(m["start_us"] for m in sources) - plan["begin_us"]) // 1000)
         offset_ms = int(offset_ms)
         if not 0 <= offset_ms < duration:
             raise ValueError("跳转位置超出片段范围")
