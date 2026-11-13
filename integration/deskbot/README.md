@@ -1,10 +1,14 @@
 # EchoTrace 作为 Echo-Mate 桌面应用
 
+当前安装和启动请优先阅读 [dev2 安装记录](../../docs/deployment-dev2.md)，日常使用见 [小屏操作](../../docs/small-screen.md)。本文下半部分保留 2026-11-13 的历史安装路径与旧链路。
+
 ## 集成边界
 
 实际桌面源码是 WSL 的 `/home/guan/Echo-Mate/Demo/DeskBot_demo`。`baseline.json` 记录了打补丁前九个文件的 SHA-256（其中三个来自相邻的 `yolov5_demo`）；Mac 上的同名副本较旧，不能直接覆盖 WSL 版本。
 
 `0001-echotrace-app.patch` 只在设置 `ECHOTRACE_APP_ROOT` 时生效：保留原有 12 个页面及其位置，在抽屉末尾增加“记忆”，并从原聊天和 AI 相机入口协调声画设备。未设置该选项时，原桌面构建行为保持原样。原电机功能及引脚不作修改，记忆 App 使用触屏与语音操作。
+
+`0004-app-launch.patch` 增加可选的 `ECHOTRACE_OPEN_APP` 启动目标，默认仍进入原首页。
 
 `0002-ai-camera-backend.patch` 和 `0003-ai-camera-page.patch` 修复隔离构建中的原 AI 相机失败路径。之前上板遇到 NPU 连续内存申请失败，随后出现内核 Oops；完整日志在 `docs/kernel-oops-2026-11-13.log`。补丁检查模型和缓冲分配结果，按 RKNN API 要求先释放张量内存再销毁上下文，避免重复释放，并限制检测文字长度。页面在启动前检查 `/proc/buddyinfo`，启动或推理失败时提示并退出。内核驱动故障是否完全消除仍须实板复测，用户态检查不能替代驱动修复。
 
@@ -36,6 +40,7 @@ ln -s "$src/yolov5_demo/cpp/lib" "$work/yolov5_demo/cpp/lib"
 patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0001-echotrace-app.patch
 patch -d "$work" -p1 < /home/guan/EchoTrace/integration/deskbot/0002-ai-camera-backend.patch
 patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0003-ai-camera-page.patch
+patch -d "$work/DeskBot_demo" -p1 < /home/guan/EchoTrace/integration/deskbot/0004-app-launch.patch
 cd "$work/DeskBot_demo"
 cmake -S . -B build-echotrace -DTARGET_ARM=ON \
   -DECHOTRACE_APP_ROOT=/home/guan/EchoTrace -DCMAKE_BUILD_TYPE=Release
@@ -74,7 +79,7 @@ start-stop-daemon -S -b -m -p /run/echotrace-deskbot.pid \
 
 先检查 PID 文件和 `/proc/<pid>/exe`，避免重复启动。当前采集程序是 `/root/echotrace/echotrace-edge-integrated`，仍使用原来的 SD 数据、配置、socket 和 Hub 地址；完整启动参数可由 `ps -o pid,args` 核对。
 
-使用时从 Echo-Mate 首页打开底部抽屉，向下滚到“记忆”。选择项目后开始、标记、暂停或结束。回到首页后录制仍持续，状态可重新进入“记忆”查看。详细文字查询、证据视频和导出仍在鲁班猫的 Web/Qt 工作台完成。当前链路经 WSL 与 Mac 转发，断开后小屏会显示离线，但 SD 原件记录继续；双板 USB 直连尚未验证。
+使用时从 Echo-Mate 首页打开底部抽屉，向下滚到“记忆”。选择项目后开始、标记、暂停或结束。回到首页后录制仍持续，状态可重新进入“记忆”查看。当前 dev2 已支持小屏项目管理、历史、语音与文字查询、声画回放、笔记整理、对照和 SD 导出；Web/Qt 可选。当前链路经 WSL 与 Mac 转发，断开后小屏会显示离线，但 SD 原件记录继续；双板 USB 直连尚未验证。
 
 ## 恢复原显示
 

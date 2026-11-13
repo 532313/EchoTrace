@@ -1,0 +1,25 @@
+#!/bin/sh
+# Optional late-start wrapper for boards whose vendor modules load in S99.
+# Install this OR the individual S95/S96 init entries, never both.
+set -eu
+env_file=${ECHOTRACE_SERVICE_ENV:-/etc/echotrace/edge.env}
+[ ! -f "$env_file" ] || . "$env_file"
+prefix=${ECHOTRACE_PREFIX:-/opt/echotrace}
+case "${1:-}" in
+start)
+    if ! sh "$prefix/S95echotrace" start; then
+        echo 'Recording service is unavailable; the desktop will still start' >&2
+    fi
+    sh "$prefix/S96echotrace-deskbot" start
+    ;;
+stop)
+    sh "$prefix/S96echotrace-deskbot" stop
+    sh "$prefix/S95echotrace" stop
+    ;;
+restart) "$0" stop; "$0" start ;;
+status)
+    sh "$prefix/S95echotrace" status
+    sh "$prefix/S96echotrace-deskbot" status
+    ;;
+*) echo 'usage: S99z_echotrace start|stop|restart|status' >&2; exit 2 ;;
+esac

@@ -2,7 +2,7 @@
 
 EchoTrace 是 Echo-Mate 桌面里的“记忆”App。RV1106 保存操作视频和声音，鲁班猫 3 负责离线识别、检索和证据回放。
 
-**当前是开发版。** 小屏已有选择项目、开始、标记、暂停、继续和结束；新建项目、完整历史、文字检索、视频回放和导出目前在浏览器完成。完整小屏流程见 [开发任务](docs/roadmap.md)。原聊天等应用沿用原配置。
+**当前为 0.2.0.dev2 开发版，已部署到两块板。** 小屏有“记录 / 项目 / 历史 / 提问”四页，支持语音命名、录制预览、步骤回放、笔记整理、画面对照和导出到 SD。直接使用见 [小屏操作](docs/small-screen.md)，当前实板启动和回退见 [本次安装](docs/deployment-dev2.md)。原聊天等应用沿用原配置；现有接线仍通过 WSL 和 Mac 转发。
 
 第一次按顺序读；以后直接跳到需要的章节：
 
@@ -524,24 +524,22 @@ for so in libasound.so.2 libstdc++.so.6 libgcc_s.so.1 \
 done
 cp bsp/rv1106/S95echotrace bsp/rv1106/S96echotrace-deskbot build/rv1106-install/echotrace/
 cp config/edge.example.json build/rv1106-install/echotrace/edge.json
+cp bsp/rv1106/S99z_echotrace build/rv1106-install/echotrace/
 git rev-parse HEAD > build/rv1106-install/echotrace/SOURCE_COMMIT
 .venv/bin/python -m echotrace --version > build/rv1106-install/echotrace/VERSION
 ~~~
 
 这些库从同一 ARM sysroot 复制，覆盖采集服务和原桌面的依赖。任何 cp 报错都先修正路径，不继续打包；不复制或替换系统的 libc 和加载器。
 
-将这次安装的启动脚本改为现有 SSH 链路和新的数据目录。只改暂存文件，不改仓库脚本：
+为本教程写一份安装配置，指定 SSH 链路和新数据目录。服务脚本本身无需修改：
 
 ~~~sh
 # [WSL｜~/EchoTrace-git]
-python3 - <<'PY'
-from pathlib import Path
-p = Path("build/rv1106-install/echotrace/S95echotrace")
-text = p.read_text()
-text = text.replace("ws://192.168.77.1:18081/ws/device", "ws://127.0.0.1:18081/ws/device")
-text = text.replace("/mnt/sdcard/echotrace", "/mnt/sdcard/echotrace-guide")
-p.write_text(text)
-PY
+cat > build/rv1106-install/echotrace/edge.env <<'EOF'
+ECHOTRACE_PREFIX=/opt/echotrace
+ECHOTRACE_DATA=/mnt/sdcard/echotrace-guide
+ECHOTRACE_HUB=ws://127.0.0.1:18081/ws/device
+EOF
 "$ET_CROSS"strip --strip-unneeded build/rv1106-install/echotrace/bin/echotrace-edge build/rv1106-install/echotrace/deskbot/bin/main build/rv1106-install/echotrace/lib/*.so*
 .venv/bin/python scripts/release.py artifact --target rv1106 --component app \
   --file build/rv1106-install/echotrace/bin/echotrace-edge \
@@ -563,7 +561,7 @@ strip 去掉调试符号以缩小体积；artifacts.manifest.json 记录版本�
 cat /mnt/sdcard/echotrace/state.json
 ~~~
 
-首次安装且没有该文件时跳过。已有本项目开发安装时，停止文档记录的两个旧进程：
+首次安装且没有该文件时跳过。当前 dev2 已安装时，按 [实板安装记录](docs/deployment-dev2.md)停止并移出自动启动入口，再进行另一套教程安装；已有更早开发安装时，停止文档记录的两个旧进程：
 
 ~~~sh
 # [Echo｜任意目录；仅旧开发安装存在时执行]
@@ -618,6 +616,10 @@ if [ -f /etc/echotrace/edge.json ]; then
     cp -p /etc/echotrace/edge.json /etc/echotrace/edge.json.before-guide
 fi
 cp /opt/echotrace/edge.json /etc/echotrace/edge.json
+if [ -f /etc/echotrace/edge.env ]; then
+    cp -p /etc/echotrace/edge.env /etc/echotrace/edge.env.before-guide
+fi
+cp /opt/echotrace/edge.env /etc/echotrace/edge.env
 if [ -f /etc/echotrace/token ]; then
     cp -p /etc/echotrace/token /etc/echotrace/token.before-guide
 fi
@@ -739,27 +741,25 @@ cat /mnt/sdcard/echotrace-guide/state.json
 
 这次只手动启动，没有把脚本复制到 /etc/init.d。整机开机自启尚未作为完成品交付，重启后按第 7.1 节启动。
 
-### 6.5 真正录一次，查一次
+### 6.5 只用 Echo 小屏完成一次记录和查询
 
-**[Mac｜浏览器]** 打开 <http://127.0.0.1:18084>。左下角点齿轮，填写 6.2 的同一令牌；网页提示未授权时也从这里填写。
+**[Echo 屏幕]** 打开首页底部抽屉，向下滚动，点“记忆”。
 
-**[Mac｜任意目录]** 用下面的命令把令牌放到剪贴板，再到网页输入框按 Command+V 粘贴：
+1. 点“项目”→“新建项目”。保留默认名称或点“语音”，说“我的接线记录”，说完点“结束”，确认后点“保存”。
+2. 点“记录”→“开始记忆”。看到“记录中”、彩色预览和时长后开始操作。
+3. 点“记这一步”，同时口述“更换排线是因为接触不良”。暂停时点“暂停/继续”；返回首页仍记录。
+4. 点“结束记忆”。到“历史”选择本次会话，等待口述转写完成，点步骤看原图、口述和描述。
+5. 点“提问”→“语音提问”，说“为什么更换排线”，说完点“结束说话”；也能点“输入问题”用键盘输入。
+6. 点回答下方的候选，进入步骤详情，点“播放”。支持暂停/继续、拖动、跨片段播放，小屏约 5fps。
+7. 在详情中向上滑动，可“改笔记”、“导出 SD”或设置画面 A；打开另一步可对照。回到会话内点“继续”开始后续记录。
 
-~~~sh
-pbcopy < /private/tmp/echotrace-guide.token
-~~~
+未录制时也能主动语音提问和命名，最长一次约 12 秒。录制期间直接口述，也可说“查一下，为什么更换排线”；它经过短段闭合、识别和检索后返回。模型处理有等待时间，完成状态以屏幕提示为准。
 
-1. 点“＋ 新建项目”，输入“我的接线记录”。
-2. **[Echo 屏幕]** 进入“记忆”，选择该项目，点“开始记忆”。
-3. 操作时点“记下这一步”，口述“更换排线是因为接触不良”。
-4. 可点“暂停 / 继续”；返回原桌面仍继续记录。录制时进入原聊天或 AI 相机会受设备锁限制。
-5. 点“结束记忆”。**[浏览器]** 选择这次会话，等待语音转写和关键帧任务完成。
-6. 输入“为什么更换排线”，点“查找记忆”；点结果进入证据。
-7. 原片未缓存时点“获取原始片段”，就绪后播放；可编辑笔记、选两步对照或导出。
+录制时进入原聊天或 AI 相机会提示先结束，离开记忆页不停止采集。详细按钮、删除确认和异常处理见 [小屏操作](docs/small-screen.md)。
 
-录制中也可说“查一下，为什么更换排线”。它经过短段闭合、识别和检索后返回，**不是即时语音助手**。未录制时的主动语音提问、小屏完整历史与视频回放仍待开发。
+**可选大屏：** [Mac 浏览器] 打开 <http://127.0.0.1:18084>，左下角点齿轮填写同一令牌。第 6.2 节教程生成的令牌可在 Mac 用 `pbcopy < /private/tmp/echotrace-guide.token` 放入剪贴板，再粘贴到自己的本地网页。网页提供更大尺寸的时间线和原片。
 
-视频是 MP4，声音是单独的 WAV；直接打开 MP4 没有声音是正常的，工作台会按时间联合播放。导出 ZIP 是选定步骤的证据包，不是整个数据库备份。
+原视频 MP4 与声音 WAV 分开保存，工作台按时间联合播放；直接打开 MP4 没有声音是正常的。导出 ZIP 是所选步骤的证据包，不是整个数据库备份，默认保存在 Echo 数据目录的 exports 子目录。
 
 ### 6.6 可选：在鲁班猫显示器打开 Qt 工作台
 
@@ -781,7 +781,7 @@ ECHOTRACE_TOKEN="$(cat runtime/hub.token)" build/rk3576/echotrace-workbench --hu
 1. **[RK]** 运行 6.1；已有后台时不重复启动。
 2. **[Mac]** 打开 6.3 的两个 SSH 转发终端。
 3. **[Echo]** 运行 6.4 的两个 start 命令。
-4. **[Mac 浏览器]** 打开 18084，填写令牌；**[Echo 屏幕]** 打开“记忆”。
+4. **[Echo 屏幕]** 打开“记忆”。需要大屏时再打开 Mac 浏览器的 18084。
 
 原件在 Echo 的 /mnt/sdcard/echotrace-guide；索引、缓存和导出在 RK 的 /root/EchoTrace-git/runtime/workbench。停止程序或升级时保留这两个目录。
 
@@ -843,7 +843,7 @@ sh /opt/echotrace/S95echotrace start
 sh /opt/echotrace/S96echotrace-deskbot start
 ~~~
 
-配置也改过时，从部署前备份恢复 /etc/echotrace/edge.json；更换令牌前同样备份并成对恢复两端令牌。数据库有格式变化时使用对应迁移和备份，不只回退二进制。
+配置也改过时，从部署前备份恢复 /etc/echotrace/edge.json 和 edge.env；更换令牌前同样备份并成对恢复两端令牌。数据库有格式变化时使用对应迁移和备份，不只回退二进制。
 
 首次采用本教程安装、没有 /opt 备份时，原来的 /root/echotrace 开发安装仍在；恢复步骤见 [原开发安装说明](integration/deskbot/README.md)。
 

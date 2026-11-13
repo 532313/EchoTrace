@@ -35,7 +35,7 @@ start)
     attempts=0
     while [ ! -S "$socket" ]; do
         attempts=$((attempts + 1))
-        [ "$attempts" -le 5 ] || { echo 'EchoTrace capture socket is not ready' >&2; exit 1; }
+        [ "$attempts" -le 5 ] || { echo 'Capture is unavailable; starting the original desktop apps anyway' >&2; break; }
         sleep 1
     done
     umask 077
