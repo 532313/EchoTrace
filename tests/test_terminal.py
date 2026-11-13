@@ -84,7 +84,7 @@ class ScreenPlaybackTests(unittest.TestCase):
             store = Store(root)
 
             async def check():
-                queue, commands = asyncio.Queue(), []
+                queue, commands, audio_started = asyncio.Queue(), [], asyncio.Event()
 
                 class Socket:
                     async def send_json(self, message):
@@ -99,6 +99,7 @@ class ScreenPlaybackTests(unittest.TestCase):
 
                     async def command(self, device_id, operation, arguments=None):
                         commands.append((operation, arguments))
+                        if operation == "playback.start": audio_started.set()
                         return {"ok": True}
 
                 player = ScreenPlayer(settings, store, Devices())
@@ -123,9 +124,11 @@ class ScreenPlaybackTests(unittest.TestCase):
                     await frame(first["id"])
                     paused = await player.pause("echo")
                     self.assertEqual(paused["state"], "paused")
+                    audio_started.clear()
                     second = await player.resume("echo", 4500)
                     picture = await frame(second["id"])
                     self.assertGreaterEqual(picture["position_ms"], 4500)
+                    await asyncio.wait_for(audio_started.wait(), 2)
                     self.assertTrue(any(op == "playback.start" for op, _ in commands))
                     await player.stop("echo")
                     self.assertEqual(player.states["echo"]["state"], "stopped")

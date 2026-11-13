@@ -9,6 +9,7 @@ from .protocol import Packet, SCREEN_FRAME, SCREEN_BYTES, SCREEN_WIDTH, SCREEN_H
 from .store import Conflict, identifier
 
 FPS = 30
+VIDEO_LEAD_SECONDS = .12
 
 
 class ScreenPlayer:
@@ -87,7 +88,7 @@ class ScreenPlayer:
         if not state:
             return {"state": "stopped"}
         if state.get("clock") is not None:
-            cursor = state["origin_us"] + int((time.monotonic() - state["clock"]) * 1e6)
+            cursor = state["origin_us"] + max(0, int((time.monotonic() - state["clock"]) * 1e6))
             state["position_ms"] = min(state["duration_ms"] - 1,
                                       max(0, (cursor - state["begin_us"]) // 1000))
         await self.cancel(device_id)
@@ -184,8 +185,8 @@ class ScreenPlayer:
                     self.settings.ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "error",
                     "-ss", str((cursor - video["start_us"]) / 1e6), "-i", str(source),
                     "-t", str((stop - cursor) / 1e6), "-an", "-threads", "2",
-                    "-vf", "scale=192:108:flags=fast_bilinear:force_original_aspect_ratio=decrease,"
-                    "pad=192:108:(ow-iw)/2:(oh-ih)/2,fps=30",
+                    "-vf", "scale=160:90:flags=fast_bilinear:force_original_aspect_ratio=decrease,"
+                    "pad=160:90:(ow-iw)/2:(oh-ih)/2,fps=30",
                     "-pix_fmt", "rgb565le", "-f", "rawvideo", "pipe:1",
                     stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL)
                 segment_start = cursor
@@ -201,11 +202,11 @@ class ScreenPlayer:
                             break
                         raise Conflict("原视频解码中断，播放已暂停")
                     if state["clock"] is None:
-                        state["clock"] = time.monotonic()
+                        state["clock"] = time.monotonic() + VIDEO_LEAD_SECONDS
                         state.update(state="playing", message="" if plan["audio"] else "此段没有原始声音")
                         await self.publish(device_id, state)
                         audio_task = asyncio.create_task(self.audio(device_id, state, plan["audio"]))
-                    deadline = state["clock"] + (cursor - state["origin_us"]) / 1e6
+                    deadline = state["clock"] + (cursor - state["origin_us"]) / 1e6 - VIDEO_LEAD_SECONDS
                     delay = deadline - time.monotonic()
                     if delay > 0:
                         await asyncio.sleep(delay)
