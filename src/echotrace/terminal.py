@@ -5,7 +5,7 @@ import base64
 import io
 import subprocess
 import wave
-from .protocol import SessionCreate, QueryIn
+from .protocol import SessionCreate, QueryIn, NoteUpdate
 from .store import Conflict, NotFound, identifier
 from .terminal_playback import ScreenPlayer
 
@@ -13,10 +13,11 @@ from .terminal_playback import ScreenPlayer
 class TerminalApp:
     PAGE_SIZE = 8
 
-    def __init__(self, settings, store, memory, devices, start_session):
+    def __init__(self, settings, store, memory, devices, start_session, delete_session=None, update_note=None):
         self.settings, self.store, self.memory = settings, store, memory
         self.devices, self.start_session = devices, start_session
         self.player = ScreenPlayer(settings, store, devices)
+        self.delete_session, self.update_note = delete_session, update_note
 
     @staticmethod
     def page(args):
@@ -71,15 +72,36 @@ class TerminalApp:
 
     async def handle(self, device_id, peer, action, args):
         if action == "player.start":
-            return await self.player.start(device_id, str(args.get("anchor_id", "")), args.get("offset_ms", 0))
+            return await self.player.start(device_id, str(args.get("anchor_id", "")), args.get("offset_ms"))
         if action == "player.pause":
             return await self.player.pause(device_id)
         if action == "player.resume":
             return await self.player.resume(device_id)
         if action == "player.seek":
-            return await self.player.resume(device_id, int(args.get("offset_ms", 0)))
+            return await self.player.resume(device_id, int(args.get("offset_ms")))
         if action == "player.stop":
             return await self.player.stop(device_id)
+        if action == "anchor.note":
+            anchor_id = str(args.get("anchor_id", ""))
+            note = args.get("note", "")
+            if args.get("append"):
+                original = self.store.anchor(anchor_id)["note"]
+                note = original + ("\n" if original else "") + note
+            result = self.update_note(anchor_id, NoteUpdate(
+                note=note, revision=args.get("revision", 0)))
+            return {"id": anchor_id, "revision": result["revision"]}
+        if action == "session.delete":
+            await self.player.stop(device_id)
+            return await self.delete_session(str(args.get("session_id", "")))
+        if action == "export":
+            if peer["capture_state"] not in ("stopped", "unknown"):
+                raise Conflict("请先结束录制，再导出证据")
+            await self.player.stop(device_id)
+            evidence = self.store.evidence(str(args.get("anchor_id", "")))
+            await self.player.ready_media(evidence)
+            export_id, path = await asyncio.to_thread(self.memory.export, [evidence["anchor"]["id"]])
+            result = await self.devices.send_asset(device_id, path)
+            return {"id": export_id, "path": result["path"], "size_bytes": path.stat().st_size}
         if action == "query":
             return await self.query(str(args.get("text", "")), args.get("project_id"))
         if action == "voice":
@@ -144,9 +166,10 @@ class TerminalApp:
             evidence = self.store.evidence(str(args.get("anchor_id", "")))
             a = evidence["anchor"]
             result = {k: a[k] for k in ("id", "session_id", "revision", "source_time_us")}
-            result.update(note=a["note"][:600], asr_text=a["asr_text"][:600],
+            result.update(title=a["title"][:80], note=a["note"][:600], asr_text=a["asr_text"][:600],
                           caption=a["caption"][:300],
                           seconds=max(0, (a["source_time_us"] - a["started_us"]) // 1000000))
+            result["note_is_long"] = len(a["note"]) > 600
             video = next((m for m in evidence["media"] if m["kind"] == "video"
                           and m["start_us"] <= a["source_time_us"] < m["end_us"]), None)
             result["pending"] = False

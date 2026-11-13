@@ -362,6 +362,41 @@ class HttpTests(unittest.TestCase):
 
 @unittest.skipUnless(EDGE.is_file(), "native host binary is not built")
 class NativeIntegration(unittest.TestCase):
+    def test_export_cache_copies_complete_file_without_audio_playback(self):
+        import zipfile
+        with tempfile.TemporaryDirectory(prefix="et-export-", dir="/tmp") as directory:
+            root = Path(directory)
+            config = root / "edge.json"
+            config.write_text(json.dumps({"device_id": "export-edge", "reserve_mb": 0}))
+            archive = root / "source.zip"
+            with zipfile.ZipFile(archive, "w") as bundle:
+                bundle.writestr("evidence.json", json.dumps(
+                    {"source": "synthetic-fixture", "padding": "记忆" * 20000}, ensure_ascii=False))
+            server = RunningServer(root / "hub").start()
+            with (root / "edge.log").open("w") as log:
+                child = subprocess.Popen([
+                    str(EDGE), "--simulated", "--config", str(config),
+                    "--hub", server.url.replace("http://", "ws://") + "/ws/device",
+                    "--data", str(root / "edge"), "--socket", str(root / "control.sock")],
+                    env={**os.environ, "ECHOTRACE_TOKEN": "integration-test-token"},
+                    stdout=log, stderr=log)
+                try:
+                    for _ in range(60):
+                        if "export-edge" in server.app.state.devices.connected:
+                            break
+                        time.sleep(.05)
+                    loop = server.app.state.memory.worker_tasks[0].get_loop()
+                    result = asyncio.run_coroutine_threadsafe(
+                        server.app.state.devices.send_asset("export-edge", archive), loop).result(10)
+                    target = Path(result["path"])
+                    self.assertEqual(target.parent.resolve(), (root / "edge/exports").resolve())
+                    self.assertEqual(target.read_bytes(), archive.read_bytes())
+                    self.assertEqual(json.loads((root / "edge/state.json").read_text())["state"], "stopped")
+                finally:
+                    child.terminate()
+                    child.wait(8)
+                    server.stop()
+
     def test_capture_fault_is_visible_and_cannot_resume(self):
         with tempfile.TemporaryDirectory(prefix="et-fault-", dir="/tmp") as directory:
             tmp = Path(directory)

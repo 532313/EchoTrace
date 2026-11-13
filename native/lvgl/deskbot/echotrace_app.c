@@ -19,7 +19,7 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t worker;
 static int running, worker_started, queued, failed_send, rendering;
 static char command[4096], notice[320];
-static json_object *shared_status, *status;
+static json_object *shared_status, *status, *anchor_model;
 static lv_obj_t *screen, *status_label, *notice_label, *tabs, *project_select;
 static lv_obj_t *start_button, *mark_button, *pause_button, *stop_button;
 static lv_obj_t *result_label, *project_label, *dialog, *editor;
@@ -28,15 +28,26 @@ static lv_image_dsc_t live_descriptor;
 static uint8_t live_data[128 * 72 * 2];
 static uint64_t live_stamp;
 
+static char compare_anchor[100], compare_caption[600];
+static uint8_t compare_original[THUMB_BYTES], compare_second[THUMB_BYTES];
+static uint8_t compare_small[2][128 * 72 * 2];
+static lv_image_dsc_t compare_descriptors[2];
+static void confirm_delete(void);
+static void export_click(lv_event_t *event);
+static void compare_click(lv_event_t *event);
+
+
 static int edit_mode;
-static lv_obj_t *voice_button, *dialog_voice, *query_list, *question_label, *speak_button;
+static lv_obj_t *voice_button, *dialog_voice, *query_list, *question_label, *speak_button, *edit_hint;
 static char spoken_answer[2400];
 static void render_query(json_object *data);
 static void voice_click(lv_event_t *event);
 
 static lv_timer_t *timer;
 static char selected_project[100], pending_id[100], pending_action[64];
-static char edit_project[100], old_choices[4096], last_query[100];
+static char edit_project[100], edit_anchor[100], old_choices[4096], last_query[100];
+static uint64_t edit_revision;
+static int edit_append;
 static uint64_t pending_since;
 
 static void copy(char *out, size_t size, const char *text) {
@@ -264,7 +275,7 @@ static void close_dialog(lv_event_t *event) {
     if (dialog && *pending_id && !strcmp(pending_action, "voice")) {
         operation("voice.cancel"); pending_id[0] = 0;
     }
-    if (dialog) { lv_obj_delete(dialog); dialog = NULL; editor = dialog_voice = NULL; }
+    if (dialog) { lv_obj_delete(dialog); dialog = NULL; editor = dialog_voice = edit_hint = NULL; }
 }
 static void save_project(lv_event_t *event) {
     (void)event;
@@ -274,19 +285,34 @@ static void save_project(lv_event_t *event) {
         putstr(args, "text", lv_textarea_get_text(editor));
         if (*selected_project) putstr(args, "project_id", selected_project);
         action = "query";
+    } else if (edit_mode == 2) {
+        putstr(args, "anchor_id", edit_anchor);
+        putstr(args, "note", lv_textarea_get_text(editor));
+        json_object_object_add(args, "revision", json_object_new_int64(edit_revision));
+        json_object_object_add(args, "append", json_object_new_boolean(edit_append));
+        action = "anchor.note";
     } else {
         putstr(args, "name", lv_textarea_get_text(editor));
         if (*edit_project) putstr(args, "project_id", edit_project);
         action = *edit_project ? "project.rename" : "project.create";
     }
-    if (call(action, args)) close_dialog(NULL);
+    if (call(action, args)) {
+        if (edit_mode == 1) close_dialog(NULL);
+        else if (edit_hint) lv_label_set_text(edit_hint, "正在保存…");
+    }
     json_object_put(args);
 }
 static void project_editor(lv_event_t *event) {
     if (dialog) return;
     int kind = (int)(intptr_t)lv_event_get_user_data(event);
     int rename = kind == 1;
-    edit_mode = kind == 2 ? 1 : 0;
+    edit_mode = kind == 2 ? 1 : kind == 3 ? 2 : 0;
+    if (edit_mode == 2 && !anchor_model) { message("请先打开一个步骤"); return; }
+    if (edit_mode == 2) {
+        copy(edit_anchor, sizeof(edit_anchor), str(anchor_model, "id"));
+        edit_revision = number(anchor_model, "revision");
+        edit_append = boolean(anchor_model, "note_is_long");
+    }
     if (rename && !*selected_project) { message("请先选择项目"); return; }
     copy(edit_project, sizeof(edit_project), rename ? selected_project : "");
     dialog = lv_obj_create(screen);
@@ -295,7 +321,7 @@ static void project_editor(lv_event_t *event) {
     lv_obj_set_pos(dialog, 0, 0);
     lv_obj_set_style_pad_all(dialog, 4, 0);
     lv_obj_remove_flag(dialog, LV_OBJ_FLAG_SCROLLABLE);
-    label(dialog, edit_mode == 1 ? "输入问题" : rename ? "修改名称" : "新建项目", 108);
+    label(dialog, edit_mode == 2 ? "修改笔记" : edit_mode == 1 ? "输入问题" : rename ? "修改名称" : "新建项目", 108);
     dialog_voice = button(dialog, "语音", 62, voice_click, 0);
     lv_obj_set_pos(dialog_voice, 116, 0);
     lv_obj_t *cancel = button(dialog, "取消", 57, close_dialog, 0);
@@ -305,16 +331,19 @@ static void project_editor(lv_event_t *event) {
     editor = lv_textarea_create(dialog);
     lv_obj_set_pos(editor, 0, 38);
     lv_obj_set_size(editor, 306, 38);
-    lv_textarea_set_one_line(editor, true);
-    lv_textarea_set_max_length(editor, edit_mode == 1 ? 300 : 120);
+    lv_textarea_set_one_line(editor, edit_mode != 2);
+    lv_textarea_set_max_length(editor, edit_mode == 2 ? 600 : edit_mode == 1 ? 300 : 120);
     char suggested[100];
     snprintf(suggested, sizeof(suggested), "工作记录 %zu",
              (field(status, "projects") ? json_object_array_length(field(status, "projects")) : 0) + 1);
-    lv_textarea_set_text(editor, edit_mode == 1 ? "上次做到哪一步" : rename ? selected_name() : suggested);
+    lv_textarea_set_text(editor, edit_mode == 2 ? (boolean(anchor_model, "note_is_long") ? "" : str(anchor_model, "note")) : edit_mode == 1 ? "上次做到哪一步" : rename ? selected_name() : suggested);
     lv_obj_t *keyboard = lv_keyboard_create(dialog);
     lv_obj_set_pos(keyboard, 0, 84);
-    lv_obj_set_size(keyboard, 306, 139);
+    lv_obj_set_size(keyboard, 306, 122);
     lv_keyboard_set_textarea(keyboard, editor);
+    edit_hint = label(dialog, edit_mode == 2 && boolean(anchor_model, "note_is_long") ? "长笔记以追加方式保存，原文保留" : "可点语音输入中文，确认后保存", 302);
+    lv_obj_set_pos(edit_hint, 0, 211);
+    lv_label_set_long_mode(edit_hint, LV_LABEL_LONG_DOT);
     font_tree(dialog);
 }
 static void voice_click(lv_event_t *event) {
@@ -327,7 +356,7 @@ static void voice_click(lv_event_t *event) {
     json_object *request = object(), *args = object();
     char id[100]; snprintf(id, sizeof(id), "voice-%ld-%llu", (long)getpid(), (unsigned long long)now_us());
     putstr(request, "op", "voice.start"); putstr(request, "id", id);
-    putstr(args, "mode", dialog && edit_mode == 0 ? "project.name" : "query");
+    putstr(args, "mode", dialog && edit_mode == 0 ? "project.name" : dialog && edit_mode == 2 ? "note" : "query");
     if (*selected_project) putstr(args, "project_id", selected_project);
     json_object_object_add(request, "arguments", args);
     if (enqueue(request)) {
@@ -348,14 +377,42 @@ static void operation_click(lv_event_t *event) {
     }
 }
 static lv_obj_t *history_page, *detail, *detail_body, *detail_image, *detail_media_label;
-static json_object *anchor_model;
-static char history_session[100], opened_anchor[100];
+static char history_session[100], opened_anchor[100], history_title[1024];
 static int history_offset, history_more, detail_pending;
 static uint64_t detail_retry;
 static lv_obj_t *player_slider, *player_text, *player_pause;
 static uint64_t player_frame;
 static uint8_t detail_pixels[THUMB_BYTES];
 static lv_image_dsc_t detail_descriptor;
+
+
+static void delete_confirmed(lv_event_t *event) {
+    (void)event;
+    json_object *args = object(); putstr(args, "session_id", history_session);
+    if (call("session.delete", args) && edit_hint) {
+        lv_label_set_text(edit_hint, "正在删除，返回不撤销已确认的操作");
+        lv_obj_t *choices = lv_obj_get_parent(lv_event_get_target(event));
+        lv_label_set_text(lv_obj_get_child(lv_obj_get_child(choices, 0), 0), "返回");
+    }
+    json_object_put(args);
+}
+static void confirm_delete(void) {
+    if (dialog || !*history_session) return;
+    dialog = lv_obj_create(screen);
+    lv_obj_add_flag(dialog, LV_OBJ_FLAG_FLOATING);
+    lv_obj_set_pos(dialog, 0, 0); lv_obj_set_size(dialog, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_style_pad_all(dialog, 8, 0);
+    lv_obj_set_flex_flow(dialog, LV_FLEX_FLOW_COLUMN);
+    label(dialog, "删除这次记录？", 292);
+    label(dialog, *history_title ? history_title : history_session, 292);
+    label(dialog, "会删除本次会话和源端原片。已导出的 ZIP 保留。", 292);
+    lv_obj_t *choices = row(dialog, 34);
+    button(choices, "取消", 137, close_dialog, 0);
+    button(choices, "确认删除", 137, delete_confirmed, 0);
+    edit_hint = label(dialog, "", 292);
+    editor = dialog_voice = NULL;
+    font_tree(dialog);
+}
 
 static void request_history(int reset) {
     if (reset) { history_session[0] = 0; history_offset = 0; }
@@ -384,6 +441,7 @@ static void history_item(lv_event_t *event) {
 static void history_control(lv_event_t *event) {
     intptr_t op = (intptr_t)lv_event_get_user_data(event);
     if (*pending_id) { message("正在处理，请稍候"); return; }
+    if (op == 5) { confirm_delete(); return; }
     if (op == 0) request_history(1);
     else if (op == 1 || op == 2) {
         if (op == 1 && history_offset >= 8) history_offset -= 8;
@@ -467,9 +525,65 @@ static void player_seek(lv_event_t *event) {
     json_object_object_add(args, "offset_ms", json_object_new_int(value));
     call("player.seek", args); json_object_put(args);
 }
+
+static void export_click(lv_event_t *event) {
+    (void)event;
+    json_object *args = object(); putstr(args, "anchor_id", opened_anchor);
+    call("export", args); json_object_put(args);
+}
+static void compare_click(lv_event_t *event) {
+    (void)event;
+    if (!anchor_model) return;
+    uint8_t *pixels = *compare_anchor ? compare_second : compare_original;
+    FILE *file = fopen(str(anchor_model, "thumbnail_path"), "rb");
+    size_t count = file ? fread(pixels, 1, THUMB_BYTES, file) : 0;
+    if (file) fclose(file);
+    if (count != THUMB_BYTES) { message("请先取得这一步的原始画面"); return; }
+    if (!*compare_anchor) {
+        copy(compare_anchor, sizeof(compare_anchor), opened_anchor);
+        snprintf(compare_caption, sizeof(compare_caption), "画面 A · %s · %02llu:%02llu",
+                 str(anchor_model, "title"),
+                 (unsigned long long)(number(anchor_model, "seconds") / 60),
+                 (unsigned long long)(number(anchor_model, "seconds") % 60));
+        message("已设为画面 A；再打开另一步点对照");
+        return;
+    }
+    if (!strcmp(compare_anchor, opened_anchor)) {
+        compare_anchor[0] = 0; message("已清除画面 A"); return;
+    }
+    char caption[600];
+    snprintf(caption, sizeof(caption), "画面 B · %s · %02llu:%02llu",
+             str(anchor_model, "title"),
+             (unsigned long long)(number(anchor_model, "seconds") / 60),
+             (unsigned long long)(number(anchor_model, "seconds") % 60));
+    reader("两步原始画面对照");
+    lv_obj_t *images = row(detail_body, 75);
+    for (unsigned i = 0; i < 2; ++i) {
+        const uint8_t *source = i ? compare_second : compare_original;
+        for (unsigned y = 0; y < 72; ++y) for (unsigned x = 0; x < 128; ++x) {
+            size_t from = ((y * 90 / 72) * 160 + x * 160 / 128) * 2;
+            size_t to = (y * 128 + x) * 2;
+            compare_small[i][to] = source[from]; compare_small[i][to + 1] = source[from + 1];
+        }
+        lv_image_dsc_t *d = &compare_descriptors[i];
+        memset(d, 0, sizeof(*d)); d->header.magic = LV_IMAGE_HEADER_MAGIC;
+        d->header.cf = LV_COLOR_FORMAT_RGB565;
+        d->header.w = 128; d->header.h = 72; d->header.stride = 256;
+        d->data = compare_small[i]; d->data_size = sizeof(compare_small[i]);
+        lv_image_cache_drop(d);
+        lv_obj_t *image = lv_image_create(images); lv_image_set_src(image, d);
+    }
+    label(detail_body, compare_caption, 285); label(detail_body, caption, 285);
+    label(detail_body, "左 A，右 B。说明与原始画面分别保留。", 285);
+    font_tree(detail);
+}
+
 static void render_anchor(json_object *data) {
     if (detail && anchor_model && !strcmp(opened_anchor, str(data, "id")) &&
-        number(anchor_model, "revision") == number(data, "revision")) {
+        number(anchor_model, "revision") == number(data, "revision") &&
+        !strcmp(str(anchor_model, "note"), str(data, "note")) &&
+        !strcmp(str(anchor_model, "asr_text"), str(data, "asr_text")) &&
+        !strcmp(str(anchor_model, "caption"), str(data, "caption"))) {
         update_detail_image(data);
         lv_label_set_text(detail_media_label, str(data, "media_message"));
         json_object_put(anchor_model); anchor_model = json_object_get(data);
@@ -515,7 +629,11 @@ static void render_anchor(json_object *data) {
     }
     if (!*str(data, "note") && !*str(data, "asr_text") && !*str(data, "caption"))
         label(detail_body, "本步骤没有文字说明，可查看原始画面。", 285);
-    button(detail_body, "刷新画面", 280, detail_refresh, 0);
+    button(detail_body, "刷新详情", 280, detail_refresh, 0);
+    lv_obj_t *manage = row(detail_body, 32);
+    button(manage, "改笔记", 86, project_editor, 3);
+    button(manage, "导出 SD", 86, export_click, 0);
+    button(manage, *compare_anchor ? "对照画面" : "设为画面A", 104, compare_click, 0);
     detail_pending = boolean(data, "pending");
     detail_retry = now_us();
     font_tree(detail);
@@ -523,10 +641,12 @@ static void render_anchor(json_object *data) {
 static void render_history(json_object *data) {
     lv_obj_clean(history_page);
     lv_obj_t *controls = row(history_page, 32);
-    button(controls, *history_session ? "会话列表" : "刷新记录", 88, history_control, 0);
+    button(controls, *history_session ? "列表" : "刷新记录", *history_session ? 70 : 140, history_control, 0);
     if (*history_session) {
-        button(controls, "上次进度", 98, history_control, 3);
-        button(controls, "接着记录", 98, history_control, 4);
+        button(controls, "进度", 70, history_control, 3);
+        button(controls, "继续", 70, history_control, 4);
+        button(controls, "删除", 70, history_control, 5);
+        copy(history_title, sizeof(history_title), str(field(data, "session"), "title"));
     }
     lv_obj_t *list = lv_obj_create(history_page);
     lv_obj_set_width(list, LV_PCT(100));
@@ -627,15 +747,37 @@ static void render_query(json_object *data) {
 static void consume_reply(json_object *reply) {
     if (!*pending_id || strcmp(str(reply, "id"), pending_id)) return;
     pending_id[0] = 0;
-    if (!boolean(reply, "ok")) { message(str(reply, "error")); return; }
+    if (!boolean(reply, "ok")) {
+        message(str(reply, "error"));
+        if (dialog && edit_hint) lv_label_set_text(edit_hint, str(reply, "error"));
+        return;
+    }
     json_object *data = field(reply, "data");
     if (!strcmp(pending_action, "project.create") || !strcmp(pending_action, "project.rename")) {
+        close_dialog(NULL);
         select_project(str(data, "id"));
         message("项目已保存，可直接开始记忆");
         lv_tabview_set_active(tabs, 0, LV_ANIM_OFF);
     } else if (!strcmp(pending_action, "voice") && !strcmp(str(data, "mode"), "project.name")) {
         if (dialog && editor && edit_mode == 0) lv_textarea_set_text(editor, str(data, "transcript"));
         message("名称已识别，请确认后保存");
+    } else if (!strcmp(pending_action, "voice") && !strcmp(str(data, "mode"), "note")) {
+        if (dialog && editor && edit_mode == 2) {
+            if (*lv_textarea_get_text(editor)) lv_textarea_add_text(editor, "\n");
+            lv_textarea_add_text(editor, str(data, "transcript"));
+            if (edit_hint) lv_label_set_text(edit_hint, "已识别，请确认后保存");
+        }
+        message("口述已识别，确认后保存");
+    } else if (!strcmp(pending_action, "anchor.note")) {
+        close_dialog(NULL);
+        json_object *args = object(); putstr(args, "anchor_id", str(data, "id"));
+        call("anchor.open", args); json_object_put(args); message("笔记已保存");
+    } else if (!strcmp(pending_action, "session.delete")) {
+        close_dialog(NULL); close_detail(NULL); request_history(1);
+        message(!strcmp(str(data, "source_deletion"), "done") ? "会话和原片已删除" : "会话已删除，原片将在重连后清理");
+    } else if (!strcmp(pending_action, "export")) {
+        char saved[320]; snprintf(saved, sizeof(saved), "已导出到 SD：%s", str(data, "path"));
+        reader("导出完成"); label(detail_body, saved, 285); font_tree(detail); message("证据包已保存到 SD 卡");
     } else if (!strcmp(pending_action, "query") || !strcmp(pending_action, "voice")) {
         if (dialog && edit_mode == 1) close_dialog(NULL);
         render_query(data); lv_tabview_set_active(tabs, 3, LV_ANIM_OFF); message("");
@@ -664,7 +806,7 @@ static void refresh(lv_timer_t *unused) {
     if (failed_send) { pending_id[0] = 0; failed_send = 0; }
     pthread_mutex_unlock(&mutex);
     status = next;
-    if (*pending_id && now_us() - pending_since > (!strcmp(pending_action, "voice") ? 90000000ULL : 20000000ULL)) {
+    if (*pending_id && now_us() - pending_since > (!strcmp(pending_action, "export") ? 180000000ULL : !strcmp(pending_action, "voice") ? 90000000ULL : 20000000ULL)) {
         pending_id[0] = 0; message("后台未及时回复，请检查连接后重试");
     }
     if (status) consume_reply(field(status, "app_reply"));
@@ -769,6 +911,12 @@ static void refresh(lv_timer_t *unused) {
     if (dialog_voice) lv_label_set_text(lv_obj_get_child(dialog_voice, 0), listening ? "结束" : "语音");
     if (listening) lv_label_set_text(status_label, "正在听 · 点击结束说话");
     enabled(start_button, !active && !boolean(status, "voice_running") && !boolean(status, "playback_active"));
+    if (*pending_id && !strcmp(pending_action, "export")) {
+        json_object *progress = field(status, "export_progress");
+        int percent = progress ? json_object_get_int(progress) : -1;
+        if (percent >= 0) snprintf(hint, sizeof(hint), "正在导出到 SD · %d%%", percent);
+        else copy(hint, sizeof(hint), "正在准备原片与证据包…");
+    }
     const char *error = str(status, "error");
     lv_label_set_text(notice_label, *error ? error : hint);
     json_object *query = field(status, "query");
@@ -844,15 +992,16 @@ void ui_EchoTracePage_init(void) {
     pause_button = button(actions, "暂停/继续", 145, operation_click, 2);
     stop_button = button(actions, "结束记忆", 145, operation_click, 3);
     project_label = label(project, "工作台记录", 300);
+    lv_label_set_long_mode(project_label, LV_LABEL_LONG_DOT);
     actions = row(project, 34);
     button(actions, "新建项目", 145, project_editor, 0);
     button(actions, "修改名称", 145, project_editor, 1);
     button(project, "用此项目开始记忆", 295, operation_click, 0);
-    label(project, "可直接保存默认中文名称，或输入字母数字。", 300);
+    label(project, "语音可输入中文，保存后即可开始。", 300);
     button(history_page, "查看项目历史", 295, history_control, 0);
     label(history_page, "记录结束后，可在这里查看步骤并接着工作。", 295);
     lv_obj_add_event_cb(tabs, tab_changed, LV_EVENT_VALUE_CHANGED, NULL);
-    history_session[0] = opened_anchor[0] = 0;
+    history_session[0] = opened_anchor[0] = compare_anchor[0] = 0;
     history_offset = history_more = detail_pending = 0;
     detail = detail_body = detail_image = NULL;
     lv_obj_t *query_controls = row(memory, 32);
@@ -903,5 +1052,5 @@ void ui_EchoTracePage_deinit(void) {
     if (status) { json_object_put(status); status = NULL; }
     if (anchor_model) { json_object_put(anchor_model); anchor_model = NULL; }
     detail = detail_body = detail_image = NULL;
-    dialog = editor = dialog_voice = NULL;
+    dialog = editor = dialog_voice = edit_hint = NULL;
 }
