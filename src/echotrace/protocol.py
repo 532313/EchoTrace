@@ -10,7 +10,9 @@ from pydantic import BaseModel, ConfigDict, Field
 VERSION = 3
 HEADER = struct.Struct("!HHIIQI")
 MAX_PACKET = 65536
-AUDIO_OPUS, MEDIA_CHUNK = 1, 2
+AUDIO_OPUS, MEDIA_CHUNK, SCREEN_FRAME = 1, 2, 3
+SCREEN_WIDTH, SCREEN_HEIGHT = 160, 90
+SCREEN_BYTES = SCREEN_WIDTH * SCREEN_HEIGHT * 2
 
 
 class StrictModel(BaseModel):
@@ -89,12 +91,14 @@ class Packet:
     payload: bytes
 
     def pack(self) -> bytes:
-        if self.kind not in (AUDIO_OPUS, MEDIA_CHUNK):
+        if self.kind not in (AUDIO_OPUS, MEDIA_CHUNK, SCREEN_FRAME):
             raise ValueError("unknown binary type")
         if not self.payload or len(self.payload) > MAX_PACKET:
             raise ValueError("invalid payload length")
         if self.kind == AUDIO_OPUS and self.samples != 640:
             raise ValueError("one 40ms/16kHz Opus frame is required")
+        if self.kind == SCREEN_FRAME and (self.samples or len(self.payload) != 16 + SCREEN_BYTES):
+            raise ValueError("one complete screen frame and stream UUID are required")
         return (
             HEADER.pack(
                 VERSION,
@@ -112,10 +116,12 @@ class Packet:
         if len(data) < HEADER.size:
             raise ValueError("truncated header")
         version, kind, size, seq, stamp, samples = HEADER.unpack_from(data)
-        if version != VERSION or kind not in (AUDIO_OPUS, MEDIA_CHUNK):
+        if version != VERSION or kind not in (AUDIO_OPUS, MEDIA_CHUNK, SCREEN_FRAME):
             raise ValueError("unsupported version or binary type")
         if not 0 < size <= MAX_PACKET or len(data) != HEADER.size + size:
             raise ValueError("payload length must match exactly")
         if kind == AUDIO_OPUS and samples != 640:
             raise ValueError("one 40ms/16kHz Opus frame is required")
+        if kind == SCREEN_FRAME and (samples or size != 16 + SCREEN_BYTES):
+            raise ValueError("one complete screen frame and stream UUID are required")
         return cls(kind, seq, stamp, samples, data[HEADER.size :])

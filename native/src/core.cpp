@@ -1,4 +1,5 @@
 #include "echotrace/core.hpp"
+#include "echotrace/screen_frame.h"
 #include "picosha2.h"
 #include <algorithm>
 #include <array>
@@ -198,10 +199,12 @@ std::vector<uint8_t> decode_base64(const std::string &text, size_t maximum) {
 }
 
 std::vector<uint8_t> Packet::encode() const {
-  if ((kind != 1 && kind != 2) || payload.empty() || payload.size() > 65536)
+  if ((kind != 1 && kind != 2 && kind != 3) || payload.empty() || payload.size() > 65536)
     throw std::invalid_argument("invalid packet");
   if (kind == 1 && samples != 640)
     throw std::invalid_argument("audio frame must contain 640 samples");
+  if (kind == 3 && (samples || payload.size() != 16 + ET_SCREEN_PIXELS))
+    throw std::invalid_argument("invalid complete screen frame");
   std::vector<uint8_t> bytes;
   bytes.reserve(24 + payload.size());
   put_be(bytes, 3, 2);
@@ -222,8 +225,9 @@ Packet Packet::decode(const std::vector<uint8_t> &bytes) {
   p.source_us = get_be(bytes, 12, 8);
   p.samples = uint32_t(get_be(bytes, 20, 4));
   const auto n = get_be(bytes, 4, 4);
-  if ((p.kind != 1 && p.kind != 2) || !n || n > 65536 ||
-      bytes.size() != 24 + n || (p.kind == 1 && p.samples != 640))
+  if ((p.kind != 1 && p.kind != 2 && p.kind != 3) || !n || n > 65536 ||
+      bytes.size() != 24 + n || (p.kind == 1 && p.samples != 640) ||
+      (p.kind == 3 && (p.samples || n != 16 + ET_SCREEN_PIXELS)))
     throw std::invalid_argument("bad packet length or type");
   p.payload.assign(bytes.begin() + 24, bytes.end());
   return p;

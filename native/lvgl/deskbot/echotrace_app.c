@@ -1,5 +1,6 @@
 #include "echotrace_app.h"
 #include "ui.h"
+#include "echotrace/screen_frame.h"
 #include <errno.h>
 #include <json-c/json.h>
 #include <pthread.h>
@@ -50,6 +51,37 @@ static uint64_t edit_revision;
 static int edit_append;
 static uint64_t pending_since;
 static char entry_target[160];
+static lv_obj_t *player_view, *player_image, *player_rate, *player_heading;
+static lv_timer_t *video_timer;
+static int video_fd = -1, video_dirty, video_primed;
+static char video_socket[108], video_stream[33], display_report[1024];
+static uint8_t video_packet[ET_SCREEN_WIRE_BYTES], video_pixels[ET_SCREEN_PIXELS];
+#define VIDEO_QUEUE_SIZE 6
+static uint8_t video_queue[VIDEO_QUEUE_SIZE][ET_SCREEN_PIXELS];
+static unsigned video_head, video_count;
+static lv_image_dsc_t video_descriptor;
+static uint32_t video_sequence;
+static uint64_t player_controls_us;
+static uint64_t video_deadline;
+static uint64_t video_received, video_rendered, video_discarded, video_epoch, video_window, video_window_frames;
+static void close_player(lv_event_t *event);
+static void open_player(void);
+
+static void panel(lv_obj_t *item) {
+    lv_obj_set_style_bg_color(item, lv_color_hex(0xffffff), 0);
+    lv_obj_set_style_bg_opa(item, LV_OPA_COVER, 0);
+    lv_obj_set_style_text_color(item, lv_color_hex(0x20313f), 0);
+    lv_obj_set_style_border_width(item, 0, 0);
+    lv_obj_set_style_radius(item, 8, 0);
+    lv_obj_set_style_shadow_width(item, 0, 0);
+}
+static void set_text(lv_obj_t *item, const char *text) {
+    if (item && strcmp(lv_label_get_text(item), text)) lv_label_set_text(item, text);
+}
+static void destructive(lv_obj_t *item) {
+    lv_obj_set_style_bg_color(item, lv_color_hex(0xb53d4b), 0);
+    lv_obj_set_style_bg_color(item, lv_color_hex(0x902c38), LV_STATE_PRESSED);
+}
 
 static void open_at_startup(lv_timer_t *once) {
     lv_timer_delete(once);
@@ -176,6 +208,12 @@ static void *worker_main(void *unused) {
         char error[320] = "";
         json_object *request = json_object_new_object();
         json_object_object_add(request, "op", json_object_new_string("status"));
+        char report[1024];
+        pthread_mutex_lock(&mutex); copy(report, sizeof(report), display_report); pthread_mutex_unlock(&mutex);
+        if (*report) {
+            json_object *metrics = json_tokener_parse(report);
+            if (metrics) json_object_object_add(request, "display", metrics);
+        }
         json_object *reply = exchange(request, error, sizeof(error));
         json_object_put(request);
         pthread_mutex_lock(&mutex);
@@ -232,13 +270,21 @@ static lv_obj_t *label(lv_obj_t *parent, const char *text, int width) {
     lv_obj_set_width(item, width);
     lv_label_set_long_mode(item, LV_LABEL_LONG_WRAP);
     lv_label_set_text(item, text);
+    lv_obj_set_style_text_color(item, lv_color_hex(0x20313f), 0);
     return item;
 }
 static lv_obj_t *button(lv_obj_t *parent, const char *text, int width,
                         lv_event_cb_t callback, intptr_t action) {
     lv_obj_t *item = lv_button_create(parent);
     lv_obj_set_size(item, width, 32);
-    lv_obj_set_style_bg_color(item, lv_color_hex(0x27634e), 0);
+    panel(item);
+    lv_obj_set_style_radius(item, 7, 0);
+    lv_obj_set_style_bg_color(item, lv_color_hex(0x127d73), 0);
+    lv_obj_set_style_bg_color(item, lv_color_hex(0x096359), LV_STATE_PRESSED);
+    lv_obj_set_style_text_color(item, lv_color_hex(0xffffff), 0);
+    lv_obj_set_style_bg_color(item, lv_color_hex(0xe5eaee), LV_STATE_DISABLED);
+    lv_obj_set_style_text_color(item, lv_color_hex(0x82919b), LV_STATE_DISABLED);
+    lv_obj_set_style_pad_all(item, 3, 0);
     lv_obj_t *caption = lv_label_create(item);
     lv_label_set_text(caption, text);
     lv_obj_center(caption);
@@ -329,6 +375,7 @@ static void project_editor(lv_event_t *event) {
     if (rename && !*selected_project) { message("请先选择项目"); return; }
     copy(edit_project, sizeof(edit_project), rename ? selected_project : "");
     dialog = lv_obj_create(screen);
+    panel(dialog);
     lv_obj_add_flag(dialog, LV_OBJ_FLAG_FLOATING);
     lv_obj_set_size(dialog, LV_PCT(100), LV_PCT(100));
     lv_obj_set_pos(dialog, 0, 0);
@@ -412,6 +459,7 @@ static void delete_confirmed(lv_event_t *event) {
 static void confirm_delete(void) {
     if (dialog || !*history_session) return;
     dialog = lv_obj_create(screen);
+    panel(dialog);
     lv_obj_add_flag(dialog, LV_OBJ_FLAG_FLOATING);
     lv_obj_set_pos(dialog, 0, 0); lv_obj_set_size(dialog, LV_PCT(100), LV_PCT(100));
     lv_obj_set_style_pad_all(dialog, 8, 0);
@@ -421,7 +469,7 @@ static void confirm_delete(void) {
     label(dialog, "会删除本次会话和源端原片。已导出的 ZIP 保留。", 292);
     lv_obj_t *choices = row(dialog, 34);
     button(choices, "取消", 137, close_dialog, 0);
-    button(choices, "确认删除", 137, delete_confirmed, 0);
+    destructive(button(choices, "确认删除", 137, delete_confirmed, 0));
     edit_hint = label(dialog, "", 292);
     editor = dialog_voice = NULL;
     font_tree(dialog);
@@ -469,6 +517,7 @@ static void history_control(lv_event_t *event) {
 }
 static void close_detail(lv_event_t *event) {
     (void)event;
+    close_player(NULL);
     if (detail && *opened_anchor &&
         !strcmp(str(field(status, "player"), "anchor_id"), opened_anchor)) operation("screen.stop");
     if (detail) { lv_obj_delete(detail); detail = detail_body = detail_image = NULL; }
@@ -483,6 +532,7 @@ static void close_detail(lv_event_t *event) {
 static void reader(const char *title) {
     close_detail(NULL);
     detail = lv_obj_create(screen);
+    panel(detail);
     lv_obj_add_flag(detail, LV_OBJ_FLAG_FLOATING);
     lv_obj_set_pos(detail, 0, 0);
     lv_obj_set_size(detail, LV_PCT(100), LV_PCT(100));
@@ -493,6 +543,7 @@ static void reader(const char *title) {
     lv_obj_set_pos(heading, 62, 4);
     lv_label_set_long_mode(heading, LV_LABEL_LONG_DOT);
     detail_body = lv_obj_create(detail);
+    panel(detail_body);
     lv_obj_set_pos(detail_body, 0, 38);
     lv_obj_set_size(detail_body, 307, 190);
     lv_obj_set_style_pad_all(detail_body, 3, 0);
@@ -522,11 +573,13 @@ static void player_control(lv_event_t *event) {
     if (strcmp(str(status, "state"), "stopped") || boolean(status, "voice_running")) {
         message("请先结束录制或语音输入"); return;
     }
+    if (video_fd < 0) { message("画面通道未就绪，请重启记忆页"); return; }
     json_object *args = object(); putstr(args, "anchor_id", opened_anchor);
     const char *state = str(field(status, "player"), "state");
     const char *action = op == 0 ? "player.start" :
         !strcmp(state, "playing") || !strcmp(state, "loading") ? "player.pause" : "player.resume";
-    call(action, args); json_object_put(args);
+    if (call(action, args) && op == 0) open_player();
+    json_object_put(args);
 }
 static void player_seek(lv_event_t *event) {
     (void)event;
@@ -537,6 +590,146 @@ static void player_seek(lv_event_t *event) {
     json_object *args = object();
     json_object_object_add(args, "offset_ms", json_object_new_int(value));
     call("player.seek", args); json_object_put(args);
+}
+
+static void close_player(lv_event_t *event) {
+    (void)event;
+    if (!player_view) return;
+    operation("screen.stop");
+    lv_obj_delete(player_view);
+    player_view = player_image = player_rate = player_heading = NULL;
+    player_slider = player_text = player_pause = NULL;
+    video_dirty = video_primed = 0; video_head = video_count = 0;
+    lv_timer_resume(lv_display_get_refr_timer(lv_display_get_default()));
+    if (video_timer) lv_timer_set_period(video_timer, 8);
+    if (!strncmp(pending_action, "player.", 7)) pending_id[0] = 0;
+}
+static void open_player(void) {
+    if (player_view) return;
+    player_view = lv_obj_create(screen); panel(player_view);
+    lv_obj_add_flag(player_view, LV_OBJ_FLAG_FLOATING);
+    lv_obj_remove_flag(player_view, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_size(player_view, 320, 240); lv_obj_set_pos(player_view, -4, -4);
+    lv_obj_set_style_radius(player_view, 0, 0);
+    lv_obj_set_style_pad_all(player_view, 0, 0);
+    lv_obj_set_style_bg_color(player_view, lv_color_hex(0x101c2b), 0);
+    lv_obj_t *back = button(player_view, "返回", 54, close_player, 0);
+    lv_obj_set_pos(back, 4, 1); lv_obj_set_height(back, 28);
+    player_heading = label(player_view, "正在准备原始片段…", 251);
+    lv_obj_set_pos(player_heading, 63, 5);
+    lv_obj_set_style_text_color(player_heading, lv_color_hex(0xf3f7fb), 0);
+    lv_label_set_long_mode(player_heading, LV_LABEL_LONG_DOT);
+    player_text = label(player_view, "00:00\n00:00", (320 - ET_SCREEN_WIDTH) / 2 - 8);
+    lv_obj_set_pos(player_text, 6, 83);
+    lv_obj_set_style_text_color(player_text, lv_color_hex(0xf3f7fb), 0);
+    memset(video_pixels, 0, sizeof(video_pixels));
+    memset(&video_descriptor, 0, sizeof(video_descriptor));
+    video_descriptor.header.magic = LV_IMAGE_HEADER_MAGIC;
+    video_descriptor.header.cf = LV_COLOR_FORMAT_RGB565;
+    video_descriptor.header.w = ET_SCREEN_WIDTH; video_descriptor.header.h = ET_SCREEN_HEIGHT;
+    video_descriptor.header.stride = ET_SCREEN_WIDTH * 2;
+    video_descriptor.data = video_pixels; video_descriptor.data_size = sizeof(video_pixels);
+    player_image = lv_image_create(player_view);
+    lv_obj_set_pos(player_image, (320 - ET_SCREEN_WIDTH) / 2, 32 + (136 - ET_SCREEN_HEIGHT) / 2);
+    lv_image_set_src(player_image, &video_descriptor);
+    player_slider = lv_slider_create(player_view);
+    lv_obj_set_pos(player_slider, 13, 32 + (136 + ET_SCREEN_HEIGHT) / 2 + 3);
+    lv_obj_set_size(player_slider, 294, 4);
+    lv_obj_set_ext_click_area(player_slider, 14);
+    lv_slider_set_range(player_slider, 0, 1);
+    lv_obj_set_style_bg_color(player_slider, lv_color_hex(0x314557), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(player_slider, lv_color_hex(0x20c4b2), LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(player_slider, lv_color_hex(0xe5fff9), LV_PART_KNOB);
+    lv_obj_set_style_pad_all(player_slider, 1, LV_PART_KNOB);
+    lv_obj_add_event_cb(player_slider, player_seek, LV_EVENT_RELEASED, NULL);
+    lv_obj_t *controls = row(player_view, 42);
+    lv_obj_set_pos(controls, 5, 183); lv_obj_set_width(controls, 310);
+    button(controls, "重播", 88, player_control, 0);
+    player_pause = button(controls, "暂停", 112, player_control, 1);
+    destructive(button(controls, "停止", 98, player_control, 2));
+    for (uint32_t i = 0; i < lv_obj_get_child_count(controls); ++i)
+        lv_obj_set_height(lv_obj_get_child(controls, i), 40);
+    player_rate = label(player_view, "-- fps", (320 - ET_SCREEN_WIDTH) / 2 - 8);
+    lv_obj_set_pos(player_rate, (320 + ET_SCREEN_WIDTH) / 2 + 6, 96);
+    lv_obj_set_style_text_color(player_rate, lv_color_hex(0x9bb3c4), 0);
+    lv_label_set_long_mode(player_rate, LV_LABEL_LONG_DOT);
+    font_tree(player_view);
+    lv_obj_set_style_text_font(player_text, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_font(player_rate, &lv_font_montserrat_14, 0);
+    video_stream[0] = 0; video_dirty = 0;
+    player_controls_us = 0;
+    video_primed = 0; video_head = video_count = 0; video_deadline = 0;
+    lv_timer_pause(lv_display_get_refr_timer(lv_display_get_default()));
+    lv_timer_set_period(video_timer, 1);
+}
+static void video_flushed(lv_event_t *event) {
+    (void)event;
+    if (player_view && video_dirty) {
+        ++video_rendered; ++video_window_frames; video_dirty = 0;
+    }
+}
+static void draw_video(lv_timer_t *unused) {
+    (void)unused;
+    if (video_fd < 0) return;
+    json_object *player = field(status, "player");
+    for (int i = 0; i < 8; ++i) {
+        ssize_t got = recv(video_fd, video_packet, sizeof(video_packet), MSG_DONTWAIT | MSG_TRUNC);
+        if (got < 0) break;
+        et_screen_frame frame;
+        if (!player_view || !player_image || !et_screen_parse(video_packet, (size_t)got, &frame) ||
+            strcmp(str(player, "anchor_id"), opened_anchor) ||
+            !et_screen_matches(&frame, str(player, "stream_id"))) continue;
+        const char *stream = str(player, "stream_id");
+        if (strcmp(video_stream, stream)) {
+            copy(video_stream, sizeof(video_stream), stream);
+            video_received = video_rendered = video_discarded = video_window_frames = 0;
+            video_epoch = video_window = now_us(); video_sequence = frame.sequence;
+            video_head = video_count = 0; video_primed = 0; video_deadline = 0;
+        } else if (video_received && frame.sequence <= video_sequence) continue;
+        video_sequence = frame.sequence; ++video_received;
+        if (video_count == VIDEO_QUEUE_SIZE) {
+            video_head = (video_head + 1) % VIDEO_QUEUE_SIZE;
+            --video_count; ++video_discarded;
+        }
+        memcpy(video_queue[(video_head + video_count) % VIDEO_QUEUE_SIZE], frame.pixels, ET_SCREEN_PIXELS);
+        ++video_count;
+    }
+    uint64_t now = now_us();
+    if (!strcmp(str(player, "state"), "paused") || !strcmp(str(player, "state"), "stopped")) {
+        video_count = video_head = 0; video_primed = 0;
+    }
+    /* A four-frame startup cushion absorbs USB/SSH bursts. The six-frame cap
+     * bounds latency and memory; raw source evidence is never discarded. */
+    if (!video_primed && (video_count >= 4 || (video_count && !strcmp(str(player, "state"), "ended")))) {
+        video_primed = 1; video_deadline = now;
+    }
+    if (player_view && now >= video_deadline) {
+        if (video_primed && video_count) {
+            memcpy(video_pixels, video_queue[video_head], ET_SCREEN_PIXELS);
+            video_head = (video_head + 1) % VIDEO_QUEUE_SIZE; --video_count; video_dirty = 1;
+            lv_image_cache_drop(&video_descriptor); lv_obj_invalidate(player_image);
+        }
+        lv_refr_now(lv_display_get_default());
+        lv_timer_pause(lv_display_get_refr_timer(lv_display_get_default()));
+        if (!video_deadline || now - video_deadline > 100000)
+            video_deadline = now + 33333;
+        else video_deadline += 33333;
+    }
+    if (*video_stream && now - video_window >= 1000000) {
+        unsigned fps_milli = (unsigned)(video_window_frames * 1000000000ULL / (now - video_window));
+        char report[1024];
+        snprintf(report, sizeof(report), "{\"stream_id\":\"%s\",\"frames_received\":%llu,\"frames_rendered\":%llu,"
+                 "\"frames_discarded\":%llu,\"fps_milli\":%u,\"elapsed_us\":%llu}", video_stream,
+                 (unsigned long long)video_received, (unsigned long long)video_rendered,
+                 (unsigned long long)video_discarded, fps_milli, (unsigned long long)(now - video_epoch));
+        pthread_mutex_lock(&mutex); copy(display_report, sizeof(display_report), report); pthread_mutex_unlock(&mutex);
+        if (player_rate) {
+            char text[100]; snprintf(text, sizeof(text), "%u.%u fps",
+                                    fps_milli / 1000, (fps_milli % 1000) / 100);
+            set_text(player_rate, text);
+        }
+        video_window_frames = 0; video_window = now;
+    }
 }
 
 static void export_click(lv_event_t *event) {
@@ -591,6 +784,31 @@ static void compare_click(lv_event_t *event) {
     font_tree(detail);
 }
 
+static void detail_tool(lv_event_t *event) {
+    intptr_t op = (intptr_t)lv_event_get_user_data(event);
+    close_dialog(NULL);
+    if (op == 0) detail_refresh(NULL);
+    else if (op == 1) compare_click(NULL);
+    else export_click(NULL);
+}
+static void detail_more(lv_event_t *event) {
+    (void)event;
+    if (dialog || *pending_id) { message("请等待当前操作完成"); return; }
+    dialog = lv_obj_create(screen); panel(dialog);
+    lv_obj_add_flag(dialog, LV_OBJ_FLAG_FLOATING);
+    lv_obj_set_pos(dialog, 0, 0); lv_obj_set_size(dialog, 320, 240);
+    lv_obj_set_style_pad_all(dialog, 12, 0);
+    lv_obj_set_style_pad_row(dialog, 9, 0);
+    lv_obj_set_flex_flow(dialog, LV_FLEX_FLOW_COLUMN);
+    label(dialog, "步骤工具", 290);
+    button(dialog, "刷新详情和原图", 290, detail_tool, 0);
+    button(dialog, *compare_anchor ? "与画面 A 对照" : "设为对照画面 A", 290, detail_tool, 1);
+    button(dialog, "导出证据到 SD 卡", 290, detail_tool, 2);
+    button(dialog, "返回详情", 290, close_dialog, 0);
+    editor = dialog_voice = edit_hint = NULL;
+    font_tree(dialog);
+}
+
 static void render_anchor(json_object *data) {
     if (detail && anchor_model && !strcmp(opened_anchor, str(data, "id")) &&
         number(anchor_model, "revision") == number(data, "revision") &&
@@ -609,6 +827,8 @@ static void render_anchor(json_object *data) {
     snprintf(title, sizeof(title), "步骤 %02llu:%02llu",
              (unsigned long long)(seconds / 60), (unsigned long long)(seconds % 60));
     reader(title);
+    lv_obj_set_height(detail_body, 150);
+    lv_obj_set_flex_align(detail_body, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
     copy(opened_anchor, sizeof(opened_anchor), anchor_id);
     anchor_model = json_object_get(data);
     detail_image = lv_image_create(detail_body);
@@ -621,15 +841,11 @@ static void render_anchor(json_object *data) {
     detail_descriptor.data_size = sizeof(detail_pixels);
     detail_descriptor.data = detail_pixels;
     update_detail_image(data);
-    player_text = label(detail_body, "原始片段 · 点击播放", 285);
-    player_slider = lv_slider_create(detail_body);
-    lv_obj_set_size(player_slider, 275, 14);
-    lv_slider_set_range(player_slider, 0, 1);
-    lv_obj_add_event_cb(player_slider, player_seek, LV_EVENT_RELEASED, NULL);
-    lv_obj_t *play_controls = row(detail_body, 32);
-    button(play_controls, "播放", 78, player_control, 0);
-    player_pause = button(play_controls, "暂停/继续", 112, player_control, 1);
-    button(play_controls, "停止", 78, player_control, 2);
+    lv_obj_t *play_controls = row(detail, 33);
+    lv_obj_set_pos(play_controls, 0, 195); lv_obj_set_width(play_controls, 307);
+    button(play_controls, "回放", 98, player_control, 0);
+    button(play_controls, "改笔记", 98, project_editor, 3);
+    button(play_controls, "更多", 98, detail_more, 0);
     detail_media_label = label(detail_body, str(data, "media_message"), 285);
     if (*str(data, "note")) {
         label(detail_body, "你的笔记", 285); label(detail_body, str(data, "note"), 285);
@@ -642,11 +858,6 @@ static void render_anchor(json_object *data) {
     }
     if (!*str(data, "note") && !*str(data, "asr_text") && !*str(data, "caption"))
         label(detail_body, "本步骤没有文字说明，可查看原始画面。", 285);
-    button(detail_body, "刷新详情", 280, detail_refresh, 0);
-    lv_obj_t *manage = row(detail_body, 32);
-    button(manage, "改笔记", 86, project_editor, 3);
-    button(manage, "导出 SD", 86, export_click, 0);
-    button(manage, *compare_anchor ? "对照画面" : "设为画面A", 104, compare_click, 0);
     detail_pending = boolean(data, "pending");
     detail_retry = now_us();
     font_tree(detail);
@@ -662,6 +873,7 @@ static void render_history(json_object *data) {
         copy(history_title, sizeof(history_title), str(field(data, "session"), "title"));
     }
     lv_obj_t *list = lv_obj_create(history_page);
+    panel(list);
     lv_obj_set_width(list, LV_PCT(100));
     lv_obj_set_flex_grow(list, 1);
     lv_obj_set_style_pad_all(list, 1, 0);
@@ -686,13 +898,16 @@ static void render_history(json_object *data) {
             if (!end) end = number(item, "last_us");
             uint64_t started = number(item, "started_us");
             uint64_t seconds = end >= started ? (end - started) / 1000000 : 0;
-            snprintf(text, sizeof(text), "%s\n%llu 分 %llu 秒 · %llu 步 · %.8s",
+            snprintf(text, sizeof(text), "%s\n%llu 分 %llu 秒 · %llu 个步骤",
                 *str(item, "title") ? str(item, "title") : str(item, "project_name"),
                 (unsigned long long)(seconds / 60), (unsigned long long)(seconds % 60),
-                (unsigned long long)number(item, "steps"), str(item, "id"));
+                (unsigned long long)number(item, "steps"));
         }
         char *id = strdup(str(item, "id"));
         lv_obj_t *item_button = button(list, text, 285, NULL, 0);
+        lv_obj_set_style_bg_color(item_button, lv_color_hex(0xe9f4f1), 0);
+        lv_obj_set_style_text_color(item_button, lv_color_hex(0x184b45), 0);
+        lv_obj_set_style_text_color(item_button, lv_color_hex(0xffffff), LV_STATE_PRESSED);
         lv_obj_set_height(item_button, 54);
         lv_obj_t *caption = lv_obj_get_child(item_button, 0);
         lv_obj_set_width(caption, 270);
@@ -762,6 +977,7 @@ static void consume_reply(json_object *reply) {
     pending_id[0] = 0;
     if (!boolean(reply, "ok")) {
         message(str(reply, "error"));
+        if (player_view && player_heading) set_text(player_heading, str(reply, "error"));
         if (dialog && edit_hint) lv_label_set_text(edit_hint, str(reply, "error"));
         return;
     }
@@ -839,23 +1055,27 @@ static void refresh(lv_timer_t *unused) {
         detail_refresh(NULL);
     }
     json_object *player = field(status, "player");
-    if (detail && player_text && !strcmp(str(player, "anchor_id"), opened_anchor)) {
+    if (player_view && player_text && !strcmp(str(player, "anchor_id"), opened_anchor)) {
         uint64_t position = number(player, "position_ms"), duration = number(player, "duration_ms");
         char playback[220];
-        snprintf(playback, sizeof(playback), "%02llu:%02llu / %02llu:%02llu  %s",
+        snprintf(playback, sizeof(playback), "%02llu:%02llu\n%02llu:%02llu",
                  (unsigned long long)(position / 60000), (unsigned long long)(position / 1000 % 60),
-                 (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60),
-                 str(player, "message"));
-        lv_label_set_text(player_text, playback);
-        if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED)) {
+                 (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60));
+        set_text(player_text, playback);
+        set_text(player_heading, *str(player, "message") ? str(player, "message") : "原片回放");
+        if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED) &&
+            (now_us() - player_controls_us >= 500000 || strcmp(str(player, "state"), "playing"))) {
             lv_slider_set_range(player_slider, 0, duration ? (int)duration : 1);
             lv_slider_set_value(player_slider, (int)position, LV_ANIM_OFF);
+            player_controls_us = now_us();
         }
-        lv_label_set_text(lv_obj_get_child(player_pause, 0), !strcmp(str(player, "state"), "paused") ? "继续播放" : "暂停播放");
-        uint64_t frame = number(player, "frame_us");
-        if (frame && frame != player_frame) {
-            display_detail_frame(str(player, "frame_path")); player_frame = frame;
-        }
+        set_text(lv_obj_get_child(player_pause, 0), !strcmp(str(player, "state"), "paused") ? "继续" : "暂停");
+    }
+    /* The opaque player covers the workbench. Updating hidden widgets causes
+     * full-height dirty ranges in fbtft, wasting the SPI refresh budget. */
+    if (player_view) {
+        lv_timer_pause(lv_display_get_refr_timer(lv_display_get_default()));
+        return;
     }
     const char *state = str(status, "state");
     char line[200];
@@ -863,7 +1083,9 @@ static void refresh(lv_timer_t *unused) {
              !status ? "服务未连接" : !strcmp(state, "recording") ? "记录中" :
              !strcmp(state, "paused") ? "已暂停" : "已停止",
              boolean(status, "connected") ? "在线" : "离线");
-    lv_label_set_text(status_label, line);
+    set_text(status_label, line);
+    lv_obj_set_style_text_color(status_label, lv_color_hex(!strcmp(state, "recording") ? 0xb53d4b :
+        boolean(status, "connected") ? 0x127d73 : 0x8c672e), 0);
     if (!*selected_project) copy(selected_project, sizeof(selected_project), str(status, "selected_project_id"));
     json_object *session = field(status, "session");
     int active = !strcmp(state, "recording") || !strcmp(state, "paused");
@@ -893,16 +1115,16 @@ static void refresh(lv_timer_t *unused) {
     enabled(project_select, !active);
     rendering = 0;
     if (!*selected_project && count) copy(selected_project, sizeof(selected_project), str(json_object_array_get_idx(projects, selected), "id"));
-    lv_label_set_text(project_label, selected_name());
-    lv_label_set_text(record_project_label, selected_name());
+    set_text(project_label, selected_name());
+    set_text(record_project_label, selected_name());
     uint64_t started = number(session, "started_us"), current = number(status, "source_time_us");
     uint64_t end = active ? current : number(session, "ended_us");
     uint64_t seconds = started && end >= started ? (end - started) / 1000000 : 0;
-    snprintf(line, sizeof(line), "会话 %02llu:%02llu:%02llu",
+    snprintf(line, sizeof(line), "%02llu:%02llu:%02llu",
              (unsigned long long)(seconds / 3600), (unsigned long long)(seconds / 60 % 60),
              (unsigned long long)(seconds % 60));
-    lv_label_set_text(elapsed_label, line);
-    lv_label_set_text(preview_hint, !active ? "开始后持续收音" : !strcmp(state, "paused") ? "已暂停采集" : "正在保存声画");
+    set_text(elapsed_label, line);
+    set_text(preview_hint, !active ? "开始后持续收音" : !strcmp(state, "paused") ? "已暂停采集" : "正在保存声画");
     uint64_t stamp = number(status, "preview_time_us");
     if (active && stamp && stamp != live_stamp) {
         uint8_t pixels[THUMB_BYTES];
@@ -924,16 +1146,16 @@ static void refresh(lv_timer_t *unused) {
         lv_obj_add_flag(live_image, LV_OBJ_FLAG_HIDDEN);
         live_stamp = 0;
     }
-    lv_label_set_text(lv_obj_get_child(pause_button, 0), !strcmp(state, "paused") ? "继续记忆" : "暂停记忆");
+    set_text(lv_obj_get_child(pause_button, 0), !strcmp(state, "paused") ? "继续记忆" : "暂停记忆");
     enabled(start_button, !active);
     enabled(mark_button, !strcmp(state, "recording"));
     enabled(pause_button, active);
     enabled(stop_button, active);
     int listening = boolean(status, "listening");
     enabled(voice_button, listening || (!active && boolean(status, "connected")));
-    if (voice_button) lv_label_set_text(lv_obj_get_child(voice_button, 0), listening ? "结束说话" : "语音提问");
-    if (dialog_voice) lv_label_set_text(lv_obj_get_child(dialog_voice, 0), listening ? "结束" : "语音");
-    if (listening) lv_label_set_text(status_label, "正在听 · 点击结束说话");
+    if (voice_button) set_text(lv_obj_get_child(voice_button, 0), listening ? "结束说话" : "语音提问");
+    if (dialog_voice) set_text(lv_obj_get_child(dialog_voice, 0), listening ? "结束" : "语音");
+    if (listening) set_text(status_label, "正在听 · 点击结束说话");
     enabled(start_button, !active && !boolean(status, "voice_running") && !boolean(status, "playback_active"));
     if (*pending_id && !strcmp(pending_action, "export")) {
         json_object *progress = field(status, "export_progress");
@@ -942,7 +1164,7 @@ static void refresh(lv_timer_t *unused) {
         else copy(hint, sizeof(hint), "正在准备原片与证据包…");
     }
     const char *error = str(status, "error");
-    lv_label_set_text(notice_label, *error ? error : hint);
+    set_text(notice_label, *error ? error : hint);
     json_object *query = field(status, "query");
     char query_time[100];
     snprintf(query_time, sizeof(query_time), "%llu", (unsigned long long)number(query, "received_us"));
@@ -962,8 +1184,11 @@ void ui_EchoTracePage_init(void) {
     dialog = editor = NULL;
     queued = failed_send = rendering = 0;
     notice[0] = 0;
+    player_view = player_image = player_rate = NULL;
+    video_stream[0] = display_report[0] = 0;
     screen = lv_obj_create(NULL);
-    lv_obj_set_style_bg_color(screen, lv_color_hex(0xf3f6ef), 0);
+    panel(screen); lv_obj_set_style_radius(screen, 0, 0);
+    lv_obj_set_style_bg_color(screen, lv_color_hex(0xf4f7fa), 0);
     lv_obj_set_style_pad_all(screen, 4, 0);
     lv_obj_set_style_pad_row(screen, 3, 0);
     lv_obj_set_flex_flow(screen, LV_FLEX_FLOW_COLUMN);
@@ -972,6 +1197,8 @@ void ui_EchoTracePage_init(void) {
     status_label = label(header, "正在连接…", 245);
     lv_obj_set_style_text_color(status_label, lv_color_hex(0x183f32), 0);
     tabs = lv_tabview_create(screen);
+    panel(tabs); lv_obj_set_style_bg_opa(tabs, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_pad_all(tabs, 0, 0);
     lv_obj_set_width(tabs, LV_PCT(100));
     lv_obj_set_flex_grow(tabs, 1);
     lv_tabview_set_tab_bar_size(tabs, 27);
@@ -981,16 +1208,39 @@ void ui_EchoTracePage_init(void) {
     lv_obj_t *memory = lv_tabview_add_tab(tabs, "提问");
     lv_obj_t *pages[] = {record, project, history_page, memory};
     for (int i = 0; i < 4; ++i) {
+        panel(pages[i]);
         lv_obj_set_style_pad_all(pages[i], 2, 0);
         lv_obj_set_style_pad_row(pages[i], 3, 0);
         lv_obj_set_flex_flow(pages[i], LV_FLEX_FLOW_COLUMN);
     }
+    lv_obj_t *bar = lv_tabview_get_tab_bar(tabs);
+    panel(bar); lv_obj_set_style_radius(bar, 7, 0);
+    lv_obj_set_style_bg_color(bar, lv_color_hex(0xe6edf2), 0);
+    for (uint32_t i = 0; i < lv_obj_get_child_count(bar); ++i) {
+        lv_obj_t *tab = lv_obj_get_child(bar, i);
+        lv_obj_set_style_radius(tab, 6, 0);
+        lv_obj_set_style_bg_opa(tab, LV_OPA_TRANSP, 0);
+        lv_obj_set_style_bg_color(tab, lv_color_hex(0x127d73), LV_STATE_CHECKED);
+        lv_obj_set_style_bg_opa(tab, LV_OPA_COVER, LV_STATE_CHECKED);
+        lv_obj_set_style_text_color(tab, lv_color_hex(0x4c6272), 0);
+        lv_obj_set_style_text_color(tab, lv_color_hex(0xffffff), LV_STATE_CHECKED);
+        lv_obj_set_style_border_width(tab, 0, LV_STATE_CHECKED);
+    }
     project_select = lv_dropdown_create(project);
+    panel(project_select);
+    lv_obj_set_style_bg_color(project_select, lv_color_hex(0xe9f4f1), 0);
     lv_obj_set_size(project_select, LV_PCT(100), 32);
     lv_dropdown_set_options(project_select, "默认工作记录 · 可直接开始");
     lv_obj_add_event_cb(project_select, project_changed, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_t *live = row(record, 74);
-    live_image = lv_image_create(live);
+    lv_obj_t *preview = lv_obj_create(live); panel(preview);
+    lv_obj_set_size(preview, 128, 72); lv_obj_set_style_pad_all(preview, 0, 0);
+    lv_obj_remove_flag(preview, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(preview, lv_color_hex(0x182d3e), 0);
+    lv_obj_t *placeholder = label(preview, "工作台预览", 118);
+    lv_obj_set_style_text_color(placeholder, lv_color_hex(0xb1c8d6), 0);
+    lv_obj_set_style_text_align(placeholder, LV_TEXT_ALIGN_CENTER, 0); lv_obj_center(placeholder);
+    live_image = lv_image_create(preview); lv_obj_set_pos(live_image, 0, 0);
     lv_obj_add_flag(live_image, LV_OBJ_FLAG_HIDDEN);
     memset(&live_descriptor, 0, sizeof(live_descriptor));
     live_descriptor.header.magic = LV_IMAGE_HEADER_MAGIC;
@@ -1000,6 +1250,7 @@ void ui_EchoTracePage_init(void) {
     live_descriptor.data_size = sizeof(live_data);
     live_descriptor.data = live_data;
     lv_obj_t *info = lv_obj_create(live);
+    panel(info); lv_obj_remove_flag(info, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_size(info, 164, 74);
     lv_obj_set_style_pad_all(info, 1, 0);
     lv_obj_set_style_border_width(info, 0, 0);
@@ -1009,6 +1260,8 @@ void ui_EchoTracePage_init(void) {
     lv_label_set_long_mode(record_project_label, LV_LABEL_LONG_DOT);
     elapsed_label = label(info, "会话 00:00:00", 158);
     preview_hint = label(info, "开始后显示预览", 158);
+    /* Project + clock already fill this 72px card at the Chinese font height. */
+    lv_obj_add_flag(preview_hint, LV_OBJ_FLAG_HIDDEN);
     live_stamp = 0;
     lv_obj_t *actions = row(record, 32);
     start_button = button(actions, "开始记忆", 145, operation_click, 0);
@@ -1016,6 +1269,7 @@ void ui_EchoTracePage_init(void) {
     actions = row(record, 32);
     pause_button = button(actions, "暂停/继续", 145, operation_click, 2);
     stop_button = button(actions, "结束记忆", 145, operation_click, 3);
+    destructive(stop_button);
     project_label = label(project, "工作台记录", 300);
     lv_label_set_long_mode(project_label, LV_LABEL_LONG_DOT);
     actions = row(project, 34);
@@ -1033,6 +1287,7 @@ void ui_EchoTracePage_init(void) {
     voice_button = button(query_controls, "语音提问", 145, voice_click, 0);
     button(query_controls, "输入问题", 145, project_editor, 2);
     lv_obj_t *results = lv_obj_create(memory);
+    panel(results);
     lv_obj_set_width(results, LV_PCT(100)); lv_obj_set_flex_grow(results, 1);
     lv_obj_set_style_pad_all(results, 3, 0);
     lv_obj_set_flex_flow(results, LV_FLEX_FLOW_COLUMN);
@@ -1041,6 +1296,7 @@ void ui_EchoTracePage_init(void) {
     speak_button = button(results, "朗读回答", 280, speak_click, 0);
     enabled(speak_button, 0);
     query_list = lv_obj_create(results);
+    panel(query_list);
     lv_obj_set_size(query_list, 285, LV_SIZE_CONTENT);
     lv_obj_set_style_pad_all(query_list, 1, 0);
     lv_obj_set_flex_flow(query_list, LV_FLEX_FLOW_COLUMN);
@@ -1049,6 +1305,18 @@ void ui_EchoTracePage_init(void) {
     lv_obj_set_height(notice_label, 19);
     lv_label_set_long_mode(notice_label, LV_LABEL_LONG_DOT);
     font_tree(screen);
+    lv_obj_set_style_text_font(elapsed_label, &lv_font_montserrat_20, 0);
+    set_text(elapsed_label, "00:00:00");
+    const char *control = getenv("ECHOTRACE_SOCKET");
+    if (!control || !*control) control = access("/run/echotrace-sd.sock", F_OK) == 0 ?
+                                           "/run/echotrace-sd.sock" : "/run/echotrace/control.sock";
+    if (snprintf(video_socket, sizeof(video_socket), "%s.frames", control) < (int)sizeof(video_socket))
+        video_fd = et_screen_receiver(video_socket);
+    if (video_fd < 0) message("画面通道未就绪，请重启记忆页面");
+    lv_display_t *display = lv_display_get_default();
+    lv_timer_set_period(lv_display_get_refr_timer(display), 16);
+    lv_display_add_event_cb(display, video_flushed, LV_EVENT_REFR_READY, NULL);
+    video_timer = lv_timer_create(draw_video, 8, NULL);
     lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 100, 0, true);
     running = 1;
     worker_started = pthread_create(&worker, NULL, worker_main, NULL) == 0;
@@ -1057,6 +1325,12 @@ void ui_EchoTracePage_init(void) {
 }
 void ui_EchoTracePage_deinit(void) {
     if (timer) { lv_timer_delete(timer); timer = NULL; }
+    if (video_timer) { lv_timer_delete(video_timer); video_timer = NULL; }
+    lv_display_t *display = lv_display_get_default();
+    lv_display_remove_event_cb_with_user_data(display, video_flushed, NULL);
+    lv_timer_set_period(lv_display_get_refr_timer(display), LV_DEF_REFR_PERIOD);
+    if (video_fd >= 0) { close(video_fd); unlink(video_socket); video_fd = -1; }
+    close_player(NULL);
     const char *play_state = str(field(status, "player"), "state");
     if (!strcmp(str(status, "state"), "stopped") &&
         (!strcmp(play_state, "playing") || !strcmp(play_state, "loading"))) operation("screen.stop");

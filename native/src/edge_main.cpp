@@ -1,5 +1,6 @@
 #include "echotrace/capture.hpp"
 #include "echotrace/media_lease.h"
+#include "echotrace/screen_frame.h"
 #include <cerrno>
 #include <atomic>
 #include <chrono>
@@ -62,7 +63,7 @@ class Edge {
   };
 public:
   Edge(fs::path root, std::string hub, std::string token, bool simulated,
-       Json::Value config)
+       Json::Value config, fs::path screen_socket)
       : root_(fs::weakly_canonical(root)), hub_(std::move(hub)),
         token_(std::move(token)), simulated_(simulated),
         config_(std::move(config)),
@@ -71,6 +72,8 @@ public:
             config_.get("device_id", simulated ? "simulator-edge" : "echo-mate")
                 .asString(),
             boot_id()) {
+    screen_socket_ = std::move(screen_socket);
+    screen_fd_ = et_screen_sender();
     fs::create_directories(root_);
     ui_preferences_ = load_json(root_ / "ui.json");
     retired_ = load_json(root_ / "retired.json");
@@ -146,6 +149,7 @@ public:
       hello["capabilities"].append("durable_replay");
       hello["capabilities"].append("media_upload");
       hello["capabilities"].append("media_chunk_ack");
+      hello["capabilities"].append("screen_binary_v1");
       websocketpp::lib::error_code ec;
       client_.send(hdl, json(hello), websocketpp::frame::opcode::text, ec);
       if (ec) {
@@ -186,6 +190,19 @@ public:
       try {
         if (message->get_opcode() == websocketpp::frame::opcode::binary) {
           const auto &payload = message->get_payload();
+          et_screen_frame frame;
+          if (et_screen_parse(payload.data(), payload.size(), &frame)) {
+            std::lock_guard<std::mutex> lock(state_mutex_);
+            if (!et_screen_matches(&frame, player_.get("stream_id", "").asCString()) ||
+                (player_["state"] != "playing" && player_["state"] != "loading")) return;
+            ++screen_received_;
+            if (et_screen_send(screen_fd_, screen_socket_.c_str(), payload.data(), payload.size()))
+              ++screen_forwarded_;
+            else ++screen_dropped_;
+            const auto begin = player_["begin_us"].asUInt64();
+            player_["position_ms"] = Json::UInt64(frame.source_us >= begin ? (frame.source_us - begin) / 1000 : 0);
+            return;
+          }
           auto packet = Packet::decode(
               std::vector<uint8_t>(payload.begin(), payload.end()));
           std::lock_guard<std::mutex> lock(download_mutex_);
@@ -237,6 +254,8 @@ public:
             value["frame_us"] = Json::UInt64(monotonic_us());
           }
           std::lock_guard<std::mutex> lock(state_mutex_);
+          if (value["type"] == "screen.state" && player_["id"] != value["id"])
+            screen_received_ = screen_forwarded_ = screen_dropped_ = 0;
           if (value["type"] == "screen.state" || player_["id"] == value["id"])
             player_ = value;
         } else if (value["type"] == "app.reply") {
@@ -341,6 +360,7 @@ public:
     client_.stop();
     if (network_.joinable())
       network_.join();
+    if (screen_fd_ >= 0) close(screen_fd_);
   }
   Json::Value snapshot() const {
     std::lock_guard<std::mutex> lock(state_mutex_);
@@ -350,6 +370,7 @@ public:
     value["source_time_us"] = Json::UInt64(monotonic_us());
     value["state"] = state_;
     value["session"] = session_;
+    if (!session_.isNull()) value["session"]["state"] = state_;
     value["connected"] = connected_.load();
     value["synthetic"] = simulated_;
     value["projects"] = projects_;
@@ -364,6 +385,10 @@ public:
     value["voice_running"] = voice_running_.load();
     value["voice_started_us"] = Json::UInt64(voice_started_us_.load());
     value["player"] = player_;
+    value["player"]["frames_received"] = Json::UInt64(screen_received_);
+    value["player"]["frames_forwarded"] = Json::UInt64(screen_forwarded_);
+    value["player"]["frames_dropped"] = Json::UInt64(screen_dropped_);
+    value["display"] = screen_report_;
     const auto total = export_total_.load();
     value["export_progress"] = total ?
         int(std::min(export_bytes_.load(), total) * 100 / total) : -1;
@@ -377,8 +402,13 @@ public:
   Json::Value local(const Json::Value &request) {
     Json::Value result;
     const auto op = request.get("op", "status").asString();
-    if (op == "status")
+    if (op == "status") {
+      if (request["display"].isObject() && json(request["display"]).size() < 1024) {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        screen_report_ = request["display"];
+      }
       return snapshot();
+    }
     if (op == "screen.stop") {
       screen_stop_requested_ = true;
       Json::Value message;
@@ -1100,6 +1130,10 @@ private:
   std::string hub_, token_;
   bool simulated_;
   int media_lease_fd_ = -1;
+  int screen_fd_ = -1;
+  fs::path screen_socket_;
+  uint64_t screen_received_ = 0, screen_forwarded_ = 0, screen_dropped_ = 0;
+  Json::Value screen_report_;
   bool capture_faulted_ = false;
   Json::Value config_;
   Journal journal_;
@@ -1263,7 +1297,7 @@ int main(int argc, char **argv) {
       std::ifstream file(config["token_file"].asString());
       std::getline(file, token);
     }
-    Edge edge(fs::absolute(data), hub, token, simulated, config);
+    Edge edge(fs::absolute(data), hub, token, simulated, config, socket_path.string() + ".frames");
     ControlSocket control(socket_path, edge);
     std::cout << "EchoTrace capture daemon; synthetic=" << simulated
               << " control=" << socket_path << "\n";

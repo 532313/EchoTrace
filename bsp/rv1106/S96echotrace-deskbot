@@ -32,6 +32,12 @@ start)
     terminal_running && { echo 'stop the independent EchoTrace terminal first' >&2; exit 1; }
     [ -x "$program" ] || { echo 'integrated DeskBot is not installed' >&2; exit 1; }
     [ -c /dev/fb0 ] || { echo 'integrated DeskBot requires the framebuffer' >&2; exit 1; }
+    # Vendor debug level 7 expands to 0xffffffff and logs every SPI transfer.
+    # Keep the regular desktop fast; use 32 only for bounded LCD timing capture.
+    if [ -w /sys/class/graphics/fb0/debug ] &&
+       [ "$(cat /sys/class/graphics/fb0/name)" = fb_st7789v ]; then
+        printf '%s\n' "${ECHOTRACE_LCD_DEBUG:-0}" > /sys/class/graphics/fb0/debug
+    fi
     attempts=0
     while [ ! -S "$socket" ]; do
         attempts=$((attempts + 1))
