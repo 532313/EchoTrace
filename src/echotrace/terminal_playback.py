@@ -227,6 +227,10 @@ class ScreenPlayer:
                     with contextlib.suppress(ProcessLookupError): process.kill()
                 await process.communicate()
                 process = None
+            if state["clock"] is not None:
+                remaining = state["clock"] + (state["end_us"] - state["origin_us"]) / 1e6 - time.monotonic()
+                if remaining > 0:
+                    await asyncio.sleep(remaining)
             state.update(state="ended", position_ms=state["duration_ms"], clock=None,
                          message="片段播放结束")
             await self.publish(device_id, state)

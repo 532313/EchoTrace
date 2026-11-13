@@ -51,7 +51,7 @@ static uint64_t edit_revision;
 static int edit_append;
 static uint64_t pending_since;
 static char entry_target[160];
-static lv_obj_t *player_view, *player_image, *player_rate;
+static lv_obj_t *player_view, *player_image, *player_rate, *player_heading;
 static lv_timer_t *video_timer;
 static int video_fd = -1, video_dirty, video_primed;
 static char video_socket[108], video_stream[33], display_report[1024];
@@ -597,7 +597,7 @@ static void close_player(lv_event_t *event) {
     if (!player_view) return;
     operation("screen.stop");
     lv_obj_delete(player_view);
-    player_view = player_image = player_rate = NULL;
+    player_view = player_image = player_rate = player_heading = NULL;
     player_slider = player_text = player_pause = NULL;
     video_dirty = video_primed = 0; video_head = video_count = 0;
     lv_timer_resume(lv_display_get_refr_timer(lv_display_get_default()));
@@ -615,10 +615,13 @@ static void open_player(void) {
     lv_obj_set_style_bg_color(player_view, lv_color_hex(0x101c2b), 0);
     lv_obj_t *back = button(player_view, "返回", 54, close_player, 0);
     lv_obj_set_pos(back, 4, 1); lv_obj_set_height(back, 28);
-    player_text = label(player_view, "正在准备原始片段…", 251);
-    lv_obj_set_pos(player_text, 63, 5);
+    player_heading = label(player_view, "正在准备原始片段…", 251);
+    lv_obj_set_pos(player_heading, 63, 5);
+    lv_obj_set_style_text_color(player_heading, lv_color_hex(0xf3f7fb), 0);
+    lv_label_set_long_mode(player_heading, LV_LABEL_LONG_DOT);
+    player_text = label(player_view, "00:00\n00:00", (320 - ET_SCREEN_WIDTH) / 2 - 8);
+    lv_obj_set_pos(player_text, 6, 83);
     lv_obj_set_style_text_color(player_text, lv_color_hex(0xf3f7fb), 0);
-    lv_label_set_long_mode(player_text, LV_LABEL_LONG_DOT);
     memset(video_pixels, 0, sizeof(video_pixels));
     memset(&video_descriptor, 0, sizeof(video_descriptor));
     video_descriptor.header.magic = LV_IMAGE_HEADER_MAGIC;
@@ -630,22 +633,28 @@ static void open_player(void) {
     lv_obj_set_pos(player_image, (320 - ET_SCREEN_WIDTH) / 2, 32 + (136 - ET_SCREEN_HEIGHT) / 2);
     lv_image_set_src(player_image, &video_descriptor);
     player_slider = lv_slider_create(player_view);
-    lv_obj_set_pos(player_slider, 13, 176); lv_obj_set_size(player_slider, 294, 9);
+    lv_obj_set_pos(player_slider, 13, 32 + (136 + ET_SCREEN_HEIGHT) / 2 + 3);
+    lv_obj_set_size(player_slider, 294, 4);
+    lv_obj_set_ext_click_area(player_slider, 14);
     lv_slider_set_range(player_slider, 0, 1);
     lv_obj_set_style_bg_color(player_slider, lv_color_hex(0x314557), LV_PART_MAIN);
     lv_obj_set_style_bg_color(player_slider, lv_color_hex(0x20c4b2), LV_PART_INDICATOR);
     lv_obj_set_style_bg_color(player_slider, lv_color_hex(0xe5fff9), LV_PART_KNOB);
+    lv_obj_set_style_pad_all(player_slider, 1, LV_PART_KNOB);
     lv_obj_add_event_cb(player_slider, player_seek, LV_EVENT_RELEASED, NULL);
-    lv_obj_t *controls = row(player_view, 31);
-    lv_obj_set_pos(controls, 5, 192); lv_obj_set_width(controls, 310);
+    lv_obj_t *controls = row(player_view, 42);
+    lv_obj_set_pos(controls, 5, 183); lv_obj_set_width(controls, 310);
     button(controls, "重播", 88, player_control, 0);
     player_pause = button(controls, "暂停", 112, player_control, 1);
     destructive(button(controls, "停止", 98, player_control, 2));
-    player_rate = label(player_view, "-- fps", 302);
-    lv_obj_set_pos(player_rate, 9, 223);
+    for (uint32_t i = 0; i < lv_obj_get_child_count(controls); ++i)
+        lv_obj_set_height(lv_obj_get_child(controls, i), 40);
+    player_rate = label(player_view, "-- fps", (320 - ET_SCREEN_WIDTH) / 2 - 8);
+    lv_obj_set_pos(player_rate, (320 + ET_SCREEN_WIDTH) / 2 + 6, 96);
     lv_obj_set_style_text_color(player_rate, lv_color_hex(0x9bb3c4), 0);
     lv_label_set_long_mode(player_rate, LV_LABEL_LONG_DOT);
     font_tree(player_view);
+    lv_obj_set_style_text_font(player_text, &lv_font_montserrat_14, 0);
     lv_obj_set_style_text_font(player_rate, &lv_font_montserrat_14, 0);
     video_stream[0] = 0; video_dirty = 0;
     player_controls_us = 0;
@@ -691,7 +700,7 @@ static void draw_video(lv_timer_t *unused) {
     }
     /* A four-frame startup cushion absorbs USB/SSH bursts. The six-frame cap
      * bounds latency and memory; raw source evidence is never discarded. */
-    if (!video_primed && video_count >= 4) {
+    if (!video_primed && (video_count >= 4 || (video_count && !strcmp(str(player, "state"), "ended")))) {
         video_primed = 1; video_deadline = now;
     }
     if (player_view && now >= video_deadline) {
@@ -968,7 +977,7 @@ static void consume_reply(json_object *reply) {
     pending_id[0] = 0;
     if (!boolean(reply, "ok")) {
         message(str(reply, "error"));
-        if (player_view && player_text) set_text(player_text, str(reply, "error"));
+        if (player_view && player_heading) set_text(player_heading, str(reply, "error"));
         if (dialog && edit_hint) lv_label_set_text(edit_hint, str(reply, "error"));
         return;
     }
@@ -1049,11 +1058,11 @@ static void refresh(lv_timer_t *unused) {
     if (player_view && player_text && !strcmp(str(player, "anchor_id"), opened_anchor)) {
         uint64_t position = number(player, "position_ms"), duration = number(player, "duration_ms");
         char playback[220];
-        snprintf(playback, sizeof(playback), "%02llu:%02llu / %02llu:%02llu  %s",
+        snprintf(playback, sizeof(playback), "%02llu:%02llu\n%02llu:%02llu",
                  (unsigned long long)(position / 60000), (unsigned long long)(position / 1000 % 60),
-                 (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60),
-                 str(player, "message"));
+                 (unsigned long long)(duration / 60000), (unsigned long long)(duration / 1000 % 60));
         set_text(player_text, playback);
+        set_text(player_heading, *str(player, "message") ? str(player, "message") : "原片回放");
         if (!lv_obj_has_state(player_slider, LV_STATE_PRESSED) &&
             (now_us() - player_controls_us >= 500000 || strcmp(str(player, "state"), "playing"))) {
             lv_slider_set_range(player_slider, 0, duration ? (int)duration : 1);
