@@ -395,16 +395,24 @@ class NativeIntegration(unittest.TestCase):
                         with control.makefile("rb") as response:
                             status = json.loads(response.readline(65536))
                     self.assertEqual(status["error"], state["error"])
-                    timeline = server.request(
-                        "GET", f"/api/sessions/{session['id']}/timeline"
-                    )
-                    self.assertTrue(
-                        any(
-                            "storage reserve reached"
-                            in json.loads(event["body"])["note"]
-                            for event in timeline["events"]
+                    # The local status and the journal upload have separate
+                    # completion points. Wait for the Hub's durable event,
+                    # rather than assuming an unrelated command ACK flushes it.
+                    deadline = time.monotonic() + 5
+                    fault_events = []
+                    while time.monotonic() < deadline:
+                        timeline = server.request(
+                            "GET", f"/api/sessions/{session['id']}/timeline"
                         )
-                    )
+                        fault_events = [
+                            event for event in timeline["events"]
+                            if "storage reserve reached"
+                            in json.loads(event["body"])["note"]
+                        ]
+                        if fault_events:
+                            break
+                        time.sleep(0.05)
+                    self.assertTrue(fault_events, "Hub did not receive the source fault event")
                     with self.assertRaises(urllib.error.HTTPError) as fault:
                         server.request(
                             "PATCH",
