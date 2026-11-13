@@ -57,6 +57,7 @@ public:
                 .asString(),
             boot_id()) {
     fs::create_directories(root_);
+    ui_preferences_ = load_json(root_ / "ui.json");
     retired_ = load_json(root_ / "retired.json");
     seen_commands_ = load_json(root_ / "commands.json");
     const auto previous = load_json(root_ / "state.json");
@@ -203,6 +204,11 @@ public:
               connecting_ = false;
             }
           }
+        } else if (value["type"] == "app.reply") {
+          if (message->get_payload().size() > 60000)
+            throw std::runtime_error("app reply exceeds small-screen limit");
+          std::lock_guard<std::mutex> lock(state_mutex_);
+          app_reply_ = value;
         } else if (value["type"] == "media.chunk.ack") {
           upload_acks_.push(value);
         } else if (value["type"] == "query.result") {
@@ -275,6 +281,8 @@ public:
     value["synthetic"] = simulated_;
     value["projects"] = projects_;
     value["query"] = last_query_;
+    value["app_reply"] = app_reply_;
+    value["selected_project_id"] = ui_preferences_["project_id"];
     value["last_marker_us"] = Json::UInt64(last_marker_us_);
     value["playback_active"] = capture_->playback_active();
     value["error"] = capture_error_.empty() ? last_error_ : capture_error_;
@@ -289,6 +297,30 @@ public:
     const auto op = request.get("op", "status").asString();
     if (op == "status")
       return snapshot();
+    if (op == "project.select") {
+      const auto id = request["project_id"].asString();
+      {
+        std::lock_guard<std::mutex> lock(state_mutex_);
+        ui_preferences_["project_id"] = id;
+        atomic_json(root_ / "ui.json", ui_preferences_);
+      }
+      result["ok"] = true;
+      return result;
+    }
+    if (op == "app.call") {
+      if (!connected_)
+        throw std::runtime_error("后台离线；请先恢复连接");
+      auto message = request;
+      message.removeMember("op");
+      message["type"] = "app.request";
+      if (message["id"].asString().empty() || json(message).size() > 4096)
+        throw std::runtime_error("invalid app request");
+      if (!outgoing_.push(message))
+        throw std::runtime_error("操作队列忙，请稍后再试");
+      result["queued"] = true;
+      result["id"] = message["id"];
+      return result;
+    }
     if (op == "evidence.play") {
       Json::Value command;
       {
@@ -877,7 +909,8 @@ private:
   mutable std::mutex state_mutex_, media_mutex_, connection_mutex_, persist_mutex_,
       download_mutex_;
   std::string state_ = "stopped";
-  Json::Value session_, projects_, last_query_, retired_, seen_commands_;
+  Json::Value session_, projects_, last_query_, retired_, seen_commands_,
+      app_reply_, ui_preferences_;
   uint64_t last_marker_us_ = 0;
   std::string last_error_;
   std::string capture_error_;

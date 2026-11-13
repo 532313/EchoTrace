@@ -168,11 +168,46 @@ class HttpTests(unittest.TestCase):
             self.assertFalse(reconcile(current["id"], "paused", 110))
             self.assertTrue(reconcile(current["id"], "recording", 105))
             self.assertEqual(store.session(current["id"])["state"], "paused")
+
             ws.send(json.dumps({
                 "type": "heartbeat", "source_time_us": 120,
                 "session_id": current["id"], "capture_state": "paused",
             }))
             self.assertEqual(json.loads(ws.recv(timeout=3))["type"], "heartbeat")
+
+    def test_terminal_projects_report_results_without_dropping_connection(self):
+        with connect(
+            self.server.url.replace("http://", "ws://") + "/ws/device",
+            additional_headers={"Authorization": "Bearer integration-test-token"},
+            open_timeout=3,
+        ) as ws:
+            ws.send(json.dumps({
+                "type": "hello", "version": 3, "device_id": "screen",
+                "boot_id": "boot", "source_time_us": 100,
+            }))
+            self.assertEqual(json.loads(ws.recv(timeout=3))["type"], "hello")
+
+            def call(action, args):
+                request_id = "screen-" + str(time.monotonic_ns())
+                ws.send(json.dumps({
+                    "type": "app.request", "id": request_id,
+                    "action": action, "arguments": args,
+                }))
+                while True:
+                    reply = json.loads(ws.recv(timeout=3))
+                    if reply.get("type") == "app.reply" and reply["id"] == request_id:
+                        return reply
+
+            created = call("project.create", {"name": "  小屏维修  "})
+            self.assertTrue(created["ok"], created)
+            project_id = created["data"]["id"]
+            renamed = call("project.rename", {"project_id": project_id, "name": "接线记录"})
+            self.assertEqual(renamed["data"]["name"], "接线记录")
+            rejected = call("project.rename", {"project_id": project_id, "name": " "})
+            self.assertFalse(rejected["ok"])
+            projects = call("projects", {})
+            self.assertTrue(projects["ok"])
+            self.assertEqual(projects["data"][0]["name"], "接线记录")
 
     def test_closed_socket_and_missing_ack_are_conflicts(self):
         class ClosedSocket:
