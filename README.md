@@ -2,6 +2,8 @@
 
 面向嵌入式开发、拆装和制作的离线过程记忆机器人。Echo-Mate 保存操作现场，鲁班猫 3 建立可检索的时间线；每个结果都能回到原始记录。
 
+当前源码处于 **0.2.0.dev0 开发阶段**，目标是能在 Echo-Mate 小屏完成项目、录制、主动提问、历史与声画回看的完整 App。已有底层能力和完整小屏产品之间的缺口见 [开发任务](docs/roadmap.md)。Git 分支、提交、CI 与评审约定见 [开发流程](CONTRIBUTING.md)，版本、源码包和产物追溯见 [版本发布](docs/releases.md)。
+
 本工程保留独立的采集与记忆服务，同时把 EchoTrace 接入原版 Echo-Mate DeskBot，成为抽屉里的“记忆”应用。原聊天、AI 相机、游戏、设置和电机功能保留；集成补丁仅应用于隔离构建副本，原工程源码与原可执行文件不被覆盖。接入和恢复步骤见 [DeskBot 集成说明](integration/deskbot/README.md)。
 
 完整的软件分层、当前功能边界、真实工作台入口和操作流程见 [HTML 软件架构与使用手册](docs/EchoTrace_软件架构与使用手册.html)，也可阅读 [Markdown 版本](docs/software-guide.md)。

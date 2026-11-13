@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
-project(EchoTrace VERSION 0.1.0 LANGUAGES C CXX)
+include(cmake/version.cmake)
+project(EchoTrace VERSION ${ECHO_NUMERIC_VERSION} LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(ECHO_BUILD_EDGE "Build the capture daemon and simulation backend" ON)
@@ -31,6 +32,9 @@ if(EXISTS "${ECHO_VENDOR_DIR}/recording/recording.cc")
 endif()
 if(ECHO_BUILD_EDGE)
   add_executable(echotrace-edge native/src/edge_main.cpp native/src/capture_sim.cpp native/src/media_lease.c)
+  target_compile_definitions(echotrace-edge PRIVATE
+    ECHOTRACE_VERSION="${ECHO_VERSION}"
+    ECHOTRACE_SOURCE_REVISION="${ECHO_SOURCE_REVISION}")
   target_include_directories(echotrace-edge PRIVATE native/include)
   target_include_directories(echotrace-edge PRIVATE ${ECHO_DEPS_DIR}/websocketpp ${ECHO_DEPS_DIR}/asio/asio/include)
   target_compile_definitions(echotrace-edge PRIVATE ASIO_STANDALONE _WEBSOCKETPP_CPP11_STL_)

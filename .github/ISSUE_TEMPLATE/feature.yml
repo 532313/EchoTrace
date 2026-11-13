@@ -1,0 +1,23 @@
+name: 用户功能
+description: 描述一个可以实际操作并完成的功能
+title: '[功能] '
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: 要完成的事情
+      description: 谁在什么场景下遇到什么问题？
+    validations:
+      required: true
+  - type: textarea
+    id: flow
+    attributes:
+      label: 操作流程与可见结果
+      description: 写明从哪个页面进入、如何操作、最终看到什么。
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: 约束和关联任务
+      description: 设备、已有行为、ET 编号和必要兼容要求。

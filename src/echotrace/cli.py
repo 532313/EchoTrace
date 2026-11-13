@@ -181,7 +181,10 @@ def doctor(settings):
 
 
 def main():
+    from . import __version__
+
     parser = argparse.ArgumentParser(prog="echotrace")
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("command", choices=("serve", "demo", "doctor", "simulate-edge"))
     parser.add_argument(
         "--data", type=Path, default=Path(os.environ.get("ECHOTRACE_DATA", "runtime"))

@@ -1,0 +1,19 @@
+# Portable CI environment; model conversion and board runtimes have separate locks.
+annotated-doc==0.0.5
+annotated-types==0.7.0
+anyio==4.12.1
+click==8.1.8
+fastapi==0.128.8
+h11==0.16.0
+idna==3.20
+numpy==2.0.2
+pip==25.1.1
+pydantic==2.13.5
+pydantic_core==2.46.5
+setuptools==80.9.0
+starlette==0.49.3
+typing-inspection==0.4.2
+typing_extensions==4.16.0
+uvicorn==0.39.0
+websockets==15.0.1
+wheel==0.45.1

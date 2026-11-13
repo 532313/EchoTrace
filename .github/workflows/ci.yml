@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feat/**', 'fix/**', 'chore/**', 'refactor/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/repo_guard.py
+      - run: python scripts/release.py check
+
+  portable-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install portable build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y cmake ninja-build ffmpeg
+          python -m pip install -r config/requirements-ci.lock.txt
+          python -m pip install --no-build-isolation --no-deps -e .
+      - name: Prepare content-locked portable dependencies
+        run: python scripts/fetch_build_dependencies.py
+      - name: Build portable capture service
+        run: |
+          cmake -S . -B build/host -G Ninja -DCMAKE_BUILD_TYPE=Debug -DECHO_VENDOR_DIR="$PWD/build/ci-vendor"
+          cmake --build build/host --parallel 4
+          ctest --test-dir build/host --output-on-failure
+      - name: Check service and browser behavior
+        run: |
+          PYTHONPATH=src python -m unittest discover -s tests -v
+          node --test tests/playback_web.test.cjs
+          python -m echotrace --version
+          build/host/echotrace-edge --version
+          git diff --exit-code

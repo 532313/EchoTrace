@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "echotrace"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Offline, evidence-linked memory for physical work"
 requires-python = ">=3.9"
 dependencies = ["fastapi==0.128.8", "uvicorn==0.39.0", "websockets==15.0.1", "numpy>=1.26,<3"]
@@ -17,6 +17,9 @@ echotrace = "echotrace.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "echotrace.__version__"}
 
 [tool.setuptools.package-data]
 echotrace = ["web/*"]

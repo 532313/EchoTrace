@@ -1,0 +1,58 @@
+name: Draft source release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  source-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Validate release identity
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          python scripts/repo_guard.py
+          python scripts/release.py check --tag "$TAG"
+          version=$(PYTHONPATH=src python -c 'from echotrace import __version__; print(__version__)')
+          python scripts/release.py source --output "build/releases/echotrace-$version.tar.gz"
+      - name: Extract this version's release notes
+        run: |
+          python - <<'PY'
+          import pathlib, re, sys
+          sys.path.insert(0, 'src')
+          from echotrace import __version__
+          text = pathlib.Path('CHANGELOG.md').read_text(encoding='utf-8')
+          section = re.search(r'^## \[' + re.escape(__version__) + r'\][^\n]*\n(.*?)(?=^## |\Z)', text, re.M | re.S)
+          pathlib.Path('build/releases/notes.md').write_text(section.group(1).strip() + '\n', encoding='utf-8')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: source-release
+          path: build/releases/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Create reviewable draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          version=$(PYTHONPATH=src python -c 'from echotrace import __version__; print(__version__)')
+          archive="build/releases/echotrace-$version.tar.gz"
+          flags=(--draft --verify-tag --title "EchoTrace $version" --notes-file build/releases/notes.md)
+          if [[ "$version" =~ [a-z] ]]; then flags+=(--prerelease); fi
+          gh release create "$TAG" "$archive" "$archive.manifest.json" "$archive.sha256" "${flags[@]}"

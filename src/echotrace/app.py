@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
+from . import __version__
 from .config import Settings
 from .ai import ModelUnavailable
 from .memory import MemoryService
@@ -222,7 +223,7 @@ def create_app(settings=None):
                 await peer["socket"].close(code=1001)
         store.close()
 
-    app = FastAPI(title="EchoTrace", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="EchoTrace", version=__version__, lifespan=lifespan)
     app.state.store, app.state.memory, app.state.devices, app.state.settings = (
         store,
         memory,
@@ -282,7 +283,7 @@ def create_app(settings=None):
                     meminfo[k] = int(value.strip().split()[0]) * 1024
         return {
             "name": "EchoTrace",
-            "version": "0.1.0",
+            "version": __version__,
             "protocol": VERSION,
             "offline": True,
             "stats": store.stats(),

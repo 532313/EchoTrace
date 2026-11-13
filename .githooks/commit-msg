@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+python3 - "$1" <<'PY'
+import pathlib, re, sys
+subject = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8").splitlines()[0]
+if not re.match(r"^(?:(?:feat|fix|refactor|build|ci|docs|chore|perf|test|revert)(?:\([\w./-]+\))?!?: .+|Merge .+|Revert .+)$", subject):
+    raise SystemExit("Use a commit subject such as: feat(app): add history browsing")
+if len(subject) > 100:
+    raise SystemExit("Keep the commit subject within 100 characters")
+PY

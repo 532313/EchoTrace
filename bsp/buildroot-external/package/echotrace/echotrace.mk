@@ -1,7 +1,7 @@
 ################################################################################
 # EchoTrace: source stays separate from the vendor SDK.
 ################################################################################
-ECHOTRACE_VERSION = 0.1.0
+ECHOTRACE_VERSION = $(shell sed -n 's/^__version__ = "\([^"]*\)"/\1/p' "$(call qstrip,$(BR2_PACKAGE_ECHOTRACE_SOURCE))/src/echotrace/__init__.py")
 ECHOTRACE_SITE = $(call qstrip,$(BR2_PACKAGE_ECHOTRACE_SOURCE))
 ECHOTRACE_SITE_METHOD = local
 ECHOTRACE_DEPENDENCIES = alsa-lib

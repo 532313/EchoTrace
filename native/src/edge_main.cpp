@@ -997,7 +997,11 @@ int main(int argc, char **argv) {
     bool simulated = false;
     for (int i = 1; i < argc; ++i) {
       const std::string arg = argv[i];
-      if (arg == "--simulated")
+      if (arg == "--version") {
+        std::cout << "EchoTrace " << ECHOTRACE_VERSION << " ("
+                  << ECHOTRACE_SOURCE_REVISION << ")\n";
+        return 0;
+      } else if (arg == "--simulated")
         simulated = true;
       else if (arg == "--data" && i + 1 < argc)
         data = argv[++i];
